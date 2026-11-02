@@ -160,4 +160,6 @@ class FortressCampfireBlock : BlockWithEntity(
             null
         }
     }
+
+    override fun getCodec(): com.mojang.serialization.MapCodec<out BlockWithEntity> = com.mojang.serialization.MapCodec.unit(this)
 }

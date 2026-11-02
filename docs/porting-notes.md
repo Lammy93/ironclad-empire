@@ -24,3 +24,32 @@ Kept for upstreaming fixes and for the later 26.x port.
 `FortressBlocks.register()` registered a `BlockEntityRendererFactories` renderer. Both are client-only
 classes, so a dedicated server failed with `Cannot load class ...BlockEntityRenderer in environment type SERVER`.
 Fix: both registrations moved to `MineFortressClient.onInitializeClient`.
+
+## Step 1: Minecraft 1.20.2 → 1.20.4
+
+Pinned: Yarn `1.20.4+build.3`, Fabric API `0.97.3+1.20.4`, Fabric Loader `0.16.14`. Automatone: same bump (branch `mfc`).
+
+| Change | Before | After | Where |
+|---|---|---|---|
+| Grass item/block | `Items.GRASS` / `Blocks.GRASS` | `Items.SHORT_GRASS` / `Blocks.SHORT_GRASS` | SimilarItemsHelper, ForesterDailyTask, FarmAreaIterator |
+| Compressed NBT read | `NbtIo.readCompressed(stream)` | `NbtIo.readCompressed(stream, NbtSizeTracker.ofUnlimitedBytes())` | ServerboundBlueprintsImportExportPacket; Automatone schematic formats |
+| Widget drawing | override `render` / `renderButton` | override `renderWidget` (`render` is final) | PawnSkinButton, Text/DynamicText/ItemButtonWidget |
+| Widget tooltip position | `getTooltipPositioner()` | `HoveredTooltipPositioner.INSTANCE` | same widgets (check in play-test: 1.20.3 also auto-draws `setTooltip` tooltips, so they may show twice) |
+| List widgets | `ctor(client, w, h, top, bottom, itemH)`, `setLeftPos`, `right` | `ctor(client, w, bottom-top, top, itemH)`, `setX`, `getRight()` | BlueprintsListWidget, ImportExportBlueprintsScreen |
+| `BlockWithEntity` | — | must implement `getCodec()` (`MapCodec.unit`) | 5 fortress blocks |
+| `LevelProperties.readProperties` mixin | `(Dynamic, DataFixer, int, NbtCompound, LevelInfo, SaveVersionInfo, SpecialProperty, GeneratorOptions, Lifecycle)` | `(Dynamic, LevelInfo, SpecialProperty, GeneratorOptions, Lifecycle)` | LevelPropertiesMixin |
+| `SimpleInventory` field | `stacks` (public) | `heldStacks` (private) | FortressSimpleInventoryMixin |
+| `IntegratedServerLoader.start` mixin | `start(Screen, String, boolean, boolean)` | private `start(Session, Dynamic, boolean, boolean, Runnable)`; modify arg at HEAD | FortressIntegratedServerLoaderMixin |
+| Automatone `Box` | `new Box(BlockPos, BlockPos)` | `new Box(Vec3d.of(a), Vec3d.of(b))` | SelCommand, Selection, SelectionRenderer |
+| Automatone `EntityMixin` | injected into `hasPlayerRider` lambda `method_31469` | `@Inject` RETURN of `getPlayerPassengers`, minus fake players | EntityMixin |
+
+Build/infra fixes found at this step:
+- `fabric.mod.json` pinned `"minecraft": "1.20.2"`; now `${minecraft_version}` / `${fabric_api_min}` from `gradle.properties`.
+- Loom caches remapped mod jars by coordinates: `scripts/build-deps.sh` now deletes the cached Automatone copy.
+- `build-deps.sh` no longer runs `git submodule update` on an existing checkout (it detached the submodule onto an older commit).
+- `scripts/gametest.sh` deletes the old report and fails without a fresh one.
+- Mixin target problems show up at compile time as `warning: Cannot find target ...` in the build log: check for these after every bump.
+
+**Fabric-ASM check:** `GameModeTests` (fortress game mode round trip + saved id) pass on Loader 0.16.14 → Fabric-ASM still works; Task 3b (player-flag fallback) not needed.
+
+Result: build OK, `runServer` reaches `Done (17.8s)`, game tests 13/13.

@@ -97,7 +97,7 @@ class ForesterDailyTask : ProfessionDailyTask {
                 horizontalRange,
                 horizontalRange
             ) { pos: BlockPos? ->
-                world.getBlockState(pos).isOf(Blocks.GRASS) || world.getBlockState(pos).isOf(Blocks.TALL_GRASS)
+                world.getBlockState(pos).isOf(Blocks.SHORT_GRASS) || world.getBlockState(pos).isOf(Blocks.TALL_GRASS)
             }.or {
                 BlockPos
                     .findClosest(

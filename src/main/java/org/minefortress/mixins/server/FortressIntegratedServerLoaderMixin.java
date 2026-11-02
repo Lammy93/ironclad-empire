@@ -9,8 +9,9 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public class FortressIntegratedServerLoaderMixin {
 
     @ModifyVariable(
-            method = "start(Lnet/minecraft/client/gui/screen/Screen;Ljava/lang/String;ZZ)V",
-            at = @At(value = "LOAD", ordinal = 1),
+            // 1.20.3+: start(Session, Dynamic, safeMode, canShowBackupPrompt, onCancel); force canShowBackupPrompt = false
+            method = "start(Lnet/minecraft/world/level/storage/LevelStorage$Session;Lcom/mojang/serialization/Dynamic;ZZLjava/lang/Runnable;)V",
+            at = @At("HEAD"),
             ordinal = 1,
             argsOnly = true
     )

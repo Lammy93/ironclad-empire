@@ -62,8 +62,8 @@ public class ItemButtonWidget extends TexturedButtonWidget implements IHudButton
     }
 
     @Override
-    public final void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
-        super.render(drawContext, mouseX, mouseY, delta);
+    public final void renderWidget(DrawContext drawContext, int mouseX, int mouseY, float delta) {
+        super.renderWidget(drawContext, mouseX, mouseY, delta);
         if(!this.visible)return;
         renderItem(drawContext);
 
@@ -78,7 +78,7 @@ public class ItemButtonWidget extends TexturedButtonWidget implements IHudButton
             final var tooltip = constructTooltip();
             if (tooltip != null && currentScreen == null) {
                 final List<OrderedText> lines = tooltip.getLines(client);
-                drawContext.drawTooltip(textRenderer, lines, this.getTooltipPositioner(), mouseX, mouseY);
+                drawContext.drawTooltip(textRenderer, lines, net.minecraft.client.gui.tooltip.HoveredTooltipPositioner.INSTANCE, mouseX, mouseY);
             }
         }
     }

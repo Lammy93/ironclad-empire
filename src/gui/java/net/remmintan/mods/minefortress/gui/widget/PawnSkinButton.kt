@@ -18,7 +18,7 @@ class PawnSkinButton(
 
 ) : ClickableWidget(x, y, side, side, skin.skinName) {
 
-    override fun renderButton(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderWidget(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         val vOffset = if (this.isHovered || this.isFocused) 32 else 0
 
         // Draw button background

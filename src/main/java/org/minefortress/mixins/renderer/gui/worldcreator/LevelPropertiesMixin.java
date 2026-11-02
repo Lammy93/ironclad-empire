@@ -37,7 +37,7 @@ public abstract class LevelPropertiesMixin implements IFortressGamemodeHolder, I
     }
 
     @Inject(method = "readProperties", at = @At("RETURN"), cancellable = true)
-    private static <T> void readProperties(Dynamic<T> dynamic, DataFixer dataFixer, int dataVersion, NbtCompound playerData, LevelInfo levelInfo, SaveVersionInfo saveVersionInfo, LevelProperties.SpecialProperty specialProperty, GeneratorOptions generatorOptions, Lifecycle lifecycle, CallbackInfoReturnable<LevelProperties> cir) {
+    private static <T> void readProperties(Dynamic<T> dynamic, LevelInfo levelInfo, LevelProperties.SpecialProperty specialProperty, GeneratorOptions generatorOptions, Lifecycle lifecycle, CallbackInfoReturnable<LevelProperties> cir) {
         final var properties = cir.getReturnValue();
 
         final var fortressGamemodeLabel = dynamic.get("fortressGamemode").asString("SURVIVAL");

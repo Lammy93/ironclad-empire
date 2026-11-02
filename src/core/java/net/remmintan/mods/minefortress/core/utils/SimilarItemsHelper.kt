@@ -139,7 +139,7 @@ object SimilarItemsHelper {
             Items.GREEN_BED,
             Items.RED_BED,
             Items.BLACK_BED,
-            Items.GRASS,
+            Items.SHORT_GRASS,
             Items.TALL_GRASS,
             Items.ACACIA_LEAVES,
             Items.BIRCH_LEAVES,

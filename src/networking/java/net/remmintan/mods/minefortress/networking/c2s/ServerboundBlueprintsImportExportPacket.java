@@ -131,7 +131,7 @@ public class ServerboundBlueprintsImportExportPacket implements FortressC2SPacke
                     final var b = zis.readAllBytes();
                     final NbtCompound structureCompound;
                     try (final var nbtBais = new ByteArrayInputStream(b)) {
-                        structureCompound = NbtIo.readCompressed(nbtBais);
+                        structureCompound = NbtIo.readCompressed(nbtBais, net.minecraft.nbt.NbtSizeTracker.ofUnlimitedBytes());
                     }
 
                     if (structureCompound.contains("minefortressMetadata")) {

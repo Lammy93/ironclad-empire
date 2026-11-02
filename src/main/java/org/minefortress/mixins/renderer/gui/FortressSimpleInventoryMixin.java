@@ -25,7 +25,7 @@ public abstract class FortressSimpleInventoryMixin implements FortressSimpleInve
 
     @Shadow
     @Final
-    public DefaultedList<ItemStack> stacks;
+    private DefaultedList<ItemStack> heldStacks;
     @Unique
     private int changeCount = 0;
 
@@ -42,13 +42,13 @@ public abstract class FortressSimpleInventoryMixin implements FortressSimpleInve
 
     @Override
     public List<ItemStack> get_Stacks() {
-        return this.stacks;
+        return this.heldStacks;
     }
 
     @Override
     public int get_OccupiedSlotWithRoomForStack(ItemStack stack) {
-        for (int i = 0; i < this.stacks.size(); i++) {
-            ItemStack itemStack = this.stacks.get(i);
+        for (int i = 0; i < this.heldStacks.size(); i++) {
+            ItemStack itemStack = this.heldStacks.get(i);
             if(ItemStack.canCombine(itemStack, stack))
                 return i;
         }
@@ -58,16 +58,16 @@ public abstract class FortressSimpleInventoryMixin implements FortressSimpleInve
     @Override
     public int index_Of(ItemStack stack) {
         if(stack == null || stack.isEmpty()) return -1;
-        return this.stacks.stream()
+        return this.heldStacks.stream()
                 .filter(it -> it.getItem() == stack.getItem())
                 .findFirst()
-                .map(this.stacks::indexOf)
+                .map(this.heldStacks::indexOf)
                 .orElse(-1);
     }
 
     @Override
     public void populate_RecipeFinder(RecipeMatcher recipeMatcher) {
-        for (ItemStack itemStack : this.stacks) {
+        for (ItemStack itemStack : this.heldStacks) {
             recipeMatcher.addInput(itemStack, Integer.MAX_VALUE);
         }
     }

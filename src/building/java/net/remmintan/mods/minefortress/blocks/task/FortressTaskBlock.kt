@@ -13,4 +13,10 @@ class FortressTaskBlock : BlockWithEntity(SETTINGS) {
     override fun createBlockEntity(pos: BlockPos?, state: BlockState?): BlockEntity {
         return FortressTaskBlockEntity(pos, state)
     }
+
+    override fun getCodec(): com.mojang.serialization.MapCodec<out BlockWithEntity> = CODEC
+
+    companion object CodecHolder {
+        val CODEC: com.mojang.serialization.MapCodec<FortressTaskBlock> = com.mojang.serialization.MapCodec.unit { FortressTaskBlock() }
+    }
 }

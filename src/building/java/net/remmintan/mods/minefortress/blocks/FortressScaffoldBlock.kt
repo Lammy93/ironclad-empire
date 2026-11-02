@@ -49,4 +49,10 @@ class FortressScaffoldBlock : BlockWithEntity(
             null
         }
     }
+
+    override fun getCodec(): com.mojang.serialization.MapCodec<out BlockWithEntity> = CODEC
+
+    companion object CodecHolder {
+        val CODEC: com.mojang.serialization.MapCodec<FortressScaffoldBlock> = com.mojang.serialization.MapCodec.unit { FortressScaffoldBlock() }
+    }
 }
