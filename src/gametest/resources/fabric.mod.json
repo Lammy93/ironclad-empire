@@ -7,7 +7,8 @@
   "entrypoints": {
     "fabric-gametest": [
       "org.minefortress.gametest.SmokeTests",
-      "org.minefortress.gametest.TwoFortressesIsolationTest"
+      "org.minefortress.gametest.TwoFortressesIsolationTest",
+      "org.minefortress.gametest.StorageTests"
     ]
   },
   "depends": {

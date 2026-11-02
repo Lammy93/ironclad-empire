@@ -117,6 +117,27 @@ class FortressFixture(
 
     fun storageCount(item: Item): Int = managers.resourceHelper.getCountIncludingSimilar(item).toInt()
 
+    /** Counts [item] physically sitting in chests within 16 blocks of the campfire. */
+    fun chestTotal(item: Item): Int =
+        BlockPos.iterate(center.add(-16, -4, -16), center.add(16, 8, 16))
+            .mapNotNull { world.getBlockEntity(it) as? net.minecraft.block.entity.ChestBlockEntity }
+            .sumOf { chest -> (0 until chest.size()).sumOf { slot -> chest.getStack(slot).let { if (it.isOf(item)) it.count else 0 } } }
+
+    /** Items a blueprint build at [origin] needs, merged per item. */
+    fun blueprintCost(blueprintId: String, origin: BlockPos): Map<Item, Int> {
+        val blueprints = player.getManagersProvider().get_BlueprintManager()
+        val task = blueprints.createAreaBasedTask(UUID.randomUUID(), blueprintId, origin, BlockRotation.NONE, world)
+            as org.minefortress.tasks.AreaBlueprintTask
+        return task.requiredResources.groupBy { it.item }.mapValues { (_, stacks) -> stacks.sumOf { it.count } }
+    }
+
+    fun cancel(task: net.remmintan.mods.minefortress.core.interfaces.tasks.IBaseTask) =
+        managers.taskManager.cancelTask(task.pos, player)
+
+    /** How many of the task's positions already hold the block form of [item]. */
+    fun placedCount(item: Item, task: net.remmintan.mods.minefortress.core.interfaces.tasks.IBaseTask): Int =
+        task.positions.count { world.getBlockState(it).block.asItem() == item }
+
     fun professionAmounts(): Map<String, Int> =
         PROFESSION_IDS.associateWith { managers.professionsManager.getProfession(it)?.amount ?: 0 }
 

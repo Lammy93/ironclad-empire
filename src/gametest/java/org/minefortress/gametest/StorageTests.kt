@@ -1,0 +1,69 @@
+package org.minefortress.gametest
+
+import net.fabricmc.fabric.api.gametest.v1.FabricGameTest
+import net.minecraft.item.Items
+import net.minecraft.test.GameTest
+import net.minecraft.test.TestContext
+
+/**
+ * Audit of the unreleased "items live in real chests" storage rewrite (upstream master, Jul-Aug 2025).
+ * All run in SURVIVAL, where tasks reserve and consume real items.
+ */
+class StorageTests : FabricGameTest {
+
+    @GameTest(templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 200)
+    fun itemsLiveInRealChests(ctx: TestContext) {
+        val f = FortressTestKit.createFortress(ctx)
+        f.give(Items.COBBLESTONE, 64)
+        ctx.addInstantFinalTask {
+            ctx.assertTrue(f.chestTotal(Items.COBBLESTONE) == 64, "expected 64 cobblestone in fortress chests, found ${f.chestTotal(Items.COBBLESTONE)}")
+        }
+    }
+
+    @GameTest(templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 6000)
+    fun taskReservesAndConsumes(ctx: TestContext) {
+        val f = FortressTestKit.createFortress(ctx)
+        val origin = f.center.add(8, 0, 0)
+        val cost = f.blueprintCost("accessory_1", origin)
+        cost.entries.forEach { (item, n) -> f.give(item, n + 5) } // 5 spare of each, which must stay in storage
+        val task = f.startBlueprint("accessory_1", origin)
+        ctx.addInstantFinalTask {
+            ctx.assertTrue(task.isComplete(), "blueprint task not complete")
+            cost.entries.forEach { (item, _) ->
+                ctx.assertTrue(f.storageCount(item) == 5, "after building, expected exactly 5 spare $item, found ${f.storageCount(item)}")
+            }
+        }
+    }
+
+    @GameTest(templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 400)
+    fun cancelReturnsResources(ctx: TestContext) {
+        val f = FortressTestKit.createFortress(ctx)
+        val origin = f.center.add(8, 0, 0)
+        val cost = f.blueprintCost("accessory_1", origin)
+        cost.entries.forEach { (item, n) -> f.give(item, n) }
+        val task = f.startBlueprint("accessory_1", origin)
+        f.cancel(task)
+        ctx.addInstantFinalTask {
+            cost.entries.forEach { (item, n) ->
+                ctx.assertTrue(f.storageCount(item) == n, "after cancel, expected $n $item back in storage, found ${f.storageCount(item)}")
+            }
+        }
+    }
+
+    @GameTest(templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 400)
+    fun noLossOnSaveMidTask(ctx: TestContext) {
+        val f = FortressTestKit.createFortress(ctx)
+        val origin = f.center.add(8, 0, 0)
+        val cost = f.blueprintCost("accessory_1", origin)
+        cost.entries.forEach { (item, n) -> f.give(item, n) }
+        val task = f.startBlueprint("accessory_1", origin)
+        val reloaded = f.saveAndReload()
+        reloaded.cancel(task)
+        ctx.addInstantFinalTask {
+            cost.entries.forEach { (item, n) ->
+                val total = reloaded.storageCount(item) + reloaded.placedCount(item, task)
+                ctx.assertTrue(total == n, "after save + cancel, $item in storage + placed = $total, expected $n")
+            }
+        }
+    }
+}
