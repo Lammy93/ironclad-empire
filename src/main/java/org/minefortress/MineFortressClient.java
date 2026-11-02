@@ -1,5 +1,9 @@
 package org.minefortress;
 
+import net.remmintan.mods.minefortress.blocks.building.BuildingsHudRenderer;
+import net.remmintan.mods.minefortress.blocks.building.FortressBuildingBlockEntityRenderer;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
+
 import com.chocohead.mm.api.ClassTinkerers;
 import kotlin.jvm.functions.Function0;
 import net.fabricmc.api.ClientModInitializer;
@@ -30,6 +34,8 @@ public class MineFortressClient implements ClientModInitializer {
         FortressKeybindings.init();
         FortressEntities.registerRenderers();
         PawnDataHudRenderer.INSTANCE.register();
+        BuildingsHudRenderer.INSTANCE.register();
+        BlockEntityRendererFactories.register(FortressBlocks.BUILDING_ENT_TYPE, ctx -> new FortressBuildingBlockEntityRenderer());
         NetworkReaders.register();
 
 
