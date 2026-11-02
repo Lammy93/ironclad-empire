@@ -1,10 +1,8 @@
 plugins {
     id 'java'
-    id 'fabric-loom' version '1.4-SNAPSHOT'
+    id 'fabric-loom' version '1.7.4'
     id 'maven-publish'
-    id 'org.jetbrains.kotlin.jvm' version '1.9.21'
-    id "com.modrinth.minotaur" version "2.+"
-    id "com.matthewprenger.cursegradle" version "1.4.0"
+    id 'org.jetbrains.kotlin.jvm' version '2.0.21'
 }
 
 if (System.getenv("BUILD_NUMBER") != null) {
@@ -48,6 +46,12 @@ group = project.maven_group
 
 
 repositories {
+    // Our own Automatone build, published by scripts/build-deps.sh
+    maven {
+        name = 'MFC local deps'
+        url = rootProject.file('deps/m2')
+        content { includeGroup('io.github.ladysnake') }
+    }
     // Add repositories to retrieve artifacts from in here.
     // You should only use this when depending on other mods because
     // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
@@ -88,11 +92,11 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-transfer-api-v1:${project.fabric_version}"
-    modImplementation "net.fabricmc:fabric-language-kotlin:1.10.20+kotlin.1.9.24"
+    modImplementation "net.fabricmc:fabric-language-kotlin:1.12.3+kotlin.2.0.21"
     modRuntimeOnly "maven.modrinth:keybind-fix:1.0.0"
 
     modImplementation include("com.github.Chocohead:Fabric-ASM:v2.3")
-    modImplementation include("com.github.minefortress-mod:automatone:1.0.9-minefortress")
+    modImplementation include("io.github.ladysnake:automatone:1.0.9-mfc")
     modImplementation include("com.github.minefortress-mod.minefortress-cc-api:cardinal-components-base:5.2.9-minefortress")
     modImplementation include("com.github.minefortress-mod.minefortress-cc-api:cardinal-components-entity:5.2.9-minefortress")
     modImplementation include("com.github.minefortress-mod.minefortress-cc-api:cardinal-components-world:5.2.9-minefortress")
@@ -146,51 +150,12 @@ publishing {
     }
 }
 kotlin {
-    jvmToolchain(17)
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
 }
 
-// Publishing configurations
-// This section is wrapped in a conditional to prevent it from running during regular builds.
-// It will only be configured when the 'modrinth' or 'curseforge' tasks are explicitly called.
-
-if (gradle.startParameter.taskNames.contains("modrinth") || gradle.startParameter.taskNames.contains("curseforge")) {
-    def changelogContent = file("changelog.md").exists() ? file("changelog.md").text : "See the [commit history](https://github.com/minefortress-mod/minefortress/commits/master) for details."
-
-    modrinth {
-        token = System.getenv("MODRINTH_TOKEN")
-        projectId = "lcUdtArI"
-        versionNumber = version
-        versionName = "MineFortress ${version}"
-        changelog = changelogContent
-        uploadFile = remapJar
-        gameVersions = [project.minecraft_version]
-        loaders = ["fabric"]
-        dependencies {
-            required.project "fabric-api"
-            required.project "keybind-fix"
-            required.project "fabric-language-kotlin"
-        }
-    }
-
-    curseforge {
-        apiKey = System.getenv("CURSEFORGE_TOKEN")
-
-        project {
-            id = "684798"
-            changelog = changelogContent
-            releaseType = "release"
-            addGameVersion "${minecraft_version}"
-            addGameVersion "Fabric"
-
-            mainArtifact(remapJar) {
-                displayName = "${version}"
-            }
-
-            relations {
-                requiredDependency "fabric-api"
-                requiredDependency "keybind-fix"
-                requiredDependency "fabric-language-kotlin"
-            }
-        }
-    }
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }

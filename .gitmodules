@@ -1,3 +1,4 @@
 [submodule "deps/automatone"]
 	path = deps/automatone
 	url = https://github.com/Lammy93/automatone.git
+	branch = mfc

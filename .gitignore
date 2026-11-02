@@ -38,3 +38,7 @@ automation-scripts/tests.sh
 
 ai-input.txt
 .aider*
+
+# local dependency builds
+/deps/m2/
+.kotlin/

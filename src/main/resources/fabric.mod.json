@@ -3,13 +3,16 @@
   "id": "minefortress",
   "version": "${version}",
 
-  "name": "MineFortress",
-  "description": "The Real-Time Strategy mod for minecraft. Manage a group of pawns, to survive and grow your village",
+  "name": "MineFortress Continued",
+  "description": "Continued fork of MineFortress, the Real-Time Strategy mod for Minecraft. Manage a group of pawns, to survive and grow your village. Original mod by remmintan.",
   "authors": [
-    "remmintan"
+    "remmintan",
+    "MineFortress Continued contributors"
   ],
   "contact": {
-    "homepage": "https://minecraftfortress.org/"
+    "homepage": "https://github.com/Lammy93/minefortress",
+    "sources": "https://github.com/Lammy93/minefortress",
+    "issues": "https://github.com/Lammy93/minefortress/issues"
   },
 
   "license": "MIT",
