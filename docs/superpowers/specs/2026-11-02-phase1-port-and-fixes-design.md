@@ -1,7 +1,7 @@
 # MineFortress Continued — Phase 1: Port to Fabric 1.21.1 and fix open bugs
 
 Date: 2026-11-02
-Status: approved in conversation, awaiting written-spec review
+Status: approved by Zac 2026-11-02
 
 ## 1. Goal
 
@@ -20,7 +20,7 @@ its own design, plan and build cycle:
 | **1 (this spec)** | Port + bug fixes | MineFortress, MIT |
 | 2 | Survival ↔ fortress hotkey swap, 9 extra recipes (covers upstream #62) | MFAdditions by JGBau, AFL-3.0 |
 | 3 | Combat stances/formations/squads, auto work zones (trees, mines, fishing), shared-storage crafting + missing-materials list, factions/safe zones, mounts/boats, Structurize import | **Ideas only** from "MineFortress Reforged" (deletethe0, All Rights Reserved, NeoForge 1.21.1). Clean reimplementation; no Reforged code or assets are copied. |
-| 4 | Retextured pawn skins as an optional built-in skin set | Elithris, no licence stated: only with written permission, otherwise it stays a separate resource pack |
+| 4 | Our own retextured pawn skins as an optional built-in skin set (one per profession, soldier colour variants) | Original artwork made for this project (decided 2026-11-02). Elithris's pack is not used or copied |
 
 The project must stay **publishable**: only MIT/AFL code, our own code, and assets
 we have permission for.
@@ -37,8 +37,8 @@ we have permission for.
   (from `minefortress-mod/automatone`). Local working copy:
   `/mnt/user/claude-workspace/minefortress-continued/`.
 - Commit identity: `LammyK <121271206+Lammy93@users.noreply.github.com>`.
-- Credits in `fabric.mod.json` and README: remmintan (original author). JGBau and
-  Elithris get added in Phases 2 and 4.
+- Credits in `fabric.mod.json` and README: remmintan (original author). JGBau (MFAdditions
+  ideas) gets added in Phase 2.
 - No publishing to Modrinth/CurseForge in Phase 1.
 
 ## 3. Starting point (facts checked 2026-11-02)
