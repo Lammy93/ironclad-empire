@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "minefortress-gametest",
+  "version": "1.0.0",
+  "name": "MineFortress Continued game tests",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": [
+      "org.minefortress.gametest.SmokeTests",
+      "org.minefortress.gametest.TwoFortressesIsolationTest"
+    ]
+  },
+  "depends": {
+    "minefortress": "*",
+    "fabric-gametest-api-v1": "*"
+  }
+}

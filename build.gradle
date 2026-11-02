@@ -36,6 +36,10 @@ sourceSets {
     panama {
         compileClasspath += main.compileClasspath + core.output + selections.output + building.output
     }
+    gametest {
+        compileClasspath += main.compileClasspath + main.output + core.output + networking.output + building.output + panama.output + selections.output + gui.output
+        runtimeClasspath += main.runtimeClasspath + main.output + core.output + networking.output + building.output + panama.output + selections.output + gui.output
+    }
     main {
         compileClasspath += core.output + networking.output + building.output + panama.output + selections.output + gui.output
         runtimeClasspath += core.output + networking.output + building.output + panama.output + selections.output + gui.output
@@ -113,6 +117,33 @@ processResources {
 
 loom {
     accessWidenerPath = file("src/main/resources/minefortress.accesswidener")
+
+    mods {
+        minefortress {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.core
+            sourceSet sourceSets.networking
+            sourceSet sourceSets.gui
+            sourceSet sourceSets.building
+            sourceSet sourceSets.selections
+            sourceSet sourceSets.panama
+        }
+        "minefortress-gametest" {
+            sourceSet sourceSets.gametest
+        }
+    }
+
+    runs {
+        // Headless Fabric game tests: scripts/gradle.sh runGametest
+        gametest {
+            server()
+            name "Game Test"
+            source sourceSets.gametest
+            runDir "build/gametest"
+            vmArg "-Dfabric-api.gametest"
+            vmArg "-Dfabric-api.gametest.report-file=${project.layout.buildDirectory.get().asFile}/gametest.xml"
+        }
+    }
 }
 
 jar {
