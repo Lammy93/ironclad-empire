@@ -12,6 +12,9 @@ import java.util.function.Function;
 public class ClientNetworkReceivers {
 
     public static void registerReceivers() {
+        // tells the server this client has the mod (see ModPresenceHandshake)
+        net.fabricmc.fabric.api.client.networking.v1.ClientConfigurationNetworking.registerGlobalReceiver(
+                net.remmintan.mods.minefortress.networking.helpers.ModPresenceHandshake.Handshake.ID, (payload, context) -> { });
         registerReceiver(FortressChannelNames.FINISH_TASK, ClientboundTaskExecutedPacket::new);
         registerReceiver(FortressChannelNames.FORTRESS_MANAGER_SYNC, ClientboundSyncFortressManagerPacket::new);
         registerReceiver(FortressChannelNames.FORTRESS_SYNC_BLUEPRINT, ClientboundSyncBlueprintPacket::new);

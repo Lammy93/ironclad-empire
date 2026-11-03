@@ -15,6 +15,7 @@ public class ServerNetworkReceivers {
     public static void registerReceivers() {
         // payload types are needed on both sides; this runs from the common initializer
         FortressRawPayload.registerAllS2C();
+        net.remmintan.mods.minefortress.networking.helpers.ModPresenceHandshake.registerCommon();
         registerReceiver(FortressChannelNames.NEW_SELECTION_TASK, ServerboundSimpleSelectionTaskPacket::new);
         registerReceiver(FortressChannelNames.NEW_BLUEPRINT_TASK, ServerboundBlueprintTaskPacket::new);
         registerReceiver(FortressChannelNames.CANCEL_TASK, ServerboundCancelTaskPacket::new);

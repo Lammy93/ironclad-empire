@@ -13,6 +13,8 @@ public class FortressClientNetworkHelper {
         final var registries = client.getNetworkHandler() != null
                 ? client.getNetworkHandler().getRegistryManager()
                 : net.minecraft.registry.DynamicRegistryManager.of(net.minecraft.registry.Registries.REGISTRIES);
+        // a modded client on a server without the mod: stay quiet instead of erroring
+        if (!ClientPlayNetworking.canSend(FortressRawPayload.id(channelName))) return;
         ClientPlayNetworking.send(FortressRawPayload.of(channelName, packet, registries));
     }
 
