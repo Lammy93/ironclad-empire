@@ -50,6 +50,26 @@ class StorageTests : FabricGameTest {
         }
     }
 
+    /**
+     * A fortress chest in an unloaded chunk is still the fortress's chest. Reading the storage must not load
+     * (or generate) that chunk, and must not forget the chest. Loading chunks here made the server spin forever
+     * while shutting down, and silently unregistered chests that were merely out of range.
+     */
+    @GameTest(skyAccess = true, templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 100)
+    fun unloadedChestStaysRegisteredAndUnloaded(ctx: TestContext) {
+        val f = FortressTestKit.createFortress(ctx)
+        val far = f.center.add(4096, 0, 0)
+        val farChunk = net.minecraft.util.math.ChunkPos(far)
+        ctx.assertFalse(ctx.world.chunkManager.isChunkLoaded(farChunk.x, farChunk.z), "test setup: the far chunk is already loaded")
+        f.managers.containerRegistry.register(far)
+
+        f.storageCount(Items.COBBLESTONE) // reads the fortress storage
+
+        ctx.assertFalse(ctx.world.chunkManager.isChunkLoaded(farChunk.x, farChunk.z), "reading storage loaded the chunk of an out-of-range chest")
+        ctx.assertTrue(f.registeredContainers().contains(far), "the out-of-range chest was unregistered")
+        ctx.complete()
+    }
+
     @GameTest(skyAccess = true, templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 400)
     fun noLossOnSaveMidTask(ctx: TestContext) {
         val f = FortressTestKit.createFortress(ctx)

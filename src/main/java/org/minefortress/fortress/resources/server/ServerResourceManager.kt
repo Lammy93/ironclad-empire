@@ -132,6 +132,10 @@ class ServerResourceManager(private val server: MinecraftServer) :
     override fun getStorage(): Storage<ItemVariant> {
         val storages = mutableListOf<Storage<ItemVariant>>()
         for (pos in containerPositions.toList()) {
+            // A chest in an unloaded chunk is still ours: skip it without loading (or generating) the chunk.
+            // Looking it up here used to load chunks during shutdown (the save never finished) and unregistered
+            // chests that were merely out of range.
+            if (!world.chunkManager.isChunkLoaded(pos.x shr 4, pos.z shr 4)) continue
             val storage = ItemStorage.SIDED.find(world, pos, null)
             if (storage == null || !storage.supportsInsertion() || !storage.supportsExtraction()) {
                 log.error("Storage at position $pos is no longer valid! Unregistering")

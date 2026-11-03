@@ -46,7 +46,8 @@
     "renderer.gui.worldcreator.GameTabMixin",
     "renderer.gui.worldcreator.WorldCreatorMixin",
     "world.ClientWorldMixin",
-    "world.WorldLoadedEventMixin"
+    "world.WorldLoadedEventMixin",
+    "FortressKeyBindingMixin"
   ],
   "server": [],
   "injectors": {

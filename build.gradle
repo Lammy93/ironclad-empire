@@ -97,7 +97,6 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-transfer-api-v1:${project.fabric_version}"
     modImplementation "net.fabricmc:fabric-language-kotlin:1.12.3+kotlin.2.0.21"
-    modRuntimeOnly "maven.modrinth:keybind-fix:1.0.0"
 
     modImplementation include("com.github.Chocohead:Fabric-ASM:v2.3")
     modImplementation include("io.github.ladysnake:automatone:1.0.9-mfc")

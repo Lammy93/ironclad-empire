@@ -117,6 +117,13 @@ class FortressFixture(
 
     fun storageCount(item: Item): Int = managers.resourceHelper.getCountIncludingSimilar(item).toInt()
 
+    /** Chest positions registered as this fortress's storage (read from the manager's saved form). */
+    fun registeredContainers(): Set<BlockPos> {
+        val tag = NbtCompound()
+        (managers.resourceManager as net.remmintan.mods.minefortress.core.interfaces.server.IWritableManager).write(tag)
+        return tag.getLongArray("containerPositions").map { BlockPos.fromLong(it) }.toSet()
+    }
+
     /** Counts [item] physically sitting in chests within 16 blocks of the campfire. */
     fun chestTotal(item: Item): Int =
         BlockPos.iterate(center.add(-16, -4, -16), center.add(16, 8, 16))
