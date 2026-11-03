@@ -7,7 +7,7 @@ import net.minecraft.client.gui.widget.ClickableWidget
 import net.minecraft.util.Identifier
 import net.remmintan.mods.minefortress.core.dtos.*
 
-val BUTTON_TEXTURE = Identifier("minefortress", "textures/gui/btn_big.png")
+val BUTTON_TEXTURE = Identifier.of("minefortress", "textures/gui/btn_big.png")
 
 class PawnSkinButton(
     x: Int,

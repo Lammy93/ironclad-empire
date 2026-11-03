@@ -1,4 +1,4 @@
-# MineFortress Empires
+# Ironclad Empire
 
 A continued fork of [MineFortress](https://github.com/remmintan/minefortress) by **remmintan**, the mod that turns Minecraft into a real-time strategy game.
 The original mod has not been updated since August 2025. This fork ports it to newer Minecraft versions (Fabric 1.21.1 first) and fixes open bug reports.

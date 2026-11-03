@@ -90,7 +90,7 @@ public class FisherDailyTask implements ProfessionDailyTask {
         }
 
         if (!movementHelper.hasReachedGoal() && movementHelper.isStuck())
-            colonist.teleport(earthPos.getX(), earthPos.getY(), earthPos.getZ());
+            colonist.requestTeleport(earthPos.getX(), earthPos.getY(), earthPos.getZ());
 
 
     }

@@ -14,5 +14,12 @@ public interface IFortressServerPlayerEntity {
 
     void set_ModVersionValidated(boolean validated);
 
+    /**
+     * Where this player lands when moving to {@code destination}: their blueprint cell when entering the blueprint
+     * dimension, and the remembered position when leaving it. Any other move keeps the current position.
+     * (Up to 1.20.6 this was an {@code @Inject} into {@code ServerPlayerEntity.getTeleportTarget}, removed in 1.21.)
+     */
+    net.minecraft.world.TeleportTarget get_FortressTeleportTarget(net.minecraft.server.world.ServerWorld destination);
+
 
 }

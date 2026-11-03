@@ -2,7 +2,7 @@ package net.remmintan.panama.model.builder;
 
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.chunk.BlockBufferBuilderStorage;
+import net.remmintan.panama.PanamaBufferStorage;
 import net.remmintan.gobi.renderer.selection.SelectionRenderInfo;
 import net.remmintan.mods.minefortress.core.interfaces.selections.ISelectionModelBuilderInfoProvider;
 import net.remmintan.panama.model.BuiltSelection;
@@ -12,15 +12,15 @@ import java.util.function.Supplier;
 
 public class SelectionModelBuilder {
 
-    private final Map<RenderLayer, BufferBuilder> lineBufferBuilderStorage;
-    private final BlockBufferBuilderStorage blockBufferBuilderStorage;
+    private final PanamaBufferStorage lineBufferBuilderStorage;
+    private final PanamaBufferStorage blockBufferBuilderStorage;
     private final Supplier<ISelectionModelBuilderInfoProvider> infoProviderSupplier;
 
     private BuiltSelection builtSelection;
 
     public SelectionModelBuilder(
-            Map<RenderLayer, BufferBuilder> lineBufferBuilderStorage,
-            BlockBufferBuilderStorage blockBufferBuilderStorage,
+            PanamaBufferStorage lineBufferBuilderStorage,
+            PanamaBufferStorage blockBufferBuilderStorage,
             Supplier<ISelectionModelBuilderInfoProvider> infoProviderSupplier
     ) {
         this.lineBufferBuilderStorage = lineBufferBuilderStorage;

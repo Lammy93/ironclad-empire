@@ -7,7 +7,7 @@ import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.gl.VertexBuffer;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.chunk.BlockBufferBuilderStorage;
+import net.remmintan.panama.PanamaBufferStorage;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
@@ -36,7 +36,7 @@ public final class BlueprintRenderer extends AbstractCustomRenderer implements I
 
     private final BlueprintsModelBuilder blueprintsModelBuilder;
 
-    public BlueprintRenderer(Supplier<IBlockDataProvider> blockDataProviderSupplier, MinecraftClient client, BlockBufferBuilderStorage blockBufferBuilderStorage) {
+    public BlueprintRenderer(Supplier<IBlockDataProvider> blockDataProviderSupplier, MinecraftClient client, PanamaBufferStorage blockBufferBuilderStorage) {
         super(client);
         blueprintsModelBuilder  = new BlueprintsModelBuilder(blockBufferBuilderStorage, blockDataProviderSupplier);
     }

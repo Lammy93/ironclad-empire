@@ -15,7 +15,7 @@ import java.util.List;
 
 public class BlueprintMetadataReader {
 
-    private static final Identifier PREDEFINED_BLUEPRINTS_ID = new Identifier(MineFortressMod.MOD_ID, "predefined_blueprints.json");
+    private static final Identifier PREDEFINED_BLUEPRINTS_ID = Identifier.of(MineFortressMod.MOD_ID, "predefined_blueprints.json");
     private List<BlueprintMetadata> predefinedBlueprints;
     private final MinecraftServer server;
 

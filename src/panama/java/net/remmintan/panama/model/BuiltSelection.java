@@ -8,7 +8,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.VertexBuffer;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.block.BlockRenderManager;
-import net.minecraft.client.render.chunk.BlockBufferBuilderStorage;
+import net.remmintan.panama.PanamaBufferStorage;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;
@@ -39,7 +39,7 @@ public class BuiltSelection implements BuiltModel {
     private final Set<RenderLayer> initializedLayers = new HashSet<>();
     private final Set<RenderLayer> nonEmptyLayers = new HashSet<>();
     private final Map<RenderLayer, VertexBuffer> vertexBuffers = new HashMap<>();
-    private final Map<RenderLayer, BufferBuilder.BuiltBuffer> builtBufferMap = new HashMap<>();
+    private final Map<RenderLayer, net.minecraft.client.render.BuiltBuffer> builtBufferMap = new HashMap<>();
     private CompletableFuture<Void> upload;
 
     private final SelectionRenderInfo selection;
@@ -61,12 +61,12 @@ public class BuiltSelection implements BuiltModel {
         return Optional.ofNullable(getClient().player).map(PlayerEntity::getBlockPos).orElse(getWorld().getSpawnPos());
     }
 
-    public void build(Map<RenderLayer, BufferBuilder> lineBufferBuilderStorage, BlockBufferBuilderStorage blockBufferBuilderStorage) {
+    public void build(PanamaBufferStorage lineBufferBuilderStorage, PanamaBufferStorage blockBufferBuilderStorage) {
         render(lineBufferBuilderStorage, blockBufferBuilderStorage);
         uploadBuffers();
     }
 
-    private void render(Map<RenderLayer, BufferBuilder> lineBufferBuilderStorage, BlockBufferBuilderStorage blockBufferBuilderStorage) {
+    private void render(PanamaBufferStorage lineBufferBuilderStorage, PanamaBufferStorage blockBufferBuilderStorage) {
         final MatrixStack matrices = new MatrixStack();
 
         final RenderLayer lines = RenderLayer.getLines();
@@ -114,11 +114,11 @@ public class BuiltSelection implements BuiltModel {
         }
 
         for(var layer : this.initializedLayers) {
-            final BufferBuilder.BuiltBuffer builtBuffer;
+            final net.minecraft.client.render.BuiltBuffer builtBuffer;
             if(layer == RenderLayer.getLines() || layer == FortressRenderLayer.getLinesNoDepth()) {
-                builtBuffer = lineBufferBuilderStorage.get(layer).end();
+                builtBuffer = lineBufferBuilderStorage.end(layer);
             } else {
-                builtBuffer = blockBufferBuilderStorage.get(layer).end();
+                builtBuffer = blockBufferBuilderStorage.end(layer);
             }
             this.builtBufferMap.put(layer, builtBuffer);
         }
@@ -131,7 +131,7 @@ public class BuiltSelection implements BuiltModel {
                 ((clickType == ClickType.REMOVE || clickType == ClickType.ROADS) && BuildingHelper.canRemoveBlock(getWorld(),pos));
     }
 
-    private void renderFluid(BlockBufferBuilderStorage blockBufferBuilderStorage, BlockPos pos, BlockState blockState) {
+    private void renderFluid(PanamaBufferStorage blockBufferBuilderStorage, BlockPos pos, BlockState blockState) {
         final FluidState fluidState = blockState.getFluidState();
         if(!fluidState.isEmpty()) {
             final RenderLayer fluidRenderLayer = RenderLayers.getFluidLayer(fluidState);
@@ -143,7 +143,7 @@ public class BuiltSelection implements BuiltModel {
         }
     }
 
-    private void renderBlock(BlockBufferBuilderStorage blockBufferBuilderStorage, MatrixStack matrices, BlockPos pos, BlockState blockState) {
+    private void renderBlock(PanamaBufferStorage blockBufferBuilderStorage, MatrixStack matrices, BlockPos pos, BlockState blockState) {
         if(blockState.getRenderType() != BlockRenderType.INVISIBLE) {
             final RenderLayer blockLayer = RenderLayers.getBlockLayer(blockState);
             final BufferBuilder blockBufferBuilder = blockBufferBuilderStorage.get(blockLayer);
@@ -157,13 +157,8 @@ public class BuiltSelection implements BuiltModel {
     }
 
     private void init(RenderLayer layer, BufferBuilder bufferBuilder) {
-        if(initializedLayers.add(layer)){
-            if(layer == RenderLayer.LINES || layer == FortressRenderLayer.LINES_NO_DEPTH) {
-                bufferBuilder.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
-            } else {
-                bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL);
-            }
-        }
+        // 1.21+: PanamaBufferStorage hands out builders already started with the layer's mode and format
+        initializedLayers.add(layer);
     }
 
     private void uploadBuffers() {

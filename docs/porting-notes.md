@@ -84,3 +84,28 @@ Test harness: 1.20.6 game tests default to `skyAccess = false` (a barrier ceilin
 Known follow-ups (not regressions of this port): spawn-egg pawns are not auto-registered with a fortress (upstream stored a UUID under the block-pos key; spawn NBT no longer reaches `initialize`).
 
 Result: build OK, no mixin-target warnings, `runServer` reaches `Done (8.8s)`, game tests 16/16 (incl. network round-trips).
+
+## Step 3: Minecraft 1.20.6 → 1.21.1
+
+Pinned: Yarn `1.21.1+build.3`, Fabric API `0.116.17+1.21.1`, Loader `0.16.14`, Cardinal Components API `6.1.3`.
+
+| Change | Before | After | Where |
+|---|---|---|---|
+| Identifiers | `new Identifier(ns, path)` / `new Identifier(str)` | `Identifier.of(...)` | everywhere (both repos) |
+| Data folders | `structures/`, `tags/blocks/` | `structure/`, `tags/block/` | main + game-test resources |
+| Teleport | `Entity.teleport(x, y, z)` | `requestTeleport(x, y, z)` | 11 call sites |
+| Dimension change | `moveToWorld(world)` + `getTeleportTarget(world)` inject | `teleportTo(TeleportTarget)` + `IFortressServerPlayerEntity.get_FortressTeleportTarget(dest)` | blueprint editor packets, player mixin |
+| Spawn | `moveToSpawn(world)` | `getWorldSpawnPos(world, basePos)`; camera angles set at `<init>` TAIL | player mixins (both repos) |
+| Eating | `eatFood(world, stack)`, `HungerManager.eat(stack)` | `eatFood(world, stack, food)`, `eat(FoodComponent)` | HungryEntity |
+| Enchantments | `EnchantmentHelper.getLevel(Enchantment, stack)`, `getEfficiency`, `hasAquaAffinity`, `getDepthStrider` | level read from the stack's enchantment component by `RegistryKey`; Depth Strider = `GENERIC_WATER_MOVEMENT_EFFICIENCY` × 3 | Colonist; Automatone ToolSet/CalculationContext |
+| Arrows | `createArrowProjectile(entity, arrow, pull)` | `(entity, arrow, pull, bow)` | ArcherPawn |
+| Spawn packets | `createSpawnPacket()` | `createSpawnPacket(EntityTrackerEntry)` | fishing bobber; Automatone fake player |
+| Vertex API | `vertex(double…)…next()`, shared Tessellator buffer, `BlockBufferBuilderStorage`, `BufferBuilder.BuiltBuffer` | `vertex(float…)` without `next()`, `Tessellator.begin()` returns the builder, `BuiltBuffer`; Panama uses `PanamaBufferStorage` (per-layer builders on `BufferAllocator`s, started with the layer's mode/format; empty layers skipped at upload) | Panama, renderers, fluid mixin; Automatone `RenderBuffer` |
+| Model colour | `render(..., r, g, b, a)` | `render(..., argb)` | PawnClothesFeature, VillagerHeadwearFeatureRenderer, NavigationTargetRenderer |
+| Disconnect screen | `createDisconnectedScreen(Text)` | `createDisconnectedScreen(DisconnectionInfo)` | FortressClientPlayNetworkHandlerMixin |
+| Access widener | `ChunkBuilder.buffers: BlockBufferBuilderStorage`, `CraftingScreenHandler.updateResult(5 args)` | `BlockBufferAllocatorStorage`, `updateResult(..., RecipeEntry)` | minefortress.accesswidener (checked every entry against 1.21.1) |
+| Automatone extras | `ThreadedAnvilChunkStorage`, `moveToWorld`, render `tickDelta()`, beam colour `float[]` | `ServerChunkLoadingManager`, `teleportTo`, `tickCounter().getTickDelta(true)`, ARGB `int` | Automatone `mfc` |
+
+Client-only changes that headless tests cannot see (check in the play-test): blueprint/selection/task rendering (Panama buffers), pawn clothes tint, fishing line, the blueprint editor enter/exit position, first-join camera angle, outdated-world disconnect screen, backup-prompt skip.
+
+Result: build OK, no mixin-target warnings, every access-widener entry resolves, `runServer` reaches `Done (10.0s)` with no errors, game tests 16/16.

@@ -2,7 +2,7 @@ package net.remmintan.panama.model.builder;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.chunk.BlockBufferBuilderStorage;
+import net.remmintan.panama.PanamaBufferStorage;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
@@ -18,13 +18,13 @@ import java.util.function.Supplier;
 
 public class BlueprintsModelBuilder {
 
-    private final BlockBufferBuilderStorage blockBufferBuilders;
+    private final PanamaBufferStorage blockBufferBuilders;
     private final Supplier<IBlockDataProvider> blockDataManagerSupplier;
 
     private final Map<String, BuiltBlueprint> builtBlueprints = new HashMap<>();
     private final HashSet<BuiltBlueprint> blueprintsToClose = new HashSet<>();
 
-    public BlueprintsModelBuilder(BlockBufferBuilderStorage blockBufferBuilders,
+    public BlueprintsModelBuilder(PanamaBufferStorage blockBufferBuilders,
                                   Supplier<IBlockDataProvider> blockDataProviderSupplier) {
         this.blockBufferBuilders = blockBufferBuilders;
         this.blockDataManagerSupplier = blockDataProviderSupplier;

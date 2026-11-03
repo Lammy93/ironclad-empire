@@ -18,10 +18,11 @@ public abstract class FortressClientPlayNetworkHandlerMixin extends ClientCommon
     }
 
     @Override
-    protected Screen createDisconnectedScreen(Text reason) {
-        if (reason != null && reason.getString().contains("Outdated world version")) {
+    protected Screen createDisconnectedScreen(net.minecraft.network.DisconnectionInfo info) {
+        // 1.21+: the disconnect reason comes wrapped in DisconnectionInfo
+        if (info != null && info.reason() != null && info.reason().getString().contains("Outdated world version")) {
             return new OutdatedWorldScreen();
         }
-        return super.createDisconnectedScreen(reason);
+        return super.createDisconnectedScreen(info);
     }
 }

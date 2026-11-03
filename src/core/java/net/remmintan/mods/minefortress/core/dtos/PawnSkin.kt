@@ -3,7 +3,7 @@ package net.remmintan.mods.minefortress.core.dtos
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
-val PAWN_SKIN_TEXTURE = Identifier("minefortress", "textures/races_big.png")
+val PAWN_SKIN_TEXTURE = Identifier.of("minefortress", "textures/races_big.png")
 
 const val PAWN_SKIN_TEXTURE_SIZE_X = 128
 const val PAWN_SKIN_TEXTURE_SIZE_Y = 64

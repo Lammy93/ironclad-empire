@@ -47,7 +47,7 @@ class ForesterDailyTask : ProfessionDailyTask {
             workingTicks++
         }
 
-        if (!movementHelper.hasReachedGoal() && movementHelper.isStuck) colonist.teleport(
+        if (!movementHelper.hasReachedGoal() && movementHelper.isStuck) colonist.requestTeleport(
             goal!!.x.toDouble(),
             goal!!.y.toDouble(), goal!!.z.toDouble()
         )

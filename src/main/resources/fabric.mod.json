@@ -3,16 +3,16 @@
   "id": "minefortress",
   "version": "${version}",
 
-  "name": "MineFortress Empires",
-  "description": "MineFortress Empires: a continued fork of MineFortress, the Real-Time Strategy mod for Minecraft. Manage a group of pawns, to survive and grow your village. Original mod by remmintan.",
+  "name": "Ironclad Empire",
+  "description": "Ironclad Empire: a continued fork of MineFortress, the Real-Time Strategy mod for Minecraft. Manage a group of pawns, to survive and grow your village. Original mod by remmintan.",
   "authors": [
     "remmintan",
-    "MineFortress Empires contributors"
+    "Ironclad Empire contributors"
   ],
   "contact": {
-    "homepage": "https://github.com/Lammy93/minefortress-empires",
-    "sources": "https://github.com/Lammy93/minefortress-empires",
-    "issues": "https://github.com/Lammy93/minefortress-empires/issues"
+    "homepage": "https://github.com/Lammy93/ironclad-empire",
+    "sources": "https://github.com/Lammy93/ironclad-empire",
+    "issues": "https://github.com/Lammy93/ironclad-empire/issues"
   },
 
   "license": "MIT",

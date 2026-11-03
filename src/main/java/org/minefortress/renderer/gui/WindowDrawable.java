@@ -5,7 +5,7 @@ import net.minecraft.client.gui.Drawable;
 import net.minecraft.util.Identifier;
 
 class WindowDrawable implements Drawable {
-    private static final Identifier BACKGROUND_TEXTURE_IDENTIFIER = new Identifier("textures/gui/demo_background.png");
+    private static final Identifier BACKGROUND_TEXTURE_IDENTIFIER = Identifier.of("textures/gui/demo_background.png");
 
     private final int x;
     private final int y;

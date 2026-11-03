@@ -501,9 +501,9 @@ public class FortressFishingBobberEntity extends ProjectileEntity {
         return false;
     }
 
-    public Packet<ClientPlayPacketListener> createSpawnPacket() {
+    public Packet<ClientPlayPacketListener> createSpawnPacket(net.minecraft.server.network.EntityTrackerEntry entry) {
         Entity entity = this.getOwner();
-        return new EntitySpawnS2CPacket(this, entity == null ? this.getId() : entity.getId());
+        return new EntitySpawnS2CPacket(this, entry, entity == null ? this.getId() : entity.getId()); // 1.21+: tracker entry
     }
 
     public void onSpawnPacket(EntitySpawnS2CPacket packet) {

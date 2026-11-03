@@ -21,8 +21,8 @@ public final class ProfessionsReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProfessionsReader.class);
 
-    private final Identifier professionsResourceId = new Identifier("minefortress", "professions/list.json");
-    private final Identifier professionTreeId = new Identifier("minefortress", "professions/tree.json");
+    private final Identifier professionsResourceId = Identifier.of("minefortress", "professions/list.json");
+    private final Identifier professionTreeId = Identifier.of("minefortress", "professions/tree.json");
 
     private final MinecraftServer server;
 
@@ -98,7 +98,7 @@ public final class ProfessionsReader {
 
     private Item decodeIcon(JsonReader reader) throws IOException {
         final var iconName = reader.nextString();
-        return Registries.ITEM.get(new Identifier(iconName));
+        return Registries.ITEM.get(Identifier.of(iconName));
     }
 
     private ProfessionFullInfo.Requirements readRequirements(JsonReader reader) throws IOException {
@@ -169,7 +169,7 @@ public final class ProfessionsReader {
         if(itemName == null) {
             throw new IllegalStateException("Item requirement must have an item");
         }
-        return new ProfessionFullInfo.ItemRequirement(Registries.ITEM.get(new Identifier(itemName)), count);
+        return new ProfessionFullInfo.ItemRequirement(Registries.ITEM.get(Identifier.of(itemName)), count);
     }
 
 }

@@ -38,7 +38,7 @@ class WanderAroundTheFortressGoal(colonist: Colonist) : AbstractFortressGoal(col
         if (colonist.movementHelper.isStuck) {
             if (goal != null) {
                 colonist.resetControls()
-                colonist.teleport(goal!!.x.toDouble(), goal!!.y.toDouble(), goal!!.z.toDouble())
+                colonist.requestTeleport(goal!!.x.toDouble(), goal!!.y.toDouble(), goal!!.z.toDouble())
             }
         }
     }

@@ -46,7 +46,7 @@ public abstract class FortressFluidRendererMixin {
             final double newY = y - (y1 & 0xF) + y1;
             final double newZ = z - (z1 & 0xF) + z1;
 
-            vertexConsumer.vertex(newX, newY, newZ).color(red, green, blue, 1.0f).texture(u, v).light(light).normal(0.0f, 1.0f, 0.0f).next();
+            vertexConsumer.vertex((float) newX, (float) newY, (float) newZ).color(red, green, blue, 1.0f).texture(u, v).light(light).normal(0.0f, 1.0f, 0.0f);
             ci.cancel();
         }
     }

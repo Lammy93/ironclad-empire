@@ -14,7 +14,7 @@ import java.util.List;
 
 final class ServerStartingInventoryReader {
 
-    private static final Identifier STARTING_INVENTORY_ID = new Identifier("minefortress", "starting_inventory.json");
+    private static final Identifier STARTING_INVENTORY_ID = Identifier.of("minefortress", "starting_inventory.json");
 
     private final MinecraftServer server;
 
@@ -50,7 +50,7 @@ final class ServerStartingInventoryReader {
         while (jsonReader.hasNext()) {
             final var name = jsonReader.nextName();
             switch (name) {
-                case "item" -> item = Registries.ITEM.get(new Identifier(jsonReader.nextString()));
+                case "item" -> item = Registries.ITEM.get(Identifier.of(jsonReader.nextString()));
                 case "amount" -> amount = jsonReader.nextInt();
                 default -> jsonReader.skipValue();
             }

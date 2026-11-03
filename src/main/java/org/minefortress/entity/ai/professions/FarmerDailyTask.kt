@@ -52,7 +52,7 @@ class FarmerDailyTask : AbstractAutomationAreaTask() {
 
         if (movementHelper.goal != null && !movementHelper.hasReachedGoal() && movementHelper.isStuck) {
             val workGoal = movementHelper.goal!!.up()
-            colonist.teleport(workGoal.x.toDouble(), workGoal.y.toDouble(), workGoal.z.toDouble())
+            colonist.requestTeleport(workGoal.x.toDouble(), workGoal.y.toDouble(), workGoal.z.toDouble())
         }
     }
 

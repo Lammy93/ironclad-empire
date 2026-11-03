@@ -259,7 +259,7 @@ public final class ServerFortressManager implements IServerFortressManager {
         if (fortressCenter == null) return;
         if (player.getWorld().getRegistryKey() != World.OVERWORLD) return;
 
-        player.teleport(fortressCenter.getX() + 10, fortressCenter.getY() + 20, fortressCenter.getZ() + 10);
+        player.requestTeleport(fortressCenter.getX() + 10, fortressCenter.getY() + 20, fortressCenter.getZ() + 10);
     }
 
     @Override
@@ -269,7 +269,7 @@ public final class ServerFortressManager implements IServerFortressManager {
 
         // Get a position on the ground near the campfire
         BlockPos groundPos = getRandomSpawnPosition();
-        player.teleport(groundPos.getX(), groundPos.getY(), groundPos.getZ());
+        player.requestTeleport(groundPos.getX(), groundPos.getY(), groundPos.getZ());
     }
 
     @Override

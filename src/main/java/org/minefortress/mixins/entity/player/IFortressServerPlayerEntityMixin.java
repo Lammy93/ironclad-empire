@@ -92,8 +92,8 @@ public abstract class IFortressServerPlayerEntityMixin extends PlayerEntity impl
     }
 
 
-    @Inject(method="getTeleportTarget", at=@At("HEAD"), cancellable = true)
-    public void getTeleportTarget(ServerWorld destination, CallbackInfoReturnable<TeleportTarget> cir) {
+    @Override
+    public TeleportTarget get_FortressTeleportTarget(ServerWorld destination) {
         if (destination.getRegistryKey() == BlueprintsDimensionUtilsKt.getBLUEPRINT_DIMENSION_KEY()) {
             this.persistedPos = this.getPos();
             this.persistedVelocity = this.getVelocity();
@@ -105,19 +105,19 @@ public abstract class IFortressServerPlayerEntityMixin extends PlayerEntity impl
             final var configBlockPos = cell.getConfigBlock();
             final Vec3d position = new Vec3d(configBlockPos.getX(), configBlockPos.getY() + 1, configBlockPos.getZ());
             final Vec3d velocity = new Vec3d(0, 0, 0);
-            final TeleportTarget teleportTarget = new TeleportTarget(position, velocity, -45, 0);
-            cir.setReturnValue(teleportTarget);
+            return new TeleportTarget(destination, position, velocity, -45, 0, TeleportTarget.NO_OP);
         }
 
         if (this.getWorld().getRegistryKey() == BlueprintsDimensionUtilsKt.getBLUEPRINT_DIMENSION_KEY() && destination.getRegistryKey() == World.OVERWORLD) {
             final Vec3d position = this.persistedPos;
             final Vec3d velocity = this.persistedVelocity;
-            final TeleportTarget teleportTarget = new TeleportTarget(position, velocity, this.persistedYaw, this.persistedPitch);
-            cir.setReturnValue(teleportTarget);
+            return new TeleportTarget(destination, position, velocity, this.persistedYaw, this.persistedPitch, TeleportTarget.NO_OP);
         }
+        return new TeleportTarget(destination, this.getPos(), this.getVelocity(), this.getYaw(), this.getPitch(), TeleportTarget.NO_OP);
     }
 
-    @Redirect(method = "moveToSpawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/SpawnLocating;findOverworldSpawn(Lnet/minecraft/server/world/ServerWorld;II)Lnet/minecraft/util/math/BlockPos;"))
+    // 1.21+: moveToSpawn(world) became getWorldSpawnPos(world, basePos)
+    @Redirect(method = "getWorldSpawnPos", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/SpawnLocating;findOverworldSpawn(Lnet/minecraft/server/world/ServerWorld;II)Lnet/minecraft/util/math/BlockPos;"))
     public BlockPos moveToSpawnFindOverworldSpawn(ServerWorld world, int x, int z) {
         final BlockPos actualSpawn = FortressSpawnLocating.findOverworldSpawn(world, x, z);
         if (actualSpawn != null && this.server.getDefaultGameMode() == FortressGamemodeUtilsKt.getFORTRESS()) {
@@ -127,13 +127,12 @@ public abstract class IFortressServerPlayerEntityMixin extends PlayerEntity impl
         }
     }
 
-    @Inject(method = "moveToSpawn", at = @At("RETURN"))
-    public void moveToSpawnAfter(ServerWorld world, CallbackInfo ci) {
+    // 1.21+: the constructor places the player at getWorldSpawnPos(...) with angles 0/0, so set the
+    // fortress camera angles after it (moveToSpawn's RETURN hook did this up to 1.20.6).
+    @Inject(method = "<init>", at = @At("TAIL"))
+    public void moveToSpawnAfter(net.minecraft.server.MinecraftServer server, ServerWorld world, com.mojang.authlib.GameProfile profile, net.minecraft.network.packet.c2s.common.SyncedClientOptions clientOptions, CallbackInfo ci) {
         this.setYaw(45f);
         this.setPitch(60f);
-        final var blockPos = this.getBlockPos();
-        if(this.networkHandler!=null)
-            this.teleport(blockPos.getX(), blockPos.getY(), blockPos.getZ());
     }
 
     @Inject(method = "tick", at = @At("TAIL"))

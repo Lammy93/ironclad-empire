@@ -15,8 +15,8 @@ class BuildingScreen(handler: BuildingScreenHandler, playerInventory: PlayerInve
     HandledScreen<BuildingScreenHandler>(handler, playerInventory, title) {
 
     companion object {
-        private val TABS_TEXTURE = Identifier("minefortress", "textures/gui/tabs.png")
-        private val BACKGROUND_TEXTURE = Identifier("minefortress", "textures/gui/demo_background.png")
+        private val TABS_TEXTURE = Identifier.of("minefortress", "textures/gui/tabs.png")
+        private val BACKGROUND_TEXTURE = Identifier.of("minefortress", "textures/gui/demo_background.png")
 
         const val PRIMARY_COLOR = 0x404040
         const val SECONDARY_COLOR = 0x707070

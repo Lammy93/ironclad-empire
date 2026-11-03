@@ -25,7 +25,7 @@ internal class InfoTab(private val handler: IInfoTabHandler, private val textRen
     ResizableTab {
 
     companion object {
-        private val BARS_TEXTURE = Identifier("minefortress", "textures/gui/bars.png")
+        private val BARS_TEXTURE = Identifier.of("minefortress", "textures/gui/bars.png")
     }
 
     override var x: Int = 0

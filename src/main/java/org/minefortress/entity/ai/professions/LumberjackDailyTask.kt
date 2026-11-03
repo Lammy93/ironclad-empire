@@ -70,7 +70,7 @@ class LumberjackDailyTask : AbstractAutomationAreaTask() {
         if (movementHelper.goal != null && !movementHelper.hasReachedGoal() && movementHelper.isStuck) {
             val workGoal = movementHelper.goal!!.up().west()
             colonist.resetControls()
-            colonist.teleport(workGoal.x + 0.5, workGoal.y.toDouble(), workGoal.z + 0.5)
+            colonist.requestTeleport(workGoal.x + 0.5, workGoal.y.toDouble(), workGoal.z + 0.5)
         }
     }
 

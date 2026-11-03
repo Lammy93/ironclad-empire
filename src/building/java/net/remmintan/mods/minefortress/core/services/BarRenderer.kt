@@ -4,7 +4,7 @@ import net.minecraft.client.gui.DrawContext
 import net.minecraft.util.Identifier
 import net.remmintan.mods.minefortress.core.dtos.buildings.BarColor
 
-private val BARS_TEXTURE = Identifier("minefortress", "textures/gui/bars.png")
+private val BARS_TEXTURE = Identifier.of("minefortress", "textures/gui/bars.png")
 private const val TEXTURE_SIDE = 256
 
 class BarRenderer(

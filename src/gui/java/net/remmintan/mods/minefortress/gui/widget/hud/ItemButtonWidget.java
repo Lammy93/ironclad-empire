@@ -20,9 +20,9 @@ import java.util.function.Function;
 
 public class ItemButtonWidget extends TexturedButtonWidget implements IHudButton, IItemHudElement {
 
-    protected static final ButtonTextures ITEM_BUTTON_TEXTURES = new ButtonTextures(new Identifier("widget/button"), new Identifier("widget/button_disabled"), new Identifier("widget/button_highlighted"));
+    protected static final ButtonTextures ITEM_BUTTON_TEXTURES = new ButtonTextures(Identifier.of("widget/button"), Identifier.of("widget/button_disabled"), Identifier.of("widget/button_highlighted"));
     protected static final int BUTTON_SIDE = 20;
-    private static final Identifier ARROWS_TEXTURE = new Identifier("textures/gui/recipe_book.png");
+    private static final Identifier ARROWS_TEXTURE = Identifier.of("textures/gui/recipe_book.png");
 
     protected final ItemStack itemStack;
     private final int anchorX;

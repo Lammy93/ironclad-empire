@@ -43,10 +43,10 @@ public class FortressItems {
     );
 
     public static void register() {
-        Registry.register(Registries.ITEM, new Identifier("minefortress", "scaffold_oak_planks_b_1_1_0"), FortressItems.SCAFFOLD_OAK_PLANKS);
-        Registry.register(Registries.ITEM, new Identifier("minefortress", "colonist_spawn_egg"), FortressItems.COLONIST_SPAWN_EGG);
-        Registry.register(Registries.ITEM, new Identifier("minefortress", "warrior_pawn_spawn_egg"), FortressItems.WARRIOR_PAWN_SPAWN_EGG);
-        Registry.register(Registries.ITEM, new Identifier("minefortress", "archer_pawn_spawn_egg"), FortressItems.ARCHER_PAWN_SPAWN_EGG);
+        Registry.register(Registries.ITEM, Identifier.of("minefortress", "scaffold_oak_planks_b_1_1_0"), FortressItems.SCAFFOLD_OAK_PLANKS);
+        Registry.register(Registries.ITEM, Identifier.of("minefortress", "colonist_spawn_egg"), FortressItems.COLONIST_SPAWN_EGG);
+        Registry.register(Registries.ITEM, Identifier.of("minefortress", "warrior_pawn_spawn_egg"), FortressItems.WARRIOR_PAWN_SPAWN_EGG);
+        Registry.register(Registries.ITEM, Identifier.of("minefortress", "archer_pawn_spawn_egg"), FortressItems.ARCHER_PAWN_SPAWN_EGG);
         Registry.register(Registries.ITEM, Identifier.of("minefortress", "building"), FortressItems.BUILDING_BLOCK);
     }
 

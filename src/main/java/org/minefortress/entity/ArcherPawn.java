@@ -61,7 +61,7 @@ public class ArcherPawn extends TargetedPawn implements IWarrior, RangedAttackMo
     @Override
     public void shootAt(LivingEntity target, float pullProgress) {
         final var itemStack = new ItemStack(Items.ARROW);
-        final var persistentProjectileEntity = ProjectileUtil.createArrowProjectile(this, itemStack, pullProgress);
+        final var persistentProjectileEntity = ProjectileUtil.createArrowProjectile(this, itemStack, pullProgress, this.getMainHandStack()); // 1.21+: the bow is passed too
         double d = target.getX() - this.getX();
         double e = target.getBodyY(0.3333333333333333) - persistentProjectileEntity.getY();
         double f = target.getZ() - this.getZ();

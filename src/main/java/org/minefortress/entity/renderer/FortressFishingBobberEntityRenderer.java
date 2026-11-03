@@ -22,7 +22,7 @@ import org.minefortress.entity.fisher.FortressFishingBobberEntity;
 
 @Environment(EnvType.CLIENT)
 public class FortressFishingBobberEntityRenderer extends EntityRenderer<FortressFishingBobberEntity> {
-    private static final Identifier TEXTURE = new Identifier("textures/entity/fishing_hook.png");
+    private static final Identifier TEXTURE = Identifier.of("textures/entity/fishing_hook.png");
     private static final RenderLayer LAYER;
     private static final double field_33632 = 960.0;
 
@@ -95,7 +95,7 @@ public class FortressFishingBobberEntityRenderer extends EntityRenderer<Fortress
     }
 
     private static void vertex(VertexConsumer buffer, Matrix4f matrix, MatrixStack.Entry normalMatrix, int light, float x, int y, int u, int v) {
-        buffer.vertex(matrix, x - 0.5F, (float)y - 0.5F, 0.0F).color(255, 255, 255, 255).texture((float)u, (float)v).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(normalMatrix, 0.0F, 1.0F, 0.0F).next();
+        buffer.vertex(matrix, x - 0.5F, (float)y - 0.5F, 0.0F).color(255, 255, 255, 255).texture((float)u, (float)v).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(normalMatrix, 0.0F, 1.0F, 0.0F);
     }
 
     private static void renderFishingLine(float x, float y, float z, VertexConsumer buffer, MatrixStack.Entry matrices, float segmentStart, float segmentEnd) {
@@ -109,7 +109,7 @@ public class FortressFishingBobberEntityRenderer extends EntityRenderer<Fortress
         i /= l;
         j /= l;
         k /= l;
-        buffer.vertex(matrices.getPositionMatrix(), f, g, h).color(0, 0, 0, 255).normal(matrices, i, j, k).next();
+        buffer.vertex(matrices.getPositionMatrix(), f, g, h).color(0, 0, 0, 255).normal(matrices, i, j, k);
     }
 
     public Identifier getTexture(FortressFishingBobberEntity fishingBobberEntity) {

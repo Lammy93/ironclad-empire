@@ -90,7 +90,7 @@ class ServerboundEditBlueprintPacket : FortressC2SPacket {
                     )
                     blueprintsWorld.putBlueprintInAWorld(HashMap(), player, Vec3i(1, 1, 1), floorLevel)
                 }
-                player.moveToWorld(blueprintsWorld.world)
+                player.teleportTo((player as net.remmintan.mods.minefortress.core.interfaces.entities.player.IFortressServerPlayerEntity).get_FortressTeleportTarget(blueprintsWorld.world))
             }
         }
     }

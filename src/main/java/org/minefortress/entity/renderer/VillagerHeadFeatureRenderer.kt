@@ -60,8 +60,8 @@ class VillagerHeadFeatureRenderer(
     }
 
     companion object {
-        private val VILLAGER_TEXTURE: Identifier = Identifier("textures/entity/villager/villager.png")
+        private val VILLAGER_TEXTURE: Identifier = Identifier.of("textures/entity/villager/villager.png")
         private val ZOMBIE_VILLAGER_TEXTURE: Identifier =
-            Identifier("textures/entity/zombie_villager/zombie_villager.png")
+            Identifier.of("textures/entity/zombie_villager/zombie_villager.png")
     }
 }

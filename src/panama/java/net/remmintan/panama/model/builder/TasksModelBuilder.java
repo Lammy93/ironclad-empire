@@ -1,6 +1,6 @@
 package net.remmintan.panama.model.builder;
 
-import net.minecraft.client.render.BufferBuilder;
+import net.remmintan.panama.PanamaBufferStorage;
 import net.remmintan.mods.minefortress.core.interfaces.tasks.IClientTask;
 import net.remmintan.mods.minefortress.core.interfaces.tasks.ITasksModelBuilderInfoProvider;
 import net.remmintan.panama.model.BuiltTasks;
@@ -10,12 +10,12 @@ import java.util.function.Supplier;
 
 public class TasksModelBuilder {
 
-    private final BufferBuilder bufferBuilder;
+    private final PanamaBufferStorage bufferBuilder;
     private final Supplier<ITasksModelBuilderInfoProvider> tasksHolderSupplier;
 
     private BuiltTasks builtTasks;
 
-    public TasksModelBuilder(BufferBuilder bufferBuilder, Supplier<ITasksModelBuilderInfoProvider> tasksHolderSupplier) {
+    public TasksModelBuilder(PanamaBufferStorage bufferBuilder, Supplier<ITasksModelBuilderInfoProvider> tasksHolderSupplier) {
         this.bufferBuilder = bufferBuilder;
         this.tasksHolderSupplier = tasksHolderSupplier;
     }

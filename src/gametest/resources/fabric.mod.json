@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "minefortress-gametest",
   "version": "1.0.0",
-  "name": "MineFortress Empires game tests",
+  "name": "Ironclad Empire game tests",
   "environment": "*",
   "entrypoints": {
     "fabric-gametest": [

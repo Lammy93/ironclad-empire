@@ -299,6 +299,15 @@ Each bug task follows this pattern: write the test → run it on the 1.21.1 buil
 - [ ] **Step 3:** Implement `FortressOwnership` and call it at the top of each `handle`; stop non-owners breaking the campfire (`PlayerBlockBreakEvents.BEFORE` → false unless `ownsCampfire`).
 - [ ] **Step 4:** Run → PASS; whole suite green. Commit + PR referencing the issue.
 
+### Task 18c: Branding — Ironclad Empire (added 2026-11-03, Zac's go)
+
+Name: **Ironclad Empire** (repo `Lammy93/ironclad-empire`; mod id stays `minefortress`). Art direction: medieval fortress + Minecraft pixel art + an Age of Empires feel.
+
+- [ ] **Step 1:** Art: mod icon `src/main/resources/assets/minefortress/logo.png` (128×128, pixel art), README banner `docs/main-banner.png` (replaces upstream's), GitHub social preview (1280×640, uploaded in repo settings by Zac). Method to be picked by Zac (ComfyUI drafts on lammy-pc / own art / simple logo); Zac approves the final images.
+- [ ] **Step 2:** Rewrite `README.md`: what Ironclad Empire is, "based on MineFortress by remmintan (MIT)" credit and link, features, install (Fabric 1.21.1 + Fabric API + Fabric Language Kotlin), building from source (`scripts/build-deps.sh`, `scripts/gradle.sh build`, `scripts/gametest.sh`), roadmap (versus mode, Phases 2–4). Remove upstream's Patreon/Discord/download links.
+- [ ] **Step 3:** Optional courtesy note to remmintan (only Zac sends it; not required by MIT now that the name has no "MineFortress").
+- [ ] **Step 4:** Verify the icon shows in the mods list (play-test drop) and the README renders on GitHub. Commit.
+
 ### Task 19: Release 1.18.0
 
 **Files:** Modify `gradle.properties` (`mod_version=1.18.0`), create `CHANGELOG.md`.

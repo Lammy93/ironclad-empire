@@ -58,7 +58,7 @@ public final class ServerStructureBlockDataManager extends AbstractStructureBloc
 
     @Override
     protected Optional<StructureTemplate> getStructure(String blueprintId) {
-        final Identifier id = new Identifier(MineFortressMod.MOD_ID, blueprintId);
+        final Identifier id = Identifier.of(MineFortressMod.MOD_ID, blueprintId);
         return server.getStructureTemplateManager().getTemplate(id);
     }
 

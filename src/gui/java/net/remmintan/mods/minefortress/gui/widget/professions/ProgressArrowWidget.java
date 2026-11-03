@@ -9,8 +9,8 @@ import java.util.function.Supplier;
 
 public class ProgressArrowWidget implements Drawable, Element {
 
-    private static final Identifier PROGRESS_TEXTURE = new Identifier("textures/gui/container/blast_furnace.png");
-    private static final Identifier BURN_PROGRESS_TEXTURE = new Identifier("container/furnace/burn_progress");
+    private static final Identifier PROGRESS_TEXTURE = Identifier.of("textures/gui/container/blast_furnace.png");
+    private static final Identifier BURN_PROGRESS_TEXTURE = Identifier.of("container/furnace/burn_progress");
 
     private final Supplier<Integer> progressSupplier;
     private final int x;

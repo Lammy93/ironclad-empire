@@ -52,7 +52,7 @@ public record FortressRawPayload(CustomPayload.Id<FortressRawPayload> id, byte[]
     }
 
     public static Id<FortressRawPayload> id(String channelName) {
-        return IDS.computeIfAbsent(channelName, c -> new Id<>(new Identifier(FortressChannelNames.NAMESPACE, c)));
+        return IDS.computeIfAbsent(channelName, c -> new Id<>(Identifier.of(FortressChannelNames.NAMESPACE, c)));
     }
 
     private static PacketCodec<RegistryByteBuf, FortressRawPayload> codec(Id<FortressRawPayload> id) {

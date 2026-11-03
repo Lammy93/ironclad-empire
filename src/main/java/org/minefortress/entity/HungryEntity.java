@@ -101,9 +101,9 @@ public abstract class HungryEntity extends BaritonableEntity implements IHungerA
     }
 
     @Override
-    public final ItemStack eatFood(World world, ItemStack stack) {
-        this.getHungerManager().eat(stack); // 1.20.5+: HungerManager reads the stack's food component
-        return super.eatFood(world, stack);
+    public final ItemStack eatFood(World world, ItemStack stack, net.minecraft.component.type.FoodComponent foodComponent) {
+        this.getHungerManager().eat(foodComponent); // 1.21+: eating passes the food component
+        return super.eatFood(world, stack, foodComponent);
     }
 
     private void sendHungerMessage() {

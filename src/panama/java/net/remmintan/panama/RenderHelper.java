@@ -9,11 +9,11 @@ import java.util.concurrent.CompletableFuture;
 public class RenderHelper {
 
     public static CompletableFuture<Void> scheduleUpload(
-            BufferBuilder.BuiltBuffer builtBuffer,
+            net.minecraft.client.render.BuiltBuffer builtBuffer,
             VertexBuffer vertexBuffer
     ) {
         Runnable runnable = () -> {
-            if (!vertexBuffer.isClosed()) {
+            if (builtBuffer != null && !vertexBuffer.isClosed()) { // 1.21+: an empty layer has no built buffer
                 vertexBuffer.bind();
                 vertexBuffer.upload(builtBuffer);
                 VertexBuffer.unbind();
