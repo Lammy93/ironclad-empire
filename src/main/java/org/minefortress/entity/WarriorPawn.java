@@ -61,7 +61,7 @@ public final class WarriorPawn extends TargetedPawn implements IProfessional, IW
     }
 
     private boolean canAttack(LivingEntity it) {
-        return it.isAlive() && (it instanceof HostileEntity || it.equals(getAttackTarget()));
+        return it.isAlive() && (it instanceof HostileEntity || it.equals(getAttackTarget()) || isRecentAttacker(it));
     }
 
     @Override

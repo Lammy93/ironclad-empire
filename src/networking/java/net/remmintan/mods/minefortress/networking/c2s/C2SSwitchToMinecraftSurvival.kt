@@ -21,7 +21,8 @@ class C2SSwitchToMinecraftSurvival : FortressC2SPacket {
         fortressServerManager.teleportToCampfireGround(player)
 
         // Then change the player's game mode to Survival directly on the server
-        player.inventory.clear()
+        // Fortress-mode items go, the survival inventory set aside on entering fortress mode comes back (#49)
+        (player as net.remmintan.mods.minefortress.core.interfaces.entities.player.IFortressServerPlayerEntity).restore_SurvivalInventory()
         player.changeGameMode(GameMode.SURVIVAL)
     }
 

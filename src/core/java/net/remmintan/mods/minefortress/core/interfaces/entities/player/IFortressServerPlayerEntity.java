@@ -21,5 +21,14 @@ public interface IFortressServerPlayerEntity {
      */
     net.minecraft.world.TeleportTarget get_FortressTeleportTarget(net.minecraft.server.world.ServerWorld destination);
 
+    /**
+     * Sets the player's survival inventory aside (and empties it) when they enter fortress mode; saved with the
+     * player. A second call while something is already set aside keeps the first stash. Upstream #49.
+     */
+    void stash_SurvivalInventory();
+
+    /** Empties the inventory (fortress-mode items) and puts the set-aside survival inventory back. */
+    void restore_SurvivalInventory();
+
 
 }

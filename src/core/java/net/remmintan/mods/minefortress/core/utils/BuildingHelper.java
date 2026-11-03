@@ -25,7 +25,15 @@ public class BuildingHelper {
         if (state == null) return false;
         return level.isInBuildLimit(pos) &&
                 notAirOrFluid(state) &&
-                state.getHardness(level, pos) >= 0;
+                state.getHardness(level, pos) >= 0 &&
+                !isFortressCampfire(state);
+    }
+
+    // Upstream #48: pawns must never dig up the fortress campfire (it holds the whole fortress; losing it soft-locks).
+    private static final net.minecraft.util.Identifier FORTRESS_CAMPFIRE_ID = net.minecraft.util.Identifier.of("minefortress", "fortress_campfire");
+
+    public static boolean isFortressCampfire(BlockState state) {
+        return FORTRESS_CAMPFIRE_ID.equals(net.minecraft.registry.Registries.BLOCK.getId(state.getBlock()));
     }
 
     public static boolean canStayOnBlock(@Nullable WorldAccess level, @Nullable BlockPos pos) {

@@ -105,6 +105,18 @@ class FortressFixture(
 
     fun pawnCount(): Int = fortressManager.totalColonistsCount
 
+    /** One-line state dump for failure messages: time of day, and per pawn sleeping/hunger/task state. */
+    fun diagnostics(): String {
+        val day = world.timeOfDay % 24000
+        val pawns = fortressManager.professionals.joinToString { p ->
+            val e = p as net.minecraft.entity.LivingEntity
+            val hunger = (e as? org.minefortress.entity.HungryEntity)?.currentFoodLevel
+            val worker = e as? net.remmintan.mods.minefortress.core.interfaces.entities.pawns.IWorkerPawn
+            "${p.professionId}${if (e.isSleeping) "/sleep" else ""}/food=$hunger/task=${worker?.taskControl?.hasTask()}/daily=${worker?.taskControl?.isDoingEverydayTasks}"
+        }
+        return "time=$day pawns=[$pawns]"
+    }
+
     fun pawnIds(): Set<Int> = fortressManager.professionals.map { (it as Entity).id }.toSet()
 
     fun readyWorkerIds(): Set<Int> = fortressManager.readyWorkers.map { (it as Entity).id }.toSet()
@@ -175,6 +187,14 @@ class FortressFixture(
         check(ready.isNotEmpty()) { "no ready workers to take the task (pawns=${pawnCount()}, professionals=${fortressManager.professionals.size})" }
         managers.taskManager.addTask(task, ready.toList(), player)
         check(readyWorkerIds().size < ready.size) { "task was not taken by any of ${ready.size} ready workers" }
+    }
+
+    /** Spawns an archer pawn that belongs to this fortress, next to the campfire. */
+    fun spawnArcher(): ITargetedPawn {
+        val tag = NbtCompound().apply { putLong(BasePawnEntity.FORTRESS_CENTER_BLOCK_KEY, center.asLong()) }
+        val archer = FortressEntities.ARCHER_PAWN_ENTITY_TYPE.spawn(world, { BasePawnEntity.applySpawnDataTo(it, tag) }, center.add(-2, 0, 2), SpawnReason.MOB_SUMMONED, true, false)
+            ?: error("archer did not spawn")
+        return archer as ITargetedPawn
     }
 
     /** Spawns a warrior pawn that belongs to this fortress, next to the campfire. */

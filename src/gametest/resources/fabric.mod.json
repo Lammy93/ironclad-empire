@@ -10,7 +10,10 @@
       "org.minefortress.gametest.TwoFortressesIsolationTest",
       "org.minefortress.gametest.StorageTests",
       "org.minefortress.gametest.GameModeTests",
-      "org.minefortress.gametest.NetworkRoundTripTests"
+      "org.minefortress.gametest.NetworkRoundTripTests",
+      "org.minefortress.gametest.OwnerOfflineTest",
+      "org.minefortress.gametest.ModeSwitchInventoryTest",
+      "org.minefortress.gametest.BugRegressionTests"
     ],
     "client": [
       "org.minefortress.gametest.MixinAudit"

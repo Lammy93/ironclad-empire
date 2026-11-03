@@ -15,6 +15,8 @@ class C2SSwitchToFortressModePacket() : FortressC2SPacket {
     constructor(ignoredBuf: PacketByteBuf?) : this()
 
     override fun handle(server: MinecraftServer, player: ServerPlayerEntity) {
+        // Set the survival inventory aside first (#49); it comes back when the player leaves fortress mode
+        (player as net.remmintan.mods.minefortress.core.interfaces.entities.player.IFortressServerPlayerEntity).stash_SurvivalInventory()
         // Switch player's game mode to FORTRESS
         player.changeGameMode(FORTRESS)
         // Teleport player above the campfire

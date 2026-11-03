@@ -28,7 +28,7 @@ class StorageTests : FabricGameTest {
         cost.entries.forEach { (item, n) -> f.give(item, n + 5) } // 5 spare of each, which must stay in storage
         val task = f.startBlueprint("accessory_1", origin)
         ctx.addInstantFinalTask {
-            ctx.assertTrue(task.isComplete(), "blueprint task not complete")
+            ctx.assertTrue(task.isComplete(), "blueprint task not complete; ${f.diagnostics()}")
             cost.entries.forEach { (item, _) ->
                 ctx.assertTrue(f.storageCount(item) == 5, "after building, expected exactly 5 spare $item, found ${f.storageCount(item)}")
             }

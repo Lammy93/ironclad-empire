@@ -41,6 +41,8 @@ public abstract class IFortressServerPlayerEntityMixin extends PlayerEntity impl
     @Unique
     private final IServerBlueprintManager blueprintManager = new ServerBlueprintManager();
     @Unique
+    private net.minecraft.nbt.NbtList minefortress$survivalInventory;
+    @Unique
     private Vec3d persistedPos;
     @Unique
     private Vec3d persistedVelocity;
@@ -71,6 +73,9 @@ public abstract class IFortressServerPlayerEntityMixin extends PlayerEntity impl
         }
 
         blueprintManager.write(playerState);
+        if (minefortress$survivalInventory != null) {
+            playerState.put("survivalInventory", minefortress$survivalInventory);
+        }
 
         nbt.put("fortressPlayerState", playerState);
     }
@@ -88,6 +93,26 @@ public abstract class IFortressServerPlayerEntityMixin extends PlayerEntity impl
                 );
             }
             blueprintManager.read(playerState);
+            minefortress$survivalInventory = playerState.contains("survivalInventory")
+                    ? playerState.getList("survivalInventory", net.minecraft.nbt.NbtElement.COMPOUND_TYPE)
+                    : null;
+        }
+    }
+
+    @Override
+    public void stash_SurvivalInventory() {
+        if (minefortress$survivalInventory == null) {
+            minefortress$survivalInventory = this.getInventory().writeNbt(new net.minecraft.nbt.NbtList());
+        }
+        this.getInventory().clear();
+    }
+
+    @Override
+    public void restore_SurvivalInventory() {
+        this.getInventory().clear();
+        if (minefortress$survivalInventory != null) {
+            this.getInventory().readNbt(minefortress$survivalInventory);
+            minefortress$survivalInventory = null;
         }
     }
 

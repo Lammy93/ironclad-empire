@@ -56,7 +56,7 @@ class SmokeTests : FabricGameTest {
         f.cutTrees(listOf(root))
         ctx.addInstantFinalTask {
             val logs = FortressTestKit.countBlock(ctx.world, Blocks.OAK_LOG, root.add(-3, 0, -3), root.add(3, 8, 3))
-            ctx.assertTrue(logs == 0, "tree still has $logs logs")
+            ctx.assertTrue(logs == 0, "tree still has $logs logs; ${f.diagnostics()}")
             ctx.assertTrue(f.storageCount(Items.OAK_LOG) >= 5, "expected >=5 oak logs in storage, got ${f.storageCount(Items.OAK_LOG)}")
         }
     }

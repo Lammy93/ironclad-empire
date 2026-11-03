@@ -53,6 +53,13 @@ public class DigControl extends PositionedActionControl {
         if(isDone()) return;
         if (!super.canReachTheGoal(pawn) || !pawn.getNavigation().isIdle()) return;
 
+        // never dig up the fortress campfire (#48); skip that one block the way replace jobs skip unremovable blocks.
+        // (Only the campfire: a general canRemoveBlock check here also skipped air, which stalled survival builds.)
+        if (BuildingHelper.isFortressCampfire(level.getBlockState(goal))) {
+            reset();
+            return;
+        }
+
         if (taskBlockInfo instanceof ReplaceTaskBlockInfo replaceTaskBlockInfo) {
             final var canRemove = BuildingHelper.canRemoveBlock(level, goal);
             if (!canRemove) {

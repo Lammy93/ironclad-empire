@@ -99,4 +99,16 @@ public abstract class TargetedPawn extends NamedPawnEntity implements ITargetedP
     public LivingEntity getTarget() {
         return super.getTarget();
     }
+
+    /**
+     * True when {@code entity} hurt this soldier recently and is not from the same fortress: soldiers fight back
+     * against any attacker, not only hostile mobs (upstream #29, e.g. other players or other fortresses' pawns).
+     */
+    protected boolean isRecentAttacker(net.minecraft.entity.LivingEntity entity) {
+        if (entity == null || entity != this.getAttacker()) return false;
+        if (entity instanceof net.remmintan.mods.minefortress.core.interfaces.entities.pawns.IFortressAwareEntity other) {
+            return !java.util.Objects.equals(other.getFortressPos(), this.getFortressPos());
+        }
+        return true;
+    }
 }
