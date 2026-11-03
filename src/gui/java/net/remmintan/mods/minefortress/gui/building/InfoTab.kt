@@ -25,7 +25,7 @@ internal class InfoTab(private val handler: IInfoTabHandler, private val textRen
     ResizableTab {
 
     companion object {
-        private val BARS_TEXTURE = Identifier("minefortress", "textures/gui/bars.png")
+        private val BARS_TEXTURE = Identifier.of("minefortress", "textures/gui/bars.png")
     }
 
     override var x: Int = 0
@@ -193,13 +193,14 @@ internal class InfoTab(private val handler: IInfoTabHandler, private val textRen
         matrices.pop()
 
         val matrixStack = RenderSystem.getModelViewStack()
-        matrixStack.push()
-        matrixStack.translate(x.toDouble() + 13, y.toDouble() + yDelta + 10, 0.0)
+        // 1.20.5+: the model-view stack is a JOML Matrix4fStack
+        matrixStack.pushMatrix()
+        matrixStack.translate(x.toFloat() + 13, y.toFloat() + yDelta + 10, 0f)
         RenderSystem.applyModelViewMatrix()
 
         upgradeSlots.forEach { it.renderUpgradeBlueprint() }
 
-        matrixStack.pop()
+        matrixStack.popMatrix()
         RenderSystem.applyModelViewMatrix()
 
 

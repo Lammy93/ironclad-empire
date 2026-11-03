@@ -61,4 +61,14 @@ public abstract class FortressClientPlayerEntityMixin extends AbstractClientPlay
         }
     }
 
+    // 1.21+: reach is attribute based; in fortress mode the player picks from the RTS camera
+    @Override
+    public double getBlockInteractionRange() {
+        return FortressGamemodeUtilsKt.isClientInFortressGamemode() ? org.minefortress.MineFortressConstants.PICK_DISTANCE : super.getBlockInteractionRange();
+    }
+
+    @Override
+    public double getEntityInteractionRange() {
+        return FortressGamemodeUtilsKt.isClientInFortressGamemode() ? org.minefortress.MineFortressConstants.PICK_DISTANCE : super.getEntityInteractionRange();
+    }
 }

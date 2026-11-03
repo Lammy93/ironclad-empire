@@ -34,7 +34,7 @@ public class NavigationTargetEntity extends Entity {
     }
 
     @Override
-    protected void initDataTracker() {}
+    protected void initDataTracker(net.minecraft.entity.data.DataTracker.Builder builder) {}
     @Override
     protected void readCustomDataFromNbt(NbtCompound nbt) {
         if(nbt.contains(TAG_AGE)) {

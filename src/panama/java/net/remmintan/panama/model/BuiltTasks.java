@@ -1,5 +1,7 @@
 package net.remmintan.panama.model;
 
+import net.remmintan.panama.PanamaBufferStorage;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.VertexBuffer;
 import net.minecraft.client.render.*;
@@ -24,7 +26,7 @@ public class BuiltTasks implements BuiltModel {
 
     private final VertexBuffer buffer = new VertexBuffer(VertexBuffer.Usage.STATIC);
     private final Set<IClientTask> tasks;
-    private BufferBuilder.BuiltBuffer builtBuffer;
+    private net.minecraft.client.render.BuiltBuffer builtBuffer;
 
     private boolean initialized = false;
     private boolean notEmpty = false;
@@ -35,8 +37,10 @@ public class BuiltTasks implements BuiltModel {
         this.tasks = new HashSet<>(tasks);
     }
 
-    public void build(BufferBuilder bufferBuilder) {
-        this.render(bufferBuilder);
+    public void build(PanamaBufferStorage storage) {
+        // 1.21+: the storage hands out a started LINES builder for the lines layer
+        this.render(storage.get(RenderLayer.getLines()));
+        if (initialized) builtBuffer = storage.end(RenderLayer.getLines());
         this.upload();
     }
 
@@ -62,9 +66,6 @@ public class BuiltTasks implements BuiltModel {
         for(IClientTask selection: tasks)
             renderBlock(bufferBuilder, matrices, selection::shouldRenderBlock, selection, selection.getColor());
 
-        if(initialized) {
-            builtBuffer = bufferBuilder.end();
-        }
     }
 
     private void renderBlock(BufferBuilder bufferBuilder, MatrixStack matrices, BiFunction<World, BlockPos, Boolean> shouldRender, IClientTask selection, Vector4f color) {
@@ -83,7 +84,6 @@ public class BuiltTasks implements BuiltModel {
     private void init(BufferBuilder bufferBuilder) {
         if(!initialized) {
             this.initialized = true;
-            bufferBuilder.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
         }
     }
 

@@ -11,7 +11,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class FortressToast implements Toast {
-    private static final Identifier TEXTURE = new Identifier("toast/recipe");
+    private static final Identifier TEXTURE = Identifier.of("toast/recipe");
     private Toast.Visibility visibility = Visibility.SHOW;
 
     private final Text title;

@@ -7,7 +7,7 @@ import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.gl.VertexBuffer;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.chunk.BlockBufferBuilderStorage;
+import net.remmintan.panama.PanamaBufferStorage;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
@@ -36,7 +36,7 @@ public final class BlueprintRenderer extends AbstractCustomRenderer implements I
 
     private final BlueprintsModelBuilder blueprintsModelBuilder;
 
-    public BlueprintRenderer(Supplier<IBlockDataProvider> blockDataProviderSupplier, MinecraftClient client, BlockBufferBuilderStorage blockBufferBuilderStorage) {
+    public BlueprintRenderer(Supplier<IBlockDataProvider> blockDataProviderSupplier, MinecraftClient client, PanamaBufferStorage blockBufferBuilderStorage) {
         super(client);
         blueprintsModelBuilder  = new BlueprintsModelBuilder(blockBufferBuilderStorage, blockDataProviderSupplier);
     }
@@ -130,7 +130,9 @@ public final class BlueprintRenderer extends AbstractCustomRenderer implements I
         // calculating matrix
         final var projectionMatrix = RenderSystem.getProjectionMatrix();
 
-        final var matrices = RenderSystem.getModelViewStack();
+        // 1.20.5+: the global model-view stack is a JOML Matrix4fStack; use a local MatrixStack seeded with it
+        final var matrices = new MatrixStack();
+        matrices.peek().getPositionMatrix().set(RenderSystem.getModelViewMatrix());
         final var cameraMove = new Vector3f(x, y, z);
         matrices.push();
         rotateScene(matrices, cameraMove);

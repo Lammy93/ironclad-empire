@@ -91,11 +91,11 @@ public class Colonist extends NamedPawnEntity implements IMinefortressEntity, IW
     }
 
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(CURRENT_TASK_DESCRIPTION, "");
-        this.dataTracker.startTracking(PROFESSION_ID, DEFAULT_PROFESSION_ID);
-        this.dataTracker.startTracking(HAS_TASK, false);
+    protected void initDataTracker(net.minecraft.entity.data.DataTracker.Builder builder) {
+        super.initDataTracker(builder);
+        builder.add(CURRENT_TASK_DESCRIPTION, "");
+        builder.add(PROFESSION_ID, DEFAULT_PROFESSION_ID);
+        builder.add(HAS_TASK, false);
     }
 
     public float getAdjustedMovementSpeed() {
@@ -123,10 +123,17 @@ public class Colonist extends NamedPawnEntity implements IMinefortressEntity, IW
         return movementHelper;
     }
 
+    private static int enchantmentLevel(ItemStack stack, net.minecraft.registry.RegistryKey<net.minecraft.enchantment.Enchantment> key) {
+        for (var entry : stack.getEnchantments().getEnchantmentEntries()) {
+            if (entry.getKey().matchesKey(key)) return entry.getIntValue();
+        }
+        return 0;
+    }
+
     public float getDestroySpeed(BlockState state) {
         float f = getStackInHand(Hand.MAIN_HAND).getMiningSpeedMultiplier(state);
         if (f > 1.0F) {
-            int i = EnchantmentHelper.getEfficiency(this);
+            int i = enchantmentLevel(this.getMainHandStack(), net.minecraft.enchantment.Enchantments.EFFICIENCY); // 1.21+: data-driven enchantments
             ItemStack itemstack = this.getMainHandStack();
             if (i > 0 && !itemstack.isEmpty()) {
                 f += (float)(i * i + 1);
@@ -148,7 +155,7 @@ public class Colonist extends NamedPawnEntity implements IMinefortressEntity, IW
             f *= f1;
         }
 
-        if (this.isSubmergedIn(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(this)) {
+        if (this.isSubmergedIn(FluidTags.WATER) && enchantmentLevel(this.getEquippedStack(net.minecraft.entity.EquipmentSlot.HEAD), net.minecraft.enchantment.Enchantments.AQUA_AFFINITY) <= 0) {
             f /= 5.0F;
         }
 

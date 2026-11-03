@@ -42,7 +42,9 @@ class ServerResourceManager(private val server: MinecraftServer) :
     private val foodItems: Set<Item> by lazy {
         Registries.ITEM
             .filter {
-                it.foodComponent?.statusEffects?.none { it.first.effectType.category == StatusEffectCategory.HARMFUL } == true
+                // 1.20.5+: food is a data component
+                it.components.get(net.minecraft.component.DataComponentTypes.FOOD)?.effects()
+                    ?.none { e -> e.effect().effectType.value().category == StatusEffectCategory.HARMFUL } == true
             }
             .toSet()
     }
@@ -130,6 +132,10 @@ class ServerResourceManager(private val server: MinecraftServer) :
     override fun getStorage(): Storage<ItemVariant> {
         val storages = mutableListOf<Storage<ItemVariant>>()
         for (pos in containerPositions.toList()) {
+            // A chest in an unloaded chunk is still ours: skip it without loading (or generating) the chunk.
+            // Looking it up here used to load chunks during shutdown (the save never finished) and unregistered
+            // chests that were merely out of range.
+            if (!world.chunkManager.isChunkLoaded(pos.x shr 4, pos.z shr 4)) continue
             val storage = ItemStorage.SIDED.find(world, pos, null)
             if (storage == null || !storage.supportsInsertion() || !storage.supportsExtraction()) {
                 log.error("Storage at position $pos is no longer valid! Unregistering")

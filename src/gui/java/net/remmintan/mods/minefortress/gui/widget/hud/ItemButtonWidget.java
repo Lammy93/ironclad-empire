@@ -20,9 +20,9 @@ import java.util.function.Function;
 
 public class ItemButtonWidget extends TexturedButtonWidget implements IHudButton, IItemHudElement {
 
-    protected static final ButtonTextures ITEM_BUTTON_TEXTURES = new ButtonTextures(new Identifier("widget/button"), new Identifier("widget/button_disabled"), new Identifier("widget/button_highlighted"));
+    protected static final ButtonTextures ITEM_BUTTON_TEXTURES = new ButtonTextures(Identifier.of("widget/button"), Identifier.of("widget/button_disabled"), Identifier.of("widget/button_highlighted"));
     protected static final int BUTTON_SIDE = 20;
-    private static final Identifier ARROWS_TEXTURE = new Identifier("textures/gui/recipe_book.png");
+    private static final Identifier ARROWS_TEXTURE = Identifier.of("textures/gui/recipe_book.png");
 
     protected final ItemStack itemStack;
     private final int anchorX;
@@ -62,8 +62,8 @@ public class ItemButtonWidget extends TexturedButtonWidget implements IHudButton
     }
 
     @Override
-    public final void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
-        super.render(drawContext, mouseX, mouseY, delta);
+    public final void renderWidget(DrawContext drawContext, int mouseX, int mouseY, float delta) {
+        super.renderWidget(drawContext, mouseX, mouseY, delta);
         if(!this.visible)return;
         renderItem(drawContext);
 
@@ -78,7 +78,7 @@ public class ItemButtonWidget extends TexturedButtonWidget implements IHudButton
             final var tooltip = constructTooltip();
             if (tooltip != null && currentScreen == null) {
                 final List<OrderedText> lines = tooltip.getLines(client);
-                drawContext.drawTooltip(textRenderer, lines, this.getTooltipPositioner(), mouseX, mouseY);
+                drawContext.drawTooltip(textRenderer, lines, net.minecraft.client.gui.tooltip.HoveredTooltipPositioner.INSTANCE, mouseX, mouseY);
             }
         }
     }
@@ -129,5 +129,15 @@ public class ItemButtonWidget extends TexturedButtonWidget implements IHudButton
     public void setPos(int x, int y) {
         this.setX(x);
         this.setY(y);
+    }
+
+    @Override
+    public void renderHudElement(DrawContext drawContext, int mouseX, int mouseY, float delta) {
+        this.render(drawContext, mouseX, mouseY, delta);
+    }
+
+    @Override
+    public boolean isHudElementHovered() {
+        return this.isHovered();
     }
 }

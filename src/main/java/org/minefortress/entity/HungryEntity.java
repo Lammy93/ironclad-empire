@@ -44,9 +44,9 @@ public abstract class HungryEntity extends BaritonableEntity implements IHungerA
     }
 
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(CURRENT_FOOD_LEVEL, HungerConstants.FULL_FOOD_LEVEL);
+    protected void initDataTracker(net.minecraft.entity.data.DataTracker.Builder builder) {
+        super.initDataTracker(builder);
+        builder.add(CURRENT_FOOD_LEVEL, HungerConstants.FULL_FOOD_LEVEL);
     }
 
     @Override
@@ -101,9 +101,9 @@ public abstract class HungryEntity extends BaritonableEntity implements IHungerA
     }
 
     @Override
-    public final ItemStack eatFood(World world, ItemStack stack) {
-        this.getHungerManager().eat(stack.getItem(), stack);
-        return super.eatFood(world, stack);
+    public final ItemStack eatFood(World world, ItemStack stack, net.minecraft.component.type.FoodComponent foodComponent) {
+        this.getHungerManager().eat(foodComponent); // 1.21+: eating passes the food component
+        return super.eatFood(world, stack, foodComponent);
     }
 
     private void sendHungerMessage() {

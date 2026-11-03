@@ -53,11 +53,11 @@ public abstract class BasePawnEntity extends HungryEntity implements IFortressAw
     }
 
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(FORTRESS_CENTER, Optional.empty());
-        this.dataTracker.startTracking(BODY_TEXTURE_ID, new Random().nextInt(4));
-        this.dataTracker.startTracking(PAWN_SKIN, PawnSkin.VILLAGER);
+    protected void initDataTracker(net.minecraft.entity.data.DataTracker.Builder builder) {
+        super.initDataTracker(builder);
+        builder.add(FORTRESS_CENTER, Optional.empty());
+        builder.add(BODY_TEXTURE_ID, new Random().nextInt(4));
+        builder.add(PAWN_SKIN, PawnSkin.VILLAGER);
     }
 
     @NotNull
@@ -80,10 +80,12 @@ public abstract class BasePawnEntity extends HungryEntity implements IFortressAw
         return "colonist";
     }
 
-    @Nullable
-    @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
-        if(entityNbt == null) throw new IllegalStateException("Entity nbt cannot be null");
+    /**
+     * Applies the fortress spawn data (fortress centre, skin, ...) to a freshly spawned pawn and registers it with its fortress.
+     * Minecraft 1.20.5+ no longer passes spawn NBT to {@code initialize}, so spawners call this from the spawn consumer
+     * (see {@link #applySpawnDataTo}).
+     */
+    public void applySpawnData(NbtCompound entityNbt) {
         final var posLong = entityNbt.getLong(FORTRESS_CENTER_BLOCK_KEY);
         final var fortressCenter = BlockPos.fromLong(posLong);
         this.setFortressCenter(fortressCenter);
@@ -95,7 +97,13 @@ public abstract class BasePawnEntity extends HungryEntity implements IFortressAw
         }
 
         addThisPawnToFortress();
-        return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
+    }
+
+    /** Spawn-consumer helper: {@code type.spawn(world, e -> BasePawnEntity.applySpawnDataTo(e, tag), pos, reason, true, false)}. */
+    public static void applySpawnDataTo(Object entity, NbtCompound spawnData) {
+        if (entity instanceof BasePawnEntity pawn) {
+            pawn.applySpawnData(spawnData);
+        }
     }
 
     private void addThisPawnToFortress() {

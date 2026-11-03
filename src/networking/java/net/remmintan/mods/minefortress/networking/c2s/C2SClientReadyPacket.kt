@@ -26,7 +26,7 @@ class C2SClientReadyPacket(private val clientVersion: String) : FortressC2SPacke
 
         if (serverVersion != clientVersion) {
             val disconnectMessage =
-                "MineFortress mod version is wrong! The expected version is $serverVersion but the client version is $clientVersion."
+                "Ironclad Empire version mismatch! The expected version is $serverVersion but the client version is $clientVersion."
             player.networkHandler.disconnect(Text.of(disconnectMessage))
         } else {
             (player as IFortressServerPlayerEntity).set_ModVersionValidated(true)

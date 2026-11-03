@@ -36,7 +36,7 @@ public abstract class FortressFluidRendererMixin {
     }
 
     @Inject(method="vertex", at = @At(value = "HEAD"), cancellable = true)
-    void vertex(VertexConsumer vertexConsumer, double x, double y, double z, float red, float green, float blue, float u, float v, int light, CallbackInfo ci) {
+    void vertex(VertexConsumer vertexConsumer, float x, float y, float z, float red, float green, float blue, float u, float v, int light, CallbackInfo ci) { // 1.21+: float coords
         if(this.fortressFluid.get()) {
             final int x1 = fortressFluidPos.getX();
             final int y1 = fortressFluidPos.getY();
@@ -46,7 +46,7 @@ public abstract class FortressFluidRendererMixin {
             final double newY = y - (y1 & 0xF) + y1;
             final double newZ = z - (z1 & 0xF) + z1;
 
-            vertexConsumer.vertex(newX, newY, newZ).color(red, green, blue, 1.0f).texture(u, v).light(light).normal(0.0f, 1.0f, 0.0f).next();
+            vertexConsumer.vertex((float) newX, (float) newY, (float) newZ).color(red, green, blue, 1.0f).texture(u, v).light(light).normal(0.0f, 1.0f, 0.0f);
             ci.cancel();
         }
     }

@@ -54,7 +54,7 @@ public class SleepOnTheBedGoal extends AbstractFortressGoal {
                     .ifPresent(it -> {
                         final var pos = it.up();
                         colonist.resetControls();
-                        colonist.teleport(pos.getX(), pos.getY(), pos.getZ());
+                        colonist.requestTeleport(pos.getX(), pos.getY(), pos.getZ());
                         moveToBed();
                     });
         }

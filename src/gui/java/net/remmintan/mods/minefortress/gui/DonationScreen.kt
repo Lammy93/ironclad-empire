@@ -14,7 +14,7 @@ import net.minecraft.util.Util
 import java.net.URI
 import kotlin.math.min
 
-private val BACKGROUND_TEXTURE = Identifier("minefortress", "textures/gui/donation_background.png")
+private val BACKGROUND_TEXTURE = Identifier.of("minefortress", "textures/gui/donation_background.png")
 private const val DONATION_URL = "https://www.minefortress.net/donate" // Example URL
 
 class DonationScreen : Screen(Text.translatable("minefortress.donation.title")) {

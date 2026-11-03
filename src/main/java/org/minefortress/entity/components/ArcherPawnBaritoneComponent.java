@@ -2,8 +2,8 @@ package org.minefortress.entity.components;
 
 import baritone.api.BaritoneAPI;
 import baritone.api.IBaritone;
-import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
-import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
+import org.ladysnake.cca.api.v3.entity.EntityComponentFactoryRegistry;
+import org.ladysnake.cca.api.v3.entity.EntityComponentInitializer;
 import org.minefortress.entity.ArcherPawn;
 
 public class ArcherPawnBaritoneComponent implements EntityComponentInitializer {

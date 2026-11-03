@@ -9,7 +9,7 @@ import net.remmintan.mods.minefortress.core.dtos.buildings.HudBar
 import net.remmintan.mods.minefortress.core.isClientInFortressGamemode
 import net.remmintan.mods.minefortress.core.services.BarRenderer
 
-private val BARS_SHORT_TEXTURE = Identifier("minefortress", "textures/gui/bars_short.png")
+private val BARS_SHORT_TEXTURE = Identifier.of("minefortress", "textures/gui/bars_short.png")
 
 object PawnDataHudRenderer {
 

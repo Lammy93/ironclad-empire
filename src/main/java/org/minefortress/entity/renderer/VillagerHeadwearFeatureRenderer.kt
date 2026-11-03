@@ -65,10 +65,7 @@ class VillagerHeadwearFeatureRenderer(
             vertexConsumer,
             light,
             OverlayTexture.DEFAULT_UV,
-            1.0f,
-            1.0f,
-            1.0f,
-            1.0f
+            -1 // 1.21+: packed ARGB colour (white, opaque)
         )
         villagerHatPart.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV)
 

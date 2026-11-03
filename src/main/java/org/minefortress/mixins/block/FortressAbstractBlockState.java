@@ -25,12 +25,12 @@ public abstract class FortressAbstractBlockState extends State<Block, BlockState
 
     @Shadow public abstract Block getBlock();
 
-    protected FortressAbstractBlockState(Block owner, ImmutableMap<Property<?>, Comparable<?>> entries, MapCodec<BlockState> codec) {
+    protected FortressAbstractBlockState(Block owner, it.unimi.dsi.fastutil.objects.Reference2ObjectArrayMap<Property<?>, Comparable<?>> entries, MapCodec<BlockState> codec) {
         super(owner, entries, codec);
     }
 
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
-    void onUse(World world, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
+    void onUse(World world, PlayerEntity player, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
         if (FortressGamemodeUtilsKt.isFortressGamemode(player) && this.getBlock() instanceof BlockEntityProvider) {
             cir.setReturnValue(ActionResult.PASS);
         }

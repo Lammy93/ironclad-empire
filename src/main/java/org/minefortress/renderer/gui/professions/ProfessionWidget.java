@@ -23,7 +23,7 @@ public class ProfessionWidget {
     public static final float PROFESSION_WIDGET_WIDTH = 64f;
     public static final float PROFESSION_WIDGET_HEIGHT = 35f;
     private static final AdvancementFrame PROFESSIONS_FRAME = AdvancementFrame.TASK;
-    private static final Identifier TITLE_BOX_TEXTURE = new Identifier("advancements/title_box");
+    private static final Identifier TITLE_BOX_TEXTURE = Identifier.of("advancements/title_box");
 
     private ProfessionWidget parent;
     private final List<ProfessionWidget> children = new ArrayList<>();

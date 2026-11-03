@@ -6,7 +6,7 @@ import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 public class BlueprintsListWidget extends AlwaysSelectedEntryListWidget<BlueprintListEntry> {
 
     public BlueprintsListWidget(MinecraftClient client, int width, int height, int top, int bottom, int itemHeight) {
-        super(client, width, height, top, bottom, itemHeight);
+        super(client, width, bottom - top, top, itemHeight);
     }
 
     @Override
@@ -15,8 +15,8 @@ public class BlueprintsListWidget extends AlwaysSelectedEntryListWidget<Blueprin
     }
 
     @Override
-    protected int getScrollbarPositionX() {
-        return this.right - 6;
+    protected int getScrollbarX() {
+        return this.getRight() - 6;
     }
 
     @Override

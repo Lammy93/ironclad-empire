@@ -31,7 +31,7 @@ public class ServerboundRoadsTaskPacket implements FortressC2SPacket {
     public ServerboundRoadsTaskPacket(PacketByteBuf buf) {
         digUuid = buf.readUuid();
         placeUuid = buf.readUuid();
-        blocks = buf.readCollection(ArrayList::new, PacketByteBuf::readBlockPos);
+        blocks = buf.readCollection(ArrayList::new, b -> b.readBlockPos());
         selectedPawns = new ArrayList<>();
         final int size = buf.readInt();
         for (int i = 0; i < size; i++) {
@@ -43,7 +43,7 @@ public class ServerboundRoadsTaskPacket implements FortressC2SPacket {
     public void write(PacketByteBuf buf) {
         buf.writeUuid(digUuid);
         buf.writeUuid(placeUuid);
-        buf.writeCollection(blocks, PacketByteBuf::writeBlockPos);
+        buf.writeCollection(blocks, (b, v) -> b.writeBlockPos(v));
         buf.writeInt(selectedPawns.size());
         for (Integer selectedPawn : selectedPawns) {
             buf.writeInt(selectedPawn);

@@ -28,7 +28,7 @@ public class FortressEntities {
     public static final float PAWN_HEIGHT = 1.8f;
     public static final EntityType<Colonist> COLONIST_ENTITY_TYPE = Registry.register(
             Registries.ENTITY_TYPE,
-            new Identifier("minefortress", "colonist"),
+            Identifier.of("minefortress", "colonist"),
             FabricEntityTypeBuilder
                     .create(SpawnGroup.CREATURE, Colonist::new)
                     .dimensions(EntityDimensions.fixed(PAWN_WIDTH, PAWN_HEIGHT))
@@ -37,7 +37,7 @@ public class FortressEntities {
 
     public static final EntityType<WarriorPawn> WARRIOR_PAWN_ENTITY_TYPE = Registry.register(
             Registries.ENTITY_TYPE,
-            new Identifier("minefortress", "warrior_pawn"),
+            Identifier.of("minefortress", "warrior_pawn"),
             FabricEntityTypeBuilder
                     .create(SpawnGroup.CREATURE, WarriorPawn::new)
                     .dimensions(EntityDimensions.fixed(PAWN_WIDTH, PAWN_HEIGHT))
@@ -46,7 +46,7 @@ public class FortressEntities {
 
     public static final EntityType<ArcherPawn> ARCHER_PAWN_ENTITY_TYPE = Registry.register(
             Registries.ENTITY_TYPE,
-            new Identifier("minefortress", "archer_pawn"),
+            Identifier.of("minefortress", "archer_pawn"),
             FabricEntityTypeBuilder
                     .create(SpawnGroup.CREATURE, ArcherPawn::new)
                     .dimensions(EntityDimensions.fixed(PAWN_WIDTH, PAWN_HEIGHT))
@@ -55,7 +55,7 @@ public class FortressEntities {
 
     public static final EntityType<NavigationTargetEntity> NAVIGATION_TARGET_ENTITY_TYPE = Registry.register(
             Registries.ENTITY_TYPE,
-            new Identifier("minefortress", "navigation_target"),
+            Identifier.of("minefortress", "navigation_target"),
             FabricEntityTypeBuilder
                     .create(SpawnGroup.MISC, NavigationTargetEntity::new)
                     .dimensions(EntityDimensions.fixed(0.1f, 0.1f))
@@ -69,7 +69,7 @@ public class FortressEntities {
                 (t, w) -> new FortressFishingBobberEntity(t, w);
         FORTRESS_FISHING_BOBBER_ENTITY_TYPE = Registry.register(
                 Registries.ENTITY_TYPE,
-                new Identifier("minefortress", "fortress_fishing_bobber"),
+                Identifier.of("minefortress", "fortress_fishing_bobber"),
                 FabricEntityTypeBuilder
                         .create(SpawnGroup.MISC, factory)
                         .dimensions(EntityDimensions.fixed(0.25f, 0.25f))

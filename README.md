@@ -1,3 +1,13 @@
+# Ironclad Empire
+
+A continued fork of [MineFortress](https://github.com/remmintan/minefortress) by **remmintan**, the mod that turns Minecraft into a real-time strategy game.
+The original mod has not been updated since August 2025. This fork ports it to newer Minecraft versions (Fabric 1.21.1 first) and fixes open bug reports.
+All credit for the original mod goes to remmintan. MIT licence, same as upstream.
+
+**Building:** `scripts/build-deps.sh` (once, builds our Automatone fork), then `scripts/gradle.sh build`. Both run in Docker (JDK 21).
+
+---
+
 ![the mod that will turn your Minecraft into real-time strategy](docs/main-banner.png)
 # MineFortress
 [![Support the project](https://img.shields.io/badge/PATREON-SUPPORT_THE_PROJECT-f96854?style=for-the-badge&logo=patreon&logoColor=f96854&labelColor=052d49&color=f96854)](https://www.patreon.com/minefortress)

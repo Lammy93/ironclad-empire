@@ -27,11 +27,11 @@ import java.util.List;
 
 public class PawnRenderer extends BipedEntityRenderer<BasePawnEntity, PawnModel> {
 
-    private static final Identifier GUY = new Identifier("minefortress", "textures/skins/guy.png");
-    private static final Identifier GUY2 = new Identifier("minefortress", "textures/skins/guy2.png");
-    private static final Identifier GUY3 = new Identifier("minefortress", "textures/skins/guy3.png");
-    private static final Identifier GUY4 = new Identifier("minefortress", "textures/skins/guy4.png");
-    private static final Identifier GUY_ZOMBIE = new Identifier("minefortress", "textures/skins/guy_zombie.png");
+    private static final Identifier GUY = Identifier.of("minefortress", "textures/skins/guy.png");
+    private static final Identifier GUY2 = Identifier.of("minefortress", "textures/skins/guy2.png");
+    private static final Identifier GUY3 = Identifier.of("minefortress", "textures/skins/guy3.png");
+    private static final Identifier GUY4 = Identifier.of("minefortress", "textures/skins/guy4.png");
+    private static final Identifier GUY_ZOMBIE = Identifier.of("minefortress", "textures/skins/guy_zombie.png");
 
     public PawnRenderer(EntityRendererFactory.Context context) {
         super(context, new PawnModel(context), 0.5f);

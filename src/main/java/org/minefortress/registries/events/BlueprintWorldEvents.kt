@@ -22,7 +22,7 @@ object BlueprintWorldEvents {
             if (player is IFortressServerPlayerEntity) {
                 if (player.was_InBlueprintWorldWhenLoggedOut() && player._PersistedPos != null) {
                     val pos = player._PersistedPos
-                    player.teleport(pos!!.x, pos.y, pos.z)
+                    player.requestTeleport(pos!!.x, pos.y, pos.z)
                 }
             }
         })

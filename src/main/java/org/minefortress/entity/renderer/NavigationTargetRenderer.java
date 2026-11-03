@@ -14,7 +14,7 @@ import org.minefortress.entity.renderer.models.NavigationTargetModel;
 
 public class NavigationTargetRenderer extends EntityRenderer<NavigationTargetEntity> {
 
-    private static final Identifier TEXTURE = new Identifier("minefortress", "textures/combat/navigation_target.png");
+    private static final Identifier TEXTURE = Identifier.of("minefortress", "textures/combat/navigation_target.png");
 
     private final NavigationTargetModel model = new NavigationTargetModel();
     public NavigationTargetRenderer(EntityRendererFactory.Context ctx) {
@@ -28,7 +28,7 @@ public class NavigationTargetRenderer extends EntityRenderer<NavigationTargetEnt
         final var buffer = vertexConsumers.getBuffer(layer);
         final var overlay = OverlayTexture.packUv(OverlayTexture.getU(0), OverlayTexture.getV(false));
         model.setAngles(entity, 0, 0, tickDelta, yaw, 180-90);
-        model.render(matrices, buffer, light, overlay, 1, 1, 1, 1);
+        model.render(matrices, buffer, light, overlay); // 1.21+: default colour is opaque white
     }
 
     @Override

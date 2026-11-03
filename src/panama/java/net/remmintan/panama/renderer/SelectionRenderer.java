@@ -3,7 +3,7 @@ package net.remmintan.panama.renderer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.chunk.BlockBufferBuilderStorage;
+import net.remmintan.panama.PanamaBufferStorage;
 import net.remmintan.mods.minefortress.core.interfaces.selections.ISelectionInfoProvider;
 import net.remmintan.mods.minefortress.core.interfaces.selections.ISelectionModelBuilderInfoProvider;
 import net.remmintan.panama.model.BuiltModel;
@@ -26,8 +26,8 @@ public class SelectionRenderer extends AbstractCustomRenderer {
 
     public SelectionRenderer(
             MinecraftClient client,
-            Map<RenderLayer, BufferBuilder> selectionBufferBuilderStorage,
-            BlockBufferBuilderStorage blockBufferBuilderStorage,
+            PanamaBufferStorage selectionBufferBuilderStorage,
+            PanamaBufferStorage blockBufferBuilderStorage,
             Supplier<ISelectionInfoProvider> selectionInfoProviderSupplier,
             Supplier<ISelectionModelBuilderInfoProvider> infoProviderSupplier
     ) {

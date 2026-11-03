@@ -136,7 +136,6 @@ class FortressCampfireBlock : BlockWithEntity(
         world: World,
         pos: BlockPos,
         player: PlayerEntity,
-        hand: Hand?,
         hit: BlockHitResult?
     ): ActionResult {
         if (!isFortressGamemode(player) && world.isClient) {
@@ -160,4 +159,6 @@ class FortressCampfireBlock : BlockWithEntity(
             null
         }
     }
+
+    override fun getCodec(): com.mojang.serialization.MapCodec<out BlockWithEntity> = com.mojang.serialization.MapCodec.unit(this)
 }

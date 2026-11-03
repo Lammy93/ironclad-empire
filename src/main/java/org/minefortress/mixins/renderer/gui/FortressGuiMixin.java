@@ -14,14 +14,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class FortressGuiMixin {
 
     @Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
-    private void renderCrosshair(DrawContext context, CallbackInfo ci) {
+    private void renderCrosshair(DrawContext context, net.minecraft.client.render.RenderTickCounter tickCounter, CallbackInfo ci) { // 1.21+
         if (FortressGamemodeUtilsKt.isClientInFortressGamemode()) {
             ci.cancel();
         }
     }
 
     @Inject(method = "renderHotbar", at = @At("HEAD"), cancellable = true)
-    private void renderHotbar(float tickDelta, DrawContext context, CallbackInfo ci) {
+    private void renderHotbar(DrawContext context, net.minecraft.client.render.RenderTickCounter tickCounter, CallbackInfo ci) { // 1.21+
         if (FortressGamemodeUtilsKt.isClientInFortressGamemode() && ClientModUtils.getFortressManager().getState() == FortressState.COMBAT) {
             ci.cancel();
         }

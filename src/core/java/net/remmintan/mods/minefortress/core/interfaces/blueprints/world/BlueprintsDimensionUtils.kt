@@ -6,4 +6,4 @@ import net.minecraft.util.Identifier
 import net.minecraft.world.World
 
 val BLUEPRINT_DIMENSION_KEY: RegistryKey<World> =
-    RegistryKey.of(RegistryKeys.WORLD, Identifier("minefortress", "blueprint_dimension"))
+    RegistryKey.of(RegistryKeys.WORLD, Identifier.of("minefortress", "blueprint_dimension"))

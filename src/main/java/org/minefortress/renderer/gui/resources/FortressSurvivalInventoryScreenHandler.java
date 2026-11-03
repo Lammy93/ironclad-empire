@@ -111,7 +111,8 @@ public class FortressSurvivalInventoryScreenHandler extends CreativeInventoryScr
         @Override
         public boolean canTakeItems(PlayerEntity playerEntity) {
             if (super.canTakeItems(playerEntity) && this.hasStack()) {
-                return this.getStack().getSubNbt(CUSTOM_FORTRESS_SURVIVAL_LOCK_KEY) == null;
+                final var customData = this.getStack().get(net.minecraft.component.DataComponentTypes.CUSTOM_DATA); // 1.20.5+
+                return customData == null || !customData.contains(CUSTOM_FORTRESS_SURVIVAL_LOCK_KEY);
             }
             return !this.hasStack();
         }

@@ -123,17 +123,7 @@ public abstract class FortressClientInteractionManagerMixin {
         }
     }
 
-    @Inject(method = "getReachDistance", at = @At("HEAD"), cancellable = true)
-    public void getReachDistance(CallbackInfoReturnable<Float> cir) {
-        if (FortressGamemodeUtilsKt.isClientInFortressGamemode())
-            cir.setReturnValue(PICK_DISTANCE_FLOAT);
-    }
-
-    @Inject(method = "hasExtendedReach", at = @At("HEAD"), cancellable = true)
-    public void hasExtendedReach(CallbackInfoReturnable<Boolean> cir) {
-        if (FortressGamemodeUtilsKt.isClientInFortressGamemode())
-            cir.setReturnValue(false);
-    }
+    // 1.21+: reach is PlayerEntity.getBlockInteractionRange()/getEntityInteractionRange(); see FortressClientPlayerEntityMixin
 
     @Inject(method = "isFlyingLocked", at = @At("HEAD"), cancellable = true)
     public void isFlyingLocked(CallbackInfoReturnable<Boolean> cir) {

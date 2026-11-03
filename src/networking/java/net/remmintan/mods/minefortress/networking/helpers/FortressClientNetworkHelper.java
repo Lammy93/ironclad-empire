@@ -9,9 +9,13 @@ import net.remmintan.mods.minefortress.core.interfaces.networking.FortressC2SPac
 public class FortressClientNetworkHelper {
 
     public static void send(String channelName, FortressC2SPacket packet) {
-        final PacketByteBuf packetByteBuf = PacketByteBufs.create();
-        packet.write(packetByteBuf);
-        ClientPlayNetworking.send(new Identifier(FortressChannelNames.NAMESPACE, channelName), packetByteBuf);
+        final var client = net.minecraft.client.MinecraftClient.getInstance();
+        final var registries = client.getNetworkHandler() != null
+                ? client.getNetworkHandler().getRegistryManager()
+                : net.minecraft.registry.DynamicRegistryManager.of(net.minecraft.registry.Registries.REGISTRIES);
+        // a modded client on a server without the mod: stay quiet instead of erroring
+        if (!ClientPlayNetworking.canSend(FortressRawPayload.id(channelName))) return;
+        ClientPlayNetworking.send(FortressRawPayload.of(channelName, packet, registries));
     }
 
 }

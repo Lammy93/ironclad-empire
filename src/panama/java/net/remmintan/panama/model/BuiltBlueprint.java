@@ -7,7 +7,7 @@ import net.minecraft.client.gl.VertexBuffer;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.block.BlockModelRenderer;
 import net.minecraft.client.render.block.BlockRenderManager;
-import net.minecraft.client.render.chunk.BlockBufferBuilderStorage;
+import net.remmintan.panama.PanamaBufferStorage;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.util.math.BlockPos;
@@ -34,7 +34,7 @@ public class BuiltBlueprint implements BuiltModel {
             .getBlockLayers()
             .stream()
             .collect(Collectors.toMap(Function.identity(), it -> new VertexBuffer(VertexBuffer.Usage.STATIC)));
-    private final Map<RenderLayer, BufferBuilder.BuiltBuffer> builtBuffers = new HashMap<>();
+    private final Map<RenderLayer, net.minecraft.client.render.BuiltBuffer> builtBuffers = new HashMap<>();
 
 
     private CompletableFuture<Void> uploadsFuture;
@@ -48,7 +48,7 @@ public class BuiltBlueprint implements BuiltModel {
         this.size = blockData.getSize();
     }
 
-    public void build(BlockBufferBuilderStorage blockBufferBuilders) {
+    public void build(PanamaBufferStorage blockBufferBuilders) {
         render(blockBufferBuilders);
         uploadBuffers();
     }
@@ -91,7 +91,7 @@ public class BuiltBlueprint implements BuiltModel {
     }
 
 
-    private void render(BlockBufferBuilderStorage blockBufferBuilders) {
+    private void render(PanamaBufferStorage blockBufferBuilders) {
         BlockPos minPos = BlockPos.ORIGIN;
         BlockPos maxPos = minPos.add(15, 15,15);
 
@@ -130,7 +130,7 @@ public class BuiltBlueprint implements BuiltModel {
         }
 
         for (RenderLayer layer : initializedLayers) {
-            builtBuffers.put(layer, blockBufferBuilders.get(layer).end());
+            builtBuffers.put(layer, blockBufferBuilders.end(layer));
         }
 
         BlockModelRenderer.disableBrightnessCache();
@@ -148,7 +148,7 @@ public class BuiltBlueprint implements BuiltModel {
     }
 
     private void beginBufferBuilding(BufferBuilder buffer) {
-        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL);
+        // 1.21+: PanamaBufferStorage hands out builders that are already started with the layer's format
     }
 
 }

@@ -26,14 +26,14 @@ public class TextButtonWidget extends ButtonWidget implements IHudButton {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
+    protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.renderWidget(context, mouseX, mouseY, delta);
 
         final var tooltip = this.getTooltip();
         if(tooltip != null && this.isHovered()) {
             final var client = MinecraftClient.getInstance();
             final var lines = tooltip.getLines(client);
-            context.drawTooltip(client.textRenderer, lines, this.getTooltipPositioner(), mouseX, mouseY);
+            context.drawTooltip(client.textRenderer, lines, net.minecraft.client.gui.tooltip.HoveredTooltipPositioner.INSTANCE, mouseX, mouseY);
         }
     }
 
@@ -45,5 +45,15 @@ public class TextButtonWidget extends ButtonWidget implements IHudButton {
     @Override
     public int getAnchorY() {
         return anchorY;
+    }
+
+    @Override
+    public void renderHudElement(DrawContext drawContext, int mouseX, int mouseY, float delta) {
+        this.render(drawContext, mouseX, mouseY, delta);
+    }
+
+    @Override
+    public boolean isHudElementHovered() {
+        return this.isHovered();
     }
 }

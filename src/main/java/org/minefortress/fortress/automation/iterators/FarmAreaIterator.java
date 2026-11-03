@@ -23,7 +23,7 @@ public class FarmAreaIterator extends AbstractFilteredIterator {
     }
 
     public static boolean blockCanBeRemovedToPlantCrops(BlockState blockState) {
-        return blockState.isOf(Blocks.GRASS) ||
+        return blockState.isOf(Blocks.SHORT_GRASS) ||
                 blockState.isIn(BlockTags.HOE_MINEABLE) ||
                 blockState.isIn(BlockTags.FLOWERS);
     }

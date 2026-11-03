@@ -5,7 +5,6 @@ import net.fabricmc.api.ModInitializer;
 import net.minecraft.entity.data.TrackedDataHandler;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.remmintan.mods.minefortress.blocks.FortressBlocks;
-import net.remmintan.mods.minefortress.blocks.building.BuildingsHudRenderer;
 import net.remmintan.mods.minefortress.core.dtos.PawnSkin;
 import net.remmintan.mods.minefortress.core.dtos.SupportLevel;
 import net.remmintan.mods.minefortress.core.interfaces.server.IServerFortressManager;
@@ -33,8 +32,8 @@ public class MineFortressMod implements ModInitializer {
 
     private static final ExecutorService executor;
     private static final ScheduledExecutorService scheduledExecutor;
-    public static final TrackedDataHandler<PawnSkin> PAWN_SKIN_TRACKED_DATA_HANDLER = TrackedDataHandler.ofEnum(PawnSkin.class);
-    public static final TrackedDataHandler<SupportLevel> SUPPORT_LEVEL_TRACKED_DATA_HANDLER = TrackedDataHandler.ofEnum(SupportLevel.class);
+    public static final TrackedDataHandler<PawnSkin> PAWN_SKIN_TRACKED_DATA_HANDLER = TrackedDataHandler.create(net.minecraft.network.codec.PacketCodecs.indexed(i -> PawnSkin.values()[i], PawnSkin::ordinal));
+    public static final TrackedDataHandler<SupportLevel> SUPPORT_LEVEL_TRACKED_DATA_HANDLER = TrackedDataHandler.create(net.minecraft.network.codec.PacketCodecs.indexed(i -> SupportLevel.values()[i], SupportLevel::ordinal));
 
     static  {
         final var tpIncrementor = new AtomicInteger(0);
@@ -52,7 +51,6 @@ public class MineFortressMod implements ModInitializer {
     public void onInitialize() {
         FortressServerEvents.register();
         FortressBlocks.register();
-        BuildingsHudRenderer.INSTANCE.register();
         FortressEntities.register();
         FortressItems.register();
         NetworkReaders.register();

@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ProfessionsLayer {
 
-    private static final Identifier LAYER_BACKGROUND = new Identifier("textures/gui/advancements/backgrounds/stone.png");
+    private static final Identifier LAYER_BACKGROUND = Identifier.of("textures/gui/advancements/backgrounds/stone.png");
     private int layerWidth = 234;
     private int layerHeight = 113;
 

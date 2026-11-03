@@ -39,8 +39,8 @@ class FortressCampfireBlockEntity(pos: BlockPos, state: BlockState) :
         fortressManager.tick(getFortressOwner())
     }
 
-    override fun writeNbt(nbt: NbtCompound?) {
-        super.writeNbt(nbt)
+    override fun writeNbt(nbt: NbtCompound?, registryLookup: net.minecraft.registry.RegistryWrapper.WrapperLookup) {
+        super.writeNbt(nbt, registryLookup)
 
         val mpTag = NbtCompound()
         managersProvider.write(mpTag)
@@ -51,8 +51,8 @@ class FortressCampfireBlockEntity(pos: BlockPos, state: BlockState) :
         nbt?.put("fortressManager", fmTag)
     }
 
-    override fun readNbt(nbt: NbtCompound?) {
-        super.readNbt(nbt)
+    override fun readNbt(nbt: NbtCompound?, registryLookup: net.minecraft.registry.RegistryWrapper.WrapperLookup) {
+        super.readNbt(nbt, registryLookup)
         if (nbt?.contains("managersProvider") == true)
             mpTag = nbt.getCompound("managersProvider")
 

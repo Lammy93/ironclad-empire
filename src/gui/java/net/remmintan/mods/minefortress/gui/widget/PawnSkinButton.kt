@@ -7,7 +7,7 @@ import net.minecraft.client.gui.widget.ClickableWidget
 import net.minecraft.util.Identifier
 import net.remmintan.mods.minefortress.core.dtos.*
 
-val BUTTON_TEXTURE = Identifier("minefortress", "textures/gui/btn_big.png")
+val BUTTON_TEXTURE = Identifier.of("minefortress", "textures/gui/btn_big.png")
 
 class PawnSkinButton(
     x: Int,
@@ -18,7 +18,7 @@ class PawnSkinButton(
 
 ) : ClickableWidget(x, y, side, side, skin.skinName) {
 
-    override fun renderButton(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+    override fun renderWidget(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         val vOffset = if (this.isHovered || this.isFocused) 32 else 0
 
         // Draw button background

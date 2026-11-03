@@ -9,7 +9,6 @@ import net.minecraft.client.gui.screen.world.SelectWorldScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.chunk.BlockBufferBuilderStorage;
 import net.minecraft.client.sound.SoundManager;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.server.integrated.IntegratedServer;
@@ -76,7 +75,7 @@ public abstract class FortressMinecraftClientMixin extends ReentrantThreadExecut
     @Unique
     private ClientFortressManager clientFortressManager;
     @Unique
-    private final BlockBufferBuilderStorage blockBufferBuilderStorage = new BlockBufferBuilderStorage();
+    private final net.remmintan.panama.PanamaBufferStorage blockBufferBuilderStorage = new net.remmintan.panama.PanamaBufferStorage();
     @Unique
     private ClientBlueprintManager clientBlueprintManager;
     @Unique
@@ -135,10 +134,8 @@ public abstract class FortressMinecraftClientMixin extends ReentrantThreadExecut
 
 
         blueprintRenderer = new BlueprintRenderer(this::getProperBlockDataProviderBasedOnState, client, blockBufferBuilderStorage);
-        Map<RenderLayer, BufferBuilder> selectionBufferBuilderStorage = Map.ofEntries(
-                entry(RenderLayer.getLines(), new BufferBuilder(256)),
-                entry(FortressRenderLayer.getLinesNoDepth(), new BufferBuilder(256))
-        );
+        // 1.21+: line buffers come from a PanamaBufferStorage (builders are created per build)
+        final var selectionBufferBuilderStorage = new net.remmintan.panama.PanamaBufferStorage();
 
         final var provider = ClientModUtils.getManagersProvider();
         final var manager = provider.get_ClientFortressManager();
@@ -177,7 +174,7 @@ public abstract class FortressMinecraftClientMixin extends ReentrantThreadExecut
         };
 
         tasksRenderer = new TasksRenderer(client,
-                selectionBufferBuilderStorage.get(RenderLayer.getLines()),
+                new net.remmintan.panama.PanamaBufferStorage(), // tasks get their own lines buffer
                 clientTasksHolderSupplier,
                 clientBlueprintManagerSupplier);
     }
@@ -232,13 +229,7 @@ public abstract class FortressMinecraftClientMixin extends ReentrantThreadExecut
 
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     public void setScreen(Screen screen, CallbackInfo ci) {
-        if (screen instanceof SelectWorldScreen) {
-            final var disclaimerAcknowledged = MineFortressClientConfig.INSTANCE.getDisclaimerAcknowledged();
-            if (!disclaimerAcknowledged) {
-                this.setScreen(new DisclaimerScreen(screen));
-                ci.cancel();
-            }
-        }
+        // Ironclad Empire: the upstream disclaimer only explained the supporter lookup, which this fork removed.
 
         if (FortressGamemodeUtilsKt.isClientInFortressGamemode()) {
             if (screen instanceof InventoryScreen && (selectionManager.isSelecting() || clientBlueprintManager.isSelecting())) {

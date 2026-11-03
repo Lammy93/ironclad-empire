@@ -6,7 +6,7 @@ import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.text.Text
 
 private const val TEXT_STRING =
-    "Halt, traveler! Your world was shaped in the early days of MineFortress, an older age where some wonders may not serve you well. To experience its full glory, you must forge a new world. Be warned, the past holds no promises!"
+    "Halt, traveler! Your world was shaped in the early days of MineFortress (the mod Ironclad Empire grew from), an older age where some wonders may not serve you well. To experience its full glory, you must forge a new world. Be warned, the past holds no promises!"
 private val TEXT = Text.of(TEXT_STRING)
 
 class OutdatedWorldScreen : Screen(Text.of("This world is no longer supported!")) {

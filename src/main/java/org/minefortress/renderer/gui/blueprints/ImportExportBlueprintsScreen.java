@@ -81,7 +81,7 @@ public class ImportExportBlueprintsScreen extends Screen {
                 y + listHeight - listInternalPadding,
                 height
         );
-        importsList.setLeftPos(-1000);
+        importsList.setX(-1000);
 
         importConfirm = ButtonWidget
             .builder(
@@ -290,7 +290,7 @@ public class ImportExportBlueprintsScreen extends Screen {
         exportConfirm.visible = false;
         exportCancel.visible = false;
 
-        importsList.setLeftPos(-1000);
+        importsList.setX(-1000);
         importConfirm.visible = false;
         importOpenFolder.visible = false;
         importRefresh.visible = false;
@@ -308,7 +308,7 @@ public class ImportExportBlueprintsScreen extends Screen {
         exportConfirm.visible = true;
         exportCancel.visible = true;
 
-        importsList.setLeftPos(-1000);
+        importsList.setX(-1000);
         importConfirm.visible = false;
         importOpenFolder.visible = false;
         importRefresh.visible = false;
@@ -327,7 +327,7 @@ public class ImportExportBlueprintsScreen extends Screen {
         exportConfirm.visible = false;
         exportCancel.visible = false;
 
-        importsList.setLeftPos(-1000);
+        importsList.setX(-1000);
         importConfirm.visible = false;
         importOpenFolder.visible = false;
         importRefresh.visible = false;
@@ -346,7 +346,7 @@ public class ImportExportBlueprintsScreen extends Screen {
         exportConfirm.visible = false;
         exportCancel.visible = false;
 
-        importsList.setLeftPos(this.width / 2 - 102);
+        importsList.setX(this.width / 2 - 102);
         importConfirm.visible = true;
         importOpenFolder.visible = true;
         importRefresh.visible = true;
@@ -367,7 +367,7 @@ public class ImportExportBlueprintsScreen extends Screen {
         exportConfirm.visible = false;
         exportCancel.visible = false;
 
-        importsList.setLeftPos(-1000);
+        importsList.setX(-1000);
         importConfirm.visible = false;
         importOpenFolder.visible = false;
         importRefresh.visible = false;
@@ -386,7 +386,7 @@ public class ImportExportBlueprintsScreen extends Screen {
         exportConfirm.visible = false;
         exportCancel.visible = false;
 
-        importsList.setLeftPos(-1000);
+        importsList.setX(-1000);
         importConfirm.visible = false;
         importOpenFolder.visible = false;
         importRefresh.visible = false;
@@ -410,7 +410,7 @@ public class ImportExportBlueprintsScreen extends Screen {
         exportConfirm.visible = false;
         exportCancel.visible = false;
 
-        importsList.setLeftPos(-1000);
+        importsList.setX(-1000);
         importConfirm.visible = false;
         importOpenFolder.visible = false;
         importRefresh.visible = false;
@@ -429,7 +429,7 @@ public class ImportExportBlueprintsScreen extends Screen {
         exportConfirm.visible = false;
         exportCancel.visible = false;
 
-        importsList.setLeftPos(-1000);
+        importsList.setX(-1000);
         importConfirm.visible = false;
         importOpenFolder.visible = false;
         importRefresh.visible = false;
@@ -448,7 +448,7 @@ public class ImportExportBlueprintsScreen extends Screen {
         exportConfirm.visible = false;
         exportCancel.visible = false;
 
-        importsList.setLeftPos(-1000);
+        importsList.setX(-1000);
         importConfirm.visible = false;
         importOpenFolder.visible = false;
         importRefresh.visible = false;

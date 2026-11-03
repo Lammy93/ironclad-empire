@@ -10,10 +10,7 @@ import net.remmintan.mods.minefortress.core.interfaces.networking.FortressS2CPac
 public class FortressServerNetworkHelper {
 
     public static void send(ServerPlayerEntity player, String channelName, FortressS2CPacket packet) {
-        final PacketByteBuf packetByteBuf = PacketByteBufs.create();
-        packet.write(packetByteBuf);
-
-        ServerPlayNetworking.send(player, new Identifier(FortressChannelNames.NAMESPACE, channelName), packetByteBuf);
+        ServerPlayNetworking.send(player, FortressRawPayload.of(channelName, packet, player.getServer().getRegistryManager()));
     }
 
 }

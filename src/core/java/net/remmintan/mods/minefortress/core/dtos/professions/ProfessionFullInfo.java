@@ -24,7 +24,7 @@ public record ProfessionFullInfo(
     public static ProfessionFullInfo read(PacketByteBuf packet) {
         final var key = packet.readString();
         final var title = packet.readString();
-        final var icon = packet.readItemStack().getItem();
+        final var icon = net.remmintan.mods.minefortress.core.utils.PacketCompat.readItemStack(packet).getItem();
         final var description = packet.readString();
         final var unlockMessage = packet.readString();
         final var unlockMoreMessage = packet.readString();
@@ -33,7 +33,7 @@ public record ProfessionFullInfo(
         final var blueprintRequirementType = buildingRequirementLevel >= 0 ? packet.readEnumConstant(ProfessionType.class) : null;
 
         var items = packet
-                .readList(PacketByteBuf::readItemStack)
+                .readList(net.remmintan.mods.minefortress.core.utils.PacketCompat::readItemStack)
                 .stream()
                 .map(ItemRequirement::fromStack)
                 .toList();
@@ -45,7 +45,7 @@ public record ProfessionFullInfo(
     public void write(PacketByteBuf packet) {
         packet.writeString(key);
         packet.writeString(title);
-        packet.writeItemStack(new ItemStack(icon));
+        net.remmintan.mods.minefortress.core.utils.PacketCompat.writeItemStack(packet, new ItemStack(icon));
         packet.writeString(description);
         packet.writeString(unlockMessage);
         packet.writeString(unlockMoreMessage);
@@ -56,7 +56,7 @@ public record ProfessionFullInfo(
             packet.writeEnumConstant(buildingRequirement.type);
             packet.writeVarInt(requirements.items().size());
             for (var itemReq : requirements.items()) {
-                packet.writeItemStack(itemReq.toStack());
+                net.remmintan.mods.minefortress.core.utils.PacketCompat.writeItemStack(packet, itemReq.toStack());
             }
         } else {
             packet.writeInt(-1);

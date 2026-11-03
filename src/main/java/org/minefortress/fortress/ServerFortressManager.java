@@ -117,11 +117,7 @@ public final class ServerFortressManager implements IServerFortressManager {
 
         for (int i = 0; i < num; i++) {
             final var spawnPosition = getRandomSpawnPosition();
-            final var pawn = entityType.spawn(
-                    getWorld(),
-                    infoTag,
-                    (it) -> {
-                    },
+            final var pawn = entityType.spawn(getWorld(), it -> BasePawnEntity.applySpawnDataTo(it, infoTag),
                     spawnPosition,
                     SpawnReason.EVENT,
                     true,
@@ -162,8 +158,7 @@ public final class ServerFortressManager implements IServerFortressManager {
 
         colonist.damage(getOutOfWorldDamageSource(), Float.MAX_VALUE);
         pawns.remove(colonist);
-        final var typedReplacement = entityType.spawn(world, infoTag, (it) -> {
-        }, pos, SpawnReason.EVENT, true, false);
+        final var typedReplacement = entityType.spawn(world, it -> BasePawnEntity.applySpawnDataTo(it, infoTag), pos, SpawnReason.EVENT, true, false);
         pawns.add(typedReplacement);
         getManagersProvider().getFightManager().sync();
     }
@@ -264,7 +259,7 @@ public final class ServerFortressManager implements IServerFortressManager {
         if (fortressCenter == null) return;
         if (player.getWorld().getRegistryKey() != World.OVERWORLD) return;
 
-        player.teleport(fortressCenter.getX() + 10, fortressCenter.getY() + 20, fortressCenter.getZ() + 10);
+        player.requestTeleport(fortressCenter.getX() + 10, fortressCenter.getY() + 20, fortressCenter.getZ() + 10);
     }
 
     @Override
@@ -274,7 +269,7 @@ public final class ServerFortressManager implements IServerFortressManager {
 
         // Get a position on the ground near the campfire
         BlockPos groundPos = getRandomSpawnPosition();
-        player.teleport(groundPos.getX(), groundPos.getY(), groundPos.getZ());
+        player.requestTeleport(groundPos.getX(), groundPos.getY(), groundPos.getZ());
     }
 
     @Override
@@ -284,8 +279,7 @@ public final class ServerFortressManager implements IServerFortressManager {
         final var tag = getColonistInfoTag();
         final var colonistType = FortressEntities.COLONIST_ENTITY_TYPE;
         final var world = getWorld();
-        final var spawnedPawn = colonistType.spawn(world, tag, (it) -> {
-        }, randomSpawnPosition, SpawnReason.MOB_SUMMONED, true, false);
+        final var spawnedPawn = colonistType.spawn(world, it -> BasePawnEntity.applySpawnDataTo(it, tag), randomSpawnPosition, SpawnReason.MOB_SUMMONED, true, false);
         return Optional.ofNullable(spawnedPawn);
     }
 

@@ -26,7 +26,7 @@ public class ItemHudElement extends BasicHudElement implements IItemHudElement {
     }
 
     @Override
-    public void render(DrawContext drawContext, int mouseX, int mouseY, float delta) {
+    public void renderHudElement(DrawContext drawContext, int mouseX, int mouseY, float delta) {
         drawContext.drawItem(itemStack, x, y);
         getCurrentText().ifPresent(it ->
                 drawContext.drawText(textRenderer(), it, x + 17, y + 20, 0xFFFFFF, false));
@@ -35,7 +35,7 @@ public class ItemHudElement extends BasicHudElement implements IItemHudElement {
     }
 
     @Override
-    public boolean isHovered() {
+    public boolean isHudElementHovered() {
         return hovered;
     }
 

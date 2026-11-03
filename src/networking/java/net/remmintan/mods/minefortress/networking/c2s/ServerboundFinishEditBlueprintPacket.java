@@ -34,6 +34,6 @@ public class ServerboundFinishEditBlueprintPacket implements FortressC2SPacket {
 
         final ServerWorld world = server.getWorld(World.OVERWORLD);
         player.getInventory().clear();
-        player.moveToWorld(world);
+        player.teleportTo(((net.remmintan.mods.minefortress.core.interfaces.entities.player.IFortressServerPlayerEntity) player).get_FortressTeleportTarget(world)); // 1.21+: teleportTo(TeleportTarget)
     }
 }

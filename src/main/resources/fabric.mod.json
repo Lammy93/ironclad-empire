@@ -3,13 +3,16 @@
   "id": "minefortress",
   "version": "${version}",
 
-  "name": "MineFortress",
-  "description": "The Real-Time Strategy mod for minecraft. Manage a group of pawns, to survive and grow your village",
+  "name": "Ironclad Empire",
+  "description": "Ironclad Empire: a continued fork of MineFortress, the Real-Time Strategy mod for Minecraft. Manage a group of pawns, to survive and grow your village. Original mod by remmintan.",
   "authors": [
-    "remmintan"
+    "remmintan",
+    "Ironclad Empire contributors"
   ],
   "contact": {
-    "homepage": "https://minecraftfortress.org/"
+    "homepage": "https://github.com/Lammy93/ironclad-empire",
+    "sources": "https://github.com/Lammy93/ironclad-empire",
+    "issues": "https://github.com/Lammy93/ironclad-empire/issues"
   },
 
   "license": "MIT",
@@ -24,13 +27,10 @@
       "org.minefortress.MineFortressClient"
     ],
     "server": [],
-    "preLaunch": [
-      "org.minefortress.earlyriser.MineFortressPreLaunch"
-    ],
     "mm:early_risers": [
       "org.minefortress.earlyriser.GameModeEarlyRiser"
     ],
-    "cardinal-components-entity": [
+    "cardinal-components": [
       "org.minefortress.entity.components.ColonistBaritoneComponent",
       "org.minefortress.entity.components.WarriorPawnBaritoneComponent",
       "org.minefortress.entity.components.ArcherPawnBaritoneComponent"
@@ -42,15 +42,12 @@
   "accessWidener" : "minefortress.accesswidener",
   "depends": {
     "fabricloader": ">=0.14.22",
-    "fabric-api": ">=0.91.6",
+    "fabric-api": ">=${fabric_api_min}",
     "fabric-transfer-api-v1": ">=0.91.6",
-    "minecraft": "1.20.2",
-    "java": ">=17",
+    "minecraft": "${minecraft_version}",
+    "java": ">=21",
     "mm": ">=2.3",
     "fabric-language-kotlin": ">=1.10.20+kotlin.1.9.24"
-  },
-  "recommends": {
-    "keybind_fix": ">=1.0.0"
   },
   "suggests": {}
 }

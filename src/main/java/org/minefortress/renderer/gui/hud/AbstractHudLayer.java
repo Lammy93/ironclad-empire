@@ -77,7 +77,7 @@ public abstract class AbstractHudLayer implements IHudLayer {
         for (IHudElement fortressHudButton : fortressHudElements) {
             fortressHudButton.setPosBasedOn(baseX, baseY);
             if(fortressHudButton.shouldRender(creative)) {
-                fortressHudButton.render(drawContext, (int)mouseX, (int)mouseY, delta);
+                fortressHudButton.renderHudElement(drawContext, (int)mouseX, (int)mouseY, delta);
             }
         }
     }
@@ -87,7 +87,7 @@ public abstract class AbstractHudLayer implements IHudLayer {
     final public boolean isHovered() {
         boolean creative = ClientExtensionsKt.isCreativeFortress(MinecraftClient.getInstance());
         for (IHudElement fortressHudButton : fortressHudElements) {
-            if (fortressHudButton.shouldRender(creative) && fortressHudButton.isHovered()) return true;
+            if (fortressHudButton.shouldRender(creative) && fortressHudButton.isHudElementHovered()) return true;
         }
         return false;
     }
@@ -96,7 +96,7 @@ public abstract class AbstractHudLayer implements IHudLayer {
     public boolean onHudPress(double mouseX, double mouseY) {
         boolean creative = ClientExtensionsKt.isCreativeFortress(MinecraftClient.getInstance());
         for (IHudElement element : fortressHudElements) {
-            if (element.shouldRender(creative) && element.isHovered() && element instanceof IHudButton) {
+            if (element.shouldRender(creative) && element.isHudElementHovered() && element instanceof IHudButton) {
                 this.pressedElement = element;
                 // Potentially call a onPress method on the button itself if needed for visual feedback
                 return true; // Event consumed by this layer
@@ -109,7 +109,7 @@ public abstract class AbstractHudLayer implements IHudLayer {
     public void onHudRelease(double mouseX, double mouseY) {
         boolean creative = ClientExtensionsKt.isCreativeFortress(MinecraftClient.getInstance());
         if (this.pressedElement != null) {
-            if (this.pressedElement.shouldRender(creative) && this.pressedElement.isHovered() && this.pressedElement instanceof IHudButton button) {
+            if (this.pressedElement.shouldRender(creative) && this.pressedElement.isHudElementHovered() && this.pressedElement instanceof IHudButton button) {
                 button.onClick(mouseX, mouseY); // Execute the actual click action
             }
             this.pressedElement = null; // Reset pressed element regardless of whether the click was successful

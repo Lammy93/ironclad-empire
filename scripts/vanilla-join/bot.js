@@ -1,0 +1,7 @@
+const mineflayer = require('mineflayer')
+const bot = mineflayer.createBot({ host: '127.0.0.1', port: 25565, username: 'vanilla_tester', version: '1.21.1', auth: 'offline' })
+bot.on('kicked', (reason) => { console.log('KICKED:', typeof reason === 'string' ? reason : JSON.stringify(reason)); process.exit(0) })
+bot.on('end', (r) => { console.log('END:', r); process.exit(0) })
+bot.on('spawn', () => { console.log('SPAWNED (not kicked)'); process.exit(1) })
+bot.on('error', (e) => { console.log('ERROR:', e.message) })
+setTimeout(() => { console.log('TIMEOUT'); process.exit(2) }, 60000)

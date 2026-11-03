@@ -30,7 +30,6 @@ class FortressBuildingConfigurationBlock : BlockWithEntity(
         world: World?,
         pos: BlockPos?,
         player: PlayerEntity?,
-        hand: Hand?,
         hit: BlockHitResult?
     ): ActionResult {
         val ent = world?.getBlockEntity(pos)
@@ -45,5 +44,9 @@ class FortressBuildingConfigurationBlock : BlockWithEntity(
     @Deprecated("Deprecated in Java")
     override fun getRenderType(state: BlockState?): BlockRenderType = BlockRenderType.MODEL
 
+    override fun getCodec(): com.mojang.serialization.MapCodec<out BlockWithEntity> = CODEC
 
+    companion object CodecHolder {
+        val CODEC: com.mojang.serialization.MapCodec<FortressBuildingConfigurationBlock> = com.mojang.serialization.MapCodec.unit { FortressBuildingConfigurationBlock() }
+    }
 }

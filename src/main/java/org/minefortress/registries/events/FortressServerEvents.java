@@ -79,9 +79,9 @@ public class FortressServerEvents {
     }
 
     private static void setSupporterStatus(MinecraftServer server, ServerPlayerEntity player) {
-        final var profile = player.getGameProfile();
-        final var name = profile.getName();
-        final var supporterStatus = PatronStatusService.INSTANCE.getSupporterStatus(name);
+        // Ironclad Empire: no supporter lookup. Upstream sent each player's name to minefortress.net (the original
+        // author's Patreon check); this fork never sends player data anywhere. PatronStatusService is kept unused.
+        final var supporterStatus = net.remmintan.mods.minefortress.core.dtos.SupportLevel.NONE;
         server.execute(() -> {
             if (player instanceof IFortressPlayerEntity playerEntity) {
                 playerEntity.set_SupportLevel(supporterStatus);

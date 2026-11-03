@@ -1,10 +1,8 @@
 plugins {
     id 'java'
-    id 'fabric-loom' version '1.4-SNAPSHOT'
+    id 'fabric-loom' version '1.7.4'
     id 'maven-publish'
-    id 'org.jetbrains.kotlin.jvm' version '1.9.21'
-    id "com.modrinth.minotaur" version "2.+"
-    id "com.matthewprenger.cursegradle" version "1.4.0"
+    id 'org.jetbrains.kotlin.jvm' version '2.0.21'
 }
 
 if (System.getenv("BUILD_NUMBER") != null) {
@@ -38,6 +36,10 @@ sourceSets {
     panama {
         compileClasspath += main.compileClasspath + core.output + selections.output + building.output
     }
+    gametest {
+        compileClasspath += main.compileClasspath + main.output + core.output + networking.output + building.output + panama.output + selections.output + gui.output
+        runtimeClasspath += main.runtimeClasspath + main.output + core.output + networking.output + building.output + panama.output + selections.output + gui.output
+    }
     main {
         compileClasspath += core.output + networking.output + building.output + panama.output + selections.output + gui.output
         runtimeClasspath += core.output + networking.output + building.output + panama.output + selections.output + gui.output
@@ -48,6 +50,12 @@ group = project.maven_group
 
 
 repositories {
+    // Our own Automatone build, published by scripts/build-deps.sh
+    maven {
+        name = 'MFC local deps'
+        url = rootProject.file('deps/m2')
+        content { includeGroup('io.github.ladysnake') }
+    }
     // Add repositories to retrieve artifacts from in here.
     // You should only use this when depending on other mods because
     // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
@@ -60,7 +68,7 @@ repositories {
         name = "Ladysnake Mods"
         url = "https://maven.ladysnake.org/releases"
         content {
-            includeGroup("org.ladysnake")
+            includeGroupByRegex("org\\.ladysnake.*")
             includeGroupByRegex("dev\\.emi.*")
             includeGroupByRegex("dev\\.onyxstudios.*")
         }
@@ -78,7 +86,7 @@ repositories {
 
 tasks.withType(JavaCompile).configureEach {
     // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-    it.options.release.set(17)
+    it.options.release.set(21)
 }
 
 dependencies {
@@ -88,27 +96,71 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-transfer-api-v1:${project.fabric_version}"
-    modImplementation "net.fabricmc:fabric-language-kotlin:1.10.20+kotlin.1.9.24"
-    modRuntimeOnly "maven.modrinth:keybind-fix:1.0.0"
+    modImplementation "net.fabricmc:fabric-language-kotlin:1.12.3+kotlin.2.0.21"
 
     modImplementation include("com.github.Chocohead:Fabric-ASM:v2.3")
-    modImplementation include("com.github.minefortress-mod:automatone:1.0.9-minefortress")
-    modImplementation include("com.github.minefortress-mod.minefortress-cc-api:cardinal-components-base:5.2.9-minefortress")
-    modImplementation include("com.github.minefortress-mod.minefortress-cc-api:cardinal-components-entity:5.2.9-minefortress")
-    modImplementation include("com.github.minefortress-mod.minefortress-cc-api:cardinal-components-world:5.2.9-minefortress")
+    modImplementation include("io.github.ladysnake:automatone:1.0.9-mfc")
+    modImplementation include("org.ladysnake.cardinal-components-api:cardinal-components-base:${project.cca_version}")
+    modImplementation include("org.ladysnake.cardinal-components-api:cardinal-components-entity:${project.cca_version}")
+    modImplementation include("org.ladysnake.cardinal-components-api:cardinal-components-world:${project.cca_version}")
 
 }
 
 processResources {
     inputs.property "version", project.version
+    inputs.property "minecraft_version", project.minecraft_version
+    inputs.property "fabric_api_min", project.fabric_version.split("\\+")[0]
 
     filesMatching("fabric.mod.json") {
-        expand "version": project.version
+        expand "version": project.version,
+                "minecraft_version": project.minecraft_version,
+                "fabric_api_min": project.fabric_version.split("\\+")[0]
     }
 }
 
 loom {
     accessWidenerPath = file("src/main/resources/minefortress.accesswidener")
+
+    mods {
+        minefortress {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.core
+            sourceSet sourceSets.networking
+            sourceSet sourceSets.gui
+            sourceSet sourceSets.building
+            sourceSet sourceSets.selections
+            sourceSet sourceSets.panama
+        }
+        "minefortress-gametest" {
+            sourceSet sourceSets.gametest
+        }
+    }
+
+    runs {
+        // Client start-up checks (scripts/client-check.sh): mixin audit, then a real boot to the title screen
+        clientCheck {
+            client()
+            name "Client check"
+            source sourceSets.gametest
+            runDir "build/clientcheck"
+        }
+        clientAudit {
+            client()
+            name "Client mixin audit"
+            source sourceSets.gametest
+            runDir "build/clientcheck"
+            vmArg "-Dmfc.mixinAudit=true"
+        }
+        // Headless Fabric game tests: scripts/gradle.sh runGametest
+        gametest {
+            server()
+            name "Game Test"
+            source sourceSets.gametest
+            runDir "build/gametest"
+            vmArg "-Dfabric-api.gametest"
+            vmArg "-Dfabric-api.gametest.report-file=${project.layout.buildDirectory.get().asFile}/gametest.xml"
+        }
+    }
 }
 
 jar {
@@ -146,51 +198,12 @@ publishing {
     }
 }
 kotlin {
-    jvmToolchain(17)
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
+    }
 }
 
-// Publishing configurations
-// This section is wrapped in a conditional to prevent it from running during regular builds.
-// It will only be configured when the 'modrinth' or 'curseforge' tasks are explicitly called.
-
-if (gradle.startParameter.taskNames.contains("modrinth") || gradle.startParameter.taskNames.contains("curseforge")) {
-    def changelogContent = file("changelog.md").exists() ? file("changelog.md").text : "See the [commit history](https://github.com/minefortress-mod/minefortress/commits/master) for details."
-
-    modrinth {
-        token = System.getenv("MODRINTH_TOKEN")
-        projectId = "lcUdtArI"
-        versionNumber = version
-        versionName = "MineFortress ${version}"
-        changelog = changelogContent
-        uploadFile = remapJar
-        gameVersions = [project.minecraft_version]
-        loaders = ["fabric"]
-        dependencies {
-            required.project "fabric-api"
-            required.project "keybind-fix"
-            required.project "fabric-language-kotlin"
-        }
-    }
-
-    curseforge {
-        apiKey = System.getenv("CURSEFORGE_TOKEN")
-
-        project {
-            id = "684798"
-            changelog = changelogContent
-            releaseType = "release"
-            addGameVersion "${minecraft_version}"
-            addGameVersion "Fabric"
-
-            mainArtifact(remapJar) {
-                displayName = "${version}"
-            }
-
-            relations {
-                requiredDependency "fabric-api"
-                requiredDependency "keybind-fix"
-                requiredDependency "fabric-language-kotlin"
-            }
-        }
-    }
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }

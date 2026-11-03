@@ -16,8 +16,8 @@ import java.util.Optional;
 
 public class SelectedColonistHudLayer extends AbstractHudLayer{
 
-    private static final Identifier HEART_TEXTURE = new Identifier("hud/heart/full");
-    private static final Identifier FOOD_TEXTURE = new Identifier("hud/food_full");
+    private static final Identifier HEART_TEXTURE = Identifier.of("hud/heart/full");
+    private static final Identifier FOOD_TEXTURE = Identifier.of("hud/food_full");
 
     protected SelectedColonistHudLayer(MinecraftClient client) {
         super(client);

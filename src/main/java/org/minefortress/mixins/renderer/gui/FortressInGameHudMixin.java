@@ -19,7 +19,8 @@ public class FortressInGameHudMixin {
     @Shadow @Final private MinecraftClient client;
 
     @Inject(method = "render", at = @At("TAIL"))
-    public void render(DrawContext context, float tickDelta, CallbackInfo ci) {
+    public void render(DrawContext context, net.minecraft.client.render.RenderTickCounter tickCounter, CallbackInfo ci) { // 1.21+
+        final float tickDelta = tickCounter.getTickDelta(false);
         final IFortressMinecraftClient fortressClient = (IFortressMinecraftClient) this.client;
         if (client.currentScreen == null && (FortressGamemodeUtilsKt.isClientInFortressGamemode() || client.world.getRegistryKey() == BlueprintsDimensionUtilsKt.getBLUEPRINT_DIMENSION_KEY()))
             fortressClient.get_FortressHud().render(context, tickDelta);

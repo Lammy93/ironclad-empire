@@ -1,7 +1,7 @@
 package net.remmintan.panama.renderer;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.BufferBuilder;
+import net.remmintan.panama.PanamaBufferStorage;
 import net.minecraft.client.render.RenderLayer;
 import net.remmintan.mods.minefortress.core.interfaces.tasks.ITasksModelBuilderInfoProvider;
 import net.remmintan.mods.minefortress.core.interfaces.tasks.ITasksRenderInfoProvider;
@@ -20,7 +20,7 @@ public class TasksRenderer extends AbstractCustomRenderer {
 
     public TasksRenderer(
          MinecraftClient client,
-         BufferBuilder bufferBuilder,
+         PanamaBufferStorage bufferBuilder,
          Supplier<ITasksRenderInfoProvider> tasksHolderSupplier,
          Supplier<ITasksModelBuilderInfoProvider> tasksModelBuilderInfoProviderSupplier
     ) {

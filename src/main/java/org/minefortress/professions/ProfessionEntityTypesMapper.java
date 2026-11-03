@@ -19,7 +19,7 @@ import java.util.Map;
 @MethodsReturnNonnullByDefault
 final class ProfessionEntityTypesMapper {
     private static final Type ENTITY_TYPES_MAP_TYPE = TypeToken.getParameterized(Map.class, String.class, TypeToken.getParameterized(List.class, String.class).getType()).getType();
-    private static final Identifier RESOURCE_ID = new Identifier("minefortress", "professions/entitytypemap.json");
+    private static final Identifier RESOURCE_ID = Identifier.of("minefortress", "professions/entitytypemap.json");
     private final Gson gson = new Gson();
     private final Map<String, EntityType<? extends BasePawnEntity>> entityTypeMap = new HashMap<>();
 
