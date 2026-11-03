@@ -3,11 +3,11 @@
   "id": "minefortress",
   "version": "${version}",
 
-  "name": "MineFortress Continued",
-  "description": "Continued fork of MineFortress, the Real-Time Strategy mod for Minecraft. Manage a group of pawns, to survive and grow your village. Original mod by remmintan.",
+  "name": "MineFortress Empires",
+  "description": "MineFortress Empires: a continued fork of MineFortress, the Real-Time Strategy mod for Minecraft. Manage a group of pawns, to survive and grow your village. Original mod by remmintan.",
   "authors": [
     "remmintan",
-    "MineFortress Continued contributors"
+    "MineFortress Empires contributors"
   ],
   "contact": {
     "homepage": "https://github.com/Lammy93/minefortress",
@@ -33,7 +33,7 @@
     "mm:early_risers": [
       "org.minefortress.earlyriser.GameModeEarlyRiser"
     ],
-    "cardinal-components-entity": [
+    "cardinal-components": [
       "org.minefortress.entity.components.ColonistBaritoneComponent",
       "org.minefortress.entity.components.WarriorPawnBaritoneComponent",
       "org.minefortress.entity.components.ArcherPawnBaritoneComponent"
@@ -48,7 +48,7 @@
     "fabric-api": ">=${fabric_api_min}",
     "fabric-transfer-api-v1": ">=0.91.6",
     "minecraft": "${minecraft_version}",
-    "java": ">=17",
+    "java": ">=21",
     "mm": ">=2.3",
     "fabric-language-kotlin": ">=1.10.20+kotlin.1.9.24"
   },

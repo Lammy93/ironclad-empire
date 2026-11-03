@@ -94,9 +94,9 @@ public class FortressFishingBobberEntity extends ProjectileEntity {
         this.prevPitch = this.getPitch();
     }
 
-    protected void initDataTracker() {
-        this.getDataTracker().startTracking(HOOK_ENTITY_ID, 0);
-        this.getDataTracker().startTracking(CAUGHT_FISH, false);
+    protected void initDataTracker(net.minecraft.entity.data.DataTracker.Builder builder) {
+        builder.add(HOOK_ENTITY_ID, 0);
+        builder.add(CAUGHT_FISH, false);
     }
 
     public void onTrackedDataSet(TrackedData<?> data) {
@@ -417,7 +417,7 @@ public class FortressFishingBobberEntity extends ProjectileEntity {
                 i = this.hookedEntity instanceof ItemEntity ? 3 : 5;
             } else if (this.hookCountdown > 0) {
                 var lootContextParameterSet = (new LootContextParameterSet.Builder((ServerWorld)this.getWorld())).add(LootContextParameters.ORIGIN, this.getPos()).add(LootContextParameters.TOOL, usedItem).add(LootContextParameters.THIS_ENTITY, this).luck((float)this.luckOfTheSeaLevel).build(LootContextTypes.FISHING);
-                var lootTable = this.getWorld().getServer().getLootManager().getLootTable(LootTables.FISHING_GAMEPLAY);
+                var lootTable = this.getWorld().getServer().getReloadableRegistries().getLootTable(LootTables.FISHING_GAMEPLAY);
                 var list = lootTable.generateLoot(lootContextParameterSet);
                 var var7 = list.iterator();
 

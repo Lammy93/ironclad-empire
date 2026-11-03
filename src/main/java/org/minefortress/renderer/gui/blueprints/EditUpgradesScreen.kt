@@ -69,13 +69,13 @@ class EditUpgradesScreen(private val handler: EditUpgradesScreenHandler) : Scree
         matrices.pop()
 
         val matrixStack = RenderSystem.getModelViewStack()
-        matrixStack.push()
-        matrixStack.translate(x.toDouble() + SLOT_X + 5, y.toDouble() + SLOT_Y + 9, 0.0)
+        matrixStack.pushMatrix() // 1.20.5+: JOML Matrix4fStack
+        matrixStack.translate(x.toFloat() + SLOT_X + 5, y.toFloat() + SLOT_Y + 9, 0f)
         RenderSystem.applyModelViewMatrix()
 
         upgradeSlots.forEach { it.renderUpgradeBlueprint() }
 
-        matrixStack.pop()
+        matrixStack.popMatrix()
         RenderSystem.applyModelViewMatrix()
 
         btnWidget.render(context, mouseX, mouseY, delta)

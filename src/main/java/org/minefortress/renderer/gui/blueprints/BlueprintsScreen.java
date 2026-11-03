@@ -206,9 +206,9 @@ public final class BlueprintsScreen extends Screen {
         int screenX = this.x;
         int screenY = this.y;
 
-        MatrixStack matrixStack = RenderSystem.getModelViewStack();
-        matrixStack.push();
-        matrixStack.translate(screenX, screenY, 0.0);
+        org.joml.Matrix4fStack matrixStack = RenderSystem.getModelViewStack(); // 1.20.5+: JOML stack
+        matrixStack.pushMatrix();
+        matrixStack.translate((float) (screenX), (float) (screenY), 0.0f);
         RenderSystem.applyModelViewMatrix();
         this.handler.focusOnSlot(null);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -273,7 +273,7 @@ public final class BlueprintsScreen extends Screen {
             }
         }
 
-        matrixStack.pop();
+        matrixStack.popMatrix();
         RenderSystem.applyModelViewMatrix();
         RenderSystem.enableDepthTest();
 

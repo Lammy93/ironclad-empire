@@ -49,15 +49,15 @@ class FortressBuildingConfigurationBlockEntity(pos: BlockPos?, state: BlockState
 
     override fun getDisplayName(): Text = Text.of("Building configuration")
 
-    override fun writeNbt(nbt: NbtCompound?) {
-        super.writeNbt(nbt)
+    override fun writeNbt(nbt: NbtCompound?, registryLookup: net.minecraft.registry.RegistryWrapper.WrapperLookup) {
+        super.writeNbt(nbt, registryLookup)
         nbt?.putString("blueprintId", blueprintId)
         if (blueprintName != null) nbt?.putString("blueprintName", blueprintName)
         nbt?.putInt("blueprintGroup", blueprintGroup.ordinal)
     }
 
-    override fun readNbt(nbt: NbtCompound?) {
-        super.readNbt(nbt)
+    override fun readNbt(nbt: NbtCompound?, registryLookup: net.minecraft.registry.RegistryWrapper.WrapperLookup) {
+        super.readNbt(nbt, registryLookup)
         blueprintId = nbt?.getString("blueprintId")
         blueprintName = if (nbt?.contains("blueprintName") == true) nbt.getString("blueprintName") else null
         blueprintGroup = BlueprintGroup.entries[nbt?.getInt("blueprintGroup") ?: 0]

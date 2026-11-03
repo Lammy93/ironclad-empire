@@ -49,7 +49,7 @@ public abstract class FortressSimpleInventoryMixin implements FortressSimpleInve
     public int get_OccupiedSlotWithRoomForStack(ItemStack stack) {
         for (int i = 0; i < this.heldStacks.size(); i++) {
             ItemStack itemStack = this.heldStacks.get(i);
-            if(ItemStack.canCombine(itemStack, stack))
+            if(ItemStack.areItemsAndComponentsEqual(itemStack, stack))
                 return i;
         }
         return -1;

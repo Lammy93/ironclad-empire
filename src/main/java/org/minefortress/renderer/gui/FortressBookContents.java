@@ -7,7 +7,7 @@ import net.minecraft.text.Text;
 import java.util.Arrays;
 import java.util.List;
 
-public class FortressBookContents implements BookScreen.Contents {
+public class FortressBookContents {
 
     public static final List<String> HELP_BOOK = Arrays.asList(
             """
@@ -41,14 +41,8 @@ public class FortressBookContents implements BookScreen.Contents {
         this.pages = pages;
     }
 
-    @Override
-    public int getPageCount() {
-        return pages.size();
+    /** 1.20.5+: BookScreen.Contents is a record of pages. */
+    public BookScreen.Contents toContents() {
+        return new BookScreen.Contents(pages.stream().<Text>map(Text::literal).toList());
     }
-
-    @Override
-    public StringVisitable getPageUnchecked(int index) {
-        return Text.literal(pages.get(index));
-    }
-
 }

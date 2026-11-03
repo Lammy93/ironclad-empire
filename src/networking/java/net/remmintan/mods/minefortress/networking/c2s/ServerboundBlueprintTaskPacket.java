@@ -40,7 +40,7 @@ public class ServerboundBlueprintTaskPacket implements FortressC2SPacket {
         for (int i = 0; i < size; i++) {
             selectedPawns.add(buf.readInt());
         }
-        this.upgradedBuildingPos = buf.readNullable(PacketByteBuf::readBlockPos);
+        this.upgradedBuildingPos = buf.readNullable(b -> b.readBlockPos());
     }
 
     @Override
@@ -53,7 +53,7 @@ public class ServerboundBlueprintTaskPacket implements FortressC2SPacket {
         for (Integer selectedPawn : selectedPawns) {
             buf.writeInt(selectedPawn);
         }
-        buf.writeNullable(upgradedBuildingPos, PacketByteBuf::writeBlockPos);
+        buf.writeNullable(upgradedBuildingPos, (b, v) -> b.writeBlockPos(v));
     }
 
     @Override

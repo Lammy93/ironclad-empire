@@ -42,7 +42,7 @@ public class EatControl implements IEatControl {
 
     @Override
     public void eatFood(Item food) {
-        if(!food.isFood()) throw new IllegalArgumentException("Item is not food!" + food);
+        if(!food.getComponents().contains(net.minecraft.component.DataComponentTypes.FOOD)) throw new IllegalArgumentException("Item is not food!" + food);
         this.foodInHand = food;
     }
 

@@ -36,13 +36,13 @@ public class ProfessionsScreen extends Screen {
         drawContext.drawTextWithShadow(textRenderer, this.title, screenX + 8, screenY + 6, 0xFFFFFF);
 
         final var matrices = RenderSystem.getModelViewStack();
-        matrices.push();
-        matrices.translate(0, 0, 200.0);
+        matrices.pushMatrix();
+        matrices.translate((float) (0), (float) (0), 200.0f);
         final String availableColonistsText = String.format("Available colonists: %d/%d", professionManager.getFreeColonists(), fortressManager.getTotalColonistsCount());
         drawContext.drawTextWithShadow(textRenderer, availableColonistsText, screenX + 9, screenY + 18, 0xFFFFFF);
         drawContext.drawTextWithShadow(textRenderer, "left click on profession - add pawn to profession", 2, this.height - (2*this.textRenderer.fontHeight) - 2, 0xffffff);
         drawContext.drawTextWithShadow(textRenderer, "right click on profession - remove pawn from profession", 2, this.height -  this.textRenderer.fontHeight - 2, 0xffffff);
-        matrices.pop();
+        matrices.popMatrix();
 
         this.drawWidgetTooltip(drawContext, mouseX, mouseY, screenX, screenY);
     }
@@ -63,13 +63,13 @@ public class ProfessionsScreen extends Screen {
     }
 
     private void drawProfessionsTree(DrawContext drawContext, int screenX, int screenY) {
-        MatrixStack i = RenderSystem.getModelViewStack();
-        i.push();
-        i.translate(screenX, screenY, 0.0);
+        org.joml.Matrix4fStack i = RenderSystem.getModelViewStack(); // 1.20.5+: JOML stack
+        i.pushMatrix();
+        i.translate((float) (screenX), (float) (screenY), 0.0f);
         RenderSystem.applyModelViewMatrix();
         professionsLayer.setLayerSizes(this.width, this.height);
         professionsLayer.render(drawContext);
-        i.pop();
+        i.popMatrix();
         RenderSystem.applyModelViewMatrix();
         RenderSystem.depthFunc(GL11.GL_LEQUAL);
         RenderSystem.disableDepthTest();
@@ -77,14 +77,14 @@ public class ProfessionsScreen extends Screen {
 
     private void drawWidgetTooltip(DrawContext drawContext, int mouseX, int mouseY, int screenX, int screenY) {
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        MatrixStack matrixStack = RenderSystem.getModelViewStack();
-        matrixStack.push();
-        matrixStack.translate(screenX, screenY, 400.0);
+        org.joml.Matrix4fStack matrixStack = RenderSystem.getModelViewStack(); // 1.20.5+: JOML stack
+        matrixStack.pushMatrix();
+        matrixStack.translate((float) (screenX), (float) (screenY), 400.0f);
         RenderSystem.applyModelViewMatrix();
         RenderSystem.enableDepthTest();
         this.professionsLayer.drawWidgetTooltip(drawContext, mouseX - screenX, mouseY - screenY, screenX, width);
         RenderSystem.disableDepthTest();
-        matrixStack.pop();
+        matrixStack.popMatrix();
         RenderSystem.applyModelViewMatrix();
     }
 

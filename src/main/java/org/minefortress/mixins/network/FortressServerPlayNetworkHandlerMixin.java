@@ -66,13 +66,15 @@ public class FortressServerPlayNetworkHandlerMixin {
         }
     }
 
-    @Redirect(method = "onPlayerInteractEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/Box;squaredMagnitude(Lnet/minecraft/util/math/Vec3d;)D"))
-    public double playerInteractEntitySquareDistance(Box instance, Vec3d pos) {
-        final double realDistance = instance.squaredMagnitude(pos);
-        if (FortressGamemodeUtilsKt.isFortressGamemode(this.player)) {
-            if(Math.sqrt(realDistance) < PICK_DISTANCE) return 1;
+    // 1.20.5+: the reach check is ServerPlayerEntity.canInteractWithEntityIn(box, extraRange).
+    // In fortress mode the player picks entities from the RTS camera, so allow anything within PICK_DISTANCE.
+    @Redirect(method = "onPlayerInteractEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;canInteractWithEntityIn(Lnet/minecraft/util/math/Box;D)Z"))
+    public boolean playerInteractEntityReach(net.minecraft.server.network.ServerPlayerEntity instance, Box box, double extraRange) {
+        if (FortressGamemodeUtilsKt.isFortressGamemode(instance)
+                && Math.sqrt(box.squaredMagnitude(instance.getEyePos())) < PICK_DISTANCE) {
+            return true;
         }
-        return realDistance;
+        return instance.canInteractWithEntityIn(box, extraRange);
     }
 
     @Unique
@@ -88,12 +90,11 @@ public class FortressServerPlayNetworkHandlerMixin {
     private void addCustomNbtToStack(ItemStack stack) {
         if(stack == null) return;
         if(stack.getItem() instanceof SpawnEggItem eggItem) {
-            final EntityType<?> entityType = eggItem.getEntityType(stack.getNbt());
+            final EntityType<?> entityType = eggItem.getEntityType(stack);
             if(!FortressEntities.isFortressAwareEntityType(entityType)) return;
-            if(stack.getNbt() == null) stack.setNbt(new NbtCompound());
-
-            final NbtCompound nbt = stack.getNbt();
-            nbt.putUuid(BasePawnEntity.FORTRESS_CENTER_BLOCK_KEY, player.getUuid());
+            // 1.20.5+: spawn-egg entity NBT lives in the ENTITY_DATA component
+            net.minecraft.component.type.NbtComponent.set(net.minecraft.component.DataComponentTypes.ENTITY_DATA, stack,
+                    nbt -> nbt.putUuid(BasePawnEntity.FORTRESS_CENTER_BLOCK_KEY, player.getUuid()));
         }
     }
 

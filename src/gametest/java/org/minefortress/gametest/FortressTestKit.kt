@@ -174,7 +174,7 @@ class FortressFixture(
     fun spawnWarrior(): ITargetedPawn {
         val tag = NbtCompound().apply { putLong(BasePawnEntity.FORTRESS_CENTER_BLOCK_KEY, center.asLong()) }
         val pos = center.add(2, 0, 2)
-        val warrior = FortressEntities.WARRIOR_PAWN_ENTITY_TYPE.spawn(world, tag, {}, pos, SpawnReason.MOB_SUMMONED, true, false)
+        val warrior = FortressEntities.WARRIOR_PAWN_ENTITY_TYPE.spawn(world, { BasePawnEntity.applySpawnDataTo(it, tag) }, pos, SpawnReason.MOB_SUMMONED, true, false)
             ?: error("warrior did not spawn")
         return warrior as ITargetedPawn
     }
@@ -187,10 +187,10 @@ class FortressFixture(
     fun saveAndReload(): FortressFixture {
         val pawns = fortressManager.professionals.map { it as LivingEntity }
         val old = world.getBlockEntity(center) ?: error("no campfire block entity at $center")
-        val nbt = old.createNbtWithId()
+        val nbt = old.createNbtWithId(world.registryManager)
         val state = world.getBlockState(center)
         world.removeBlockEntity(center)
-        val fresh = BlockEntity.createFromNbt(center, state, nbt) ?: error("campfire block entity could not be recreated")
+        val fresh = BlockEntity.createFromNbt(center, state, nbt, world.registryManager) ?: error("campfire block entity could not be recreated")
         world.addBlockEntity(fresh)
         val reloaded = FortressFixture(ctx, player, center)
         pawns.forEach { reloaded.fortressManager.addPawn(it) }

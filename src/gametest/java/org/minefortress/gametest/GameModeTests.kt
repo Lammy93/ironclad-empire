@@ -11,7 +11,7 @@ import net.remmintan.mods.minefortress.core.isFortressGamemode
 /** The fortress game mode (injected into vanilla's GameMode enum via Fabric-ASM) must keep working. */
 class GameModeTests : FabricGameTest {
 
-    @GameTest(templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 100)
+    @GameTest(skyAccess = true, templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 100)
     fun fortressModeRoundTrip(ctx: TestContext) {
         val f = FortressTestKit.createFortress(ctx)
         f.player.changeGameMode(FORTRESS)
@@ -21,7 +21,7 @@ class GameModeTests : FabricGameTest {
         ctx.complete()
     }
 
-    @GameTest(templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 100)
+    @GameTest(skyAccess = true, templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 100)
     fun fortressModePersists(ctx: TestContext) {
         val f = FortressTestKit.createFortress(ctx)
         f.player.changeGameMode(FORTRESS)

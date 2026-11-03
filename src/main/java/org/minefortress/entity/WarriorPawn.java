@@ -33,18 +33,18 @@ public final class WarriorPawn extends TargetedPawn implements IProfessional, IW
     }
 
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(WARRIOR_PROFESSION_KEY, "warrior1");
+    protected void initDataTracker(net.minecraft.entity.data.DataTracker.Builder builder) {
+        super.initDataTracker(builder);
+        builder.add(WARRIOR_PROFESSION_KEY, "warrior1");
     }
 
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
-        if(entityNbt != null && entityNbt.contains(ServerProfessionManager.PROFESSION_NBT_TAG)) {
+    public void applySpawnData(NbtCompound entityNbt) {
+        if(entityNbt.contains(ServerProfessionManager.PROFESSION_NBT_TAG)) {
             final var warriorProf = entityNbt.getString(ServerProfessionManager.PROFESSION_NBT_TAG);
             this.dataTracker.set(WARRIOR_PROFESSION_KEY, warriorProf);
         }
-        return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
+        super.applySpawnData(entityNbt);
     }
 
     @Override

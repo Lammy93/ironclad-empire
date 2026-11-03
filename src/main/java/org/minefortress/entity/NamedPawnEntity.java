@@ -18,10 +18,9 @@ abstract class NamedPawnEntity extends BasePawnEntity {
     }
 
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
-        final var initResult = super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
+    public void applySpawnData(NbtCompound entityNbt) {
+        super.applySpawnData(entityNbt);
         this.setCustomNameIfNeeded();
-        return initResult;
     }
 
     private void setCustomNameIfNeeded() {

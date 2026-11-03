@@ -15,7 +15,7 @@ public class BlueprintsListWidget extends AlwaysSelectedEntryListWidget<Blueprin
     }
 
     @Override
-    protected int getScrollbarPositionX() {
+    protected int getScrollbarX() {
         return this.getRight() - 6;
     }
 

@@ -12,12 +12,12 @@ data class ItemInfo(val item: ItemVariant, val amount: Long) {
 }
 
 fun PacketByteBuf.writeItemInfo(info: ItemInfo) {
-    info.item.toPacket(this)
+    net.remmintan.mods.minefortress.core.utils.PacketCompat.writeItemVariant(this, info.item)
     this.writeLong(info.amount)
 }
 
 fun PacketByteBuf.readItemInfo(): ItemInfo {
-    val item = ItemVariant.fromPacket(this)
+    val item = net.remmintan.mods.minefortress.core.utils.PacketCompat.readItemVariant(this)
     val amount = this.readLong()
 
     return ItemInfo(item, amount)

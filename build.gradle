@@ -68,7 +68,7 @@ repositories {
         name = "Ladysnake Mods"
         url = "https://maven.ladysnake.org/releases"
         content {
-            includeGroup("org.ladysnake")
+            includeGroupByRegex("org\\.ladysnake.*")
             includeGroupByRegex("dev\\.emi.*")
             includeGroupByRegex("dev\\.onyxstudios.*")
         }
@@ -86,7 +86,7 @@ repositories {
 
 tasks.withType(JavaCompile).configureEach {
     // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-    it.options.release.set(17)
+    it.options.release.set(21)
 }
 
 dependencies {
@@ -101,9 +101,9 @@ dependencies {
 
     modImplementation include("com.github.Chocohead:Fabric-ASM:v2.3")
     modImplementation include("io.github.ladysnake:automatone:1.0.9-mfc")
-    modImplementation include("com.github.minefortress-mod.minefortress-cc-api:cardinal-components-base:5.2.9-minefortress")
-    modImplementation include("com.github.minefortress-mod.minefortress-cc-api:cardinal-components-entity:5.2.9-minefortress")
-    modImplementation include("com.github.minefortress-mod.minefortress-cc-api:cardinal-components-world:5.2.9-minefortress")
+    modImplementation include("org.ladysnake.cardinal-components-api:cardinal-components-base:${project.cca_version}")
+    modImplementation include("org.ladysnake.cardinal-components-api:cardinal-components-entity:${project.cca_version}")
+    modImplementation include("org.ladysnake.cardinal-components-api:cardinal-components-world:${project.cca_version}")
 
 }
 
@@ -186,11 +186,11 @@ publishing {
 }
 kotlin {
     compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
     }
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }

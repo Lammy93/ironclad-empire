@@ -136,7 +136,6 @@ class FortressCampfireBlock : BlockWithEntity(
         world: World,
         pos: BlockPos,
         player: PlayerEntity,
-        hand: Hand?,
         hit: BlockHitResult?
     ): ActionResult {
         if (!isFortressGamemode(player) && world.isClient) {

@@ -30,7 +30,6 @@ class FortressBuildingConfigurationBlock : BlockWithEntity(
         world: World?,
         pos: BlockPos?,
         player: PlayerEntity?,
-        hand: Hand?,
         hit: BlockHitResult?
     ): ActionResult {
         val ent = world?.getBlockEntity(pos)

@@ -40,7 +40,7 @@ public class FortressFishingBobberEntityRenderer extends EntityRenderer<Fortress
             matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180.0F));
             MatrixStack.Entry entry = matrixStack.peek();
             Matrix4f matrix4f = entry.getPositionMatrix();
-            Matrix3f matrix3f = entry.getNormalMatrix();
+            MatrixStack.Entry matrix3f = entry; // 1.20.5+: normals take the whole entry
             VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(LAYER);
             vertex(vertexConsumer, matrix4f, matrix3f, i, 0.0F, 0, 0, 1);
             vertex(vertexConsumer, matrix4f, matrix3f, i, 1.0F, 0, 1, 1);
@@ -94,7 +94,7 @@ public class FortressFishingBobberEntityRenderer extends EntityRenderer<Fortress
         return (float)value / (float)max;
     }
 
-    private static void vertex(VertexConsumer buffer, Matrix4f matrix, Matrix3f normalMatrix, int light, float x, int y, int u, int v) {
+    private static void vertex(VertexConsumer buffer, Matrix4f matrix, MatrixStack.Entry normalMatrix, int light, float x, int y, int u, int v) {
         buffer.vertex(matrix, x - 0.5F, (float)y - 0.5F, 0.0F).color(255, 255, 255, 255).texture((float)u, (float)v).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(normalMatrix, 0.0F, 1.0F, 0.0F).next();
     }
 
@@ -109,7 +109,7 @@ public class FortressFishingBobberEntityRenderer extends EntityRenderer<Fortress
         i /= l;
         j /= l;
         k /= l;
-        buffer.vertex(matrices.getPositionMatrix(), f, g, h).color(0, 0, 0, 255).normal(matrices.getNormalMatrix(), i, j, k).next();
+        buffer.vertex(matrices.getPositionMatrix(), f, g, h).color(0, 0, 0, 255).normal(matrices, i, j, k).next();
     }
 
     public Identifier getTexture(FortressFishingBobberEntity fishingBobberEntity) {

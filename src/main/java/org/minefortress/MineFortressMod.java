@@ -32,8 +32,8 @@ public class MineFortressMod implements ModInitializer {
 
     private static final ExecutorService executor;
     private static final ScheduledExecutorService scheduledExecutor;
-    public static final TrackedDataHandler<PawnSkin> PAWN_SKIN_TRACKED_DATA_HANDLER = TrackedDataHandler.ofEnum(PawnSkin.class);
-    public static final TrackedDataHandler<SupportLevel> SUPPORT_LEVEL_TRACKED_DATA_HANDLER = TrackedDataHandler.ofEnum(SupportLevel.class);
+    public static final TrackedDataHandler<PawnSkin> PAWN_SKIN_TRACKED_DATA_HANDLER = TrackedDataHandler.create(net.minecraft.network.codec.PacketCodecs.indexed(i -> PawnSkin.values()[i], PawnSkin::ordinal));
+    public static final TrackedDataHandler<SupportLevel> SUPPORT_LEVEL_TRACKED_DATA_HANDLER = TrackedDataHandler.create(net.minecraft.network.codec.PacketCodecs.indexed(i -> SupportLevel.values()[i], SupportLevel::ordinal));
 
     static  {
         final var tpIncrementor = new AtomicInteger(0);

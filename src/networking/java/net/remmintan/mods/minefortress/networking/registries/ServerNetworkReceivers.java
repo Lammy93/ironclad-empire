@@ -6,12 +6,15 @@ import net.minecraft.util.Identifier;
 import net.remmintan.mods.minefortress.core.interfaces.networking.FortressC2SPacket;
 import net.remmintan.mods.minefortress.networking.c2s.*;
 import net.remmintan.mods.minefortress.networking.helpers.FortressChannelNames;
+import net.remmintan.mods.minefortress.networking.helpers.FortressRawPayload;
 
 import java.util.function.Function;
 
 public class ServerNetworkReceivers {
 
     public static void registerReceivers() {
+        // payload types are needed on both sides; this runs from the common initializer
+        FortressRawPayload.registerAllS2C();
         registerReceiver(FortressChannelNames.NEW_SELECTION_TASK, ServerboundSimpleSelectionTaskPacket::new);
         registerReceiver(FortressChannelNames.NEW_BLUEPRINT_TASK, ServerboundBlueprintTaskPacket::new);
         registerReceiver(FortressChannelNames.CANCEL_TASK, ServerboundCancelTaskPacket::new);
@@ -47,10 +50,13 @@ public class ServerNetworkReceivers {
     }
 
     private static void registerReceiver(String channelName, Function<PacketByteBuf, FortressC2SPacket> packetConstructor) {
-        ServerPlayNetworking.registerGlobalReceiver(new Identifier(FortressChannelNames.NAMESPACE, channelName), (server, player, handler, buf, sender) -> {
-            if (player == null || server == null)
+        FortressRawPayload.registerC2S(channelName);
+        ServerPlayNetworking.registerGlobalReceiver(FortressRawPayload.id(channelName), (payload, context) -> {
+            final var player = context.player();
+            final var server = player.getServer();
+            if (server == null)
                 throw new IllegalArgumentException("Player and server must not be null in the server packet receiver");
-            final FortressC2SPacket packet = packetConstructor.apply(buf);
+            final FortressC2SPacket packet = packetConstructor.apply(payload.toBuf(server.getRegistryManager()));
             server.execute(() -> packet.handle(server, player));
         });
     }

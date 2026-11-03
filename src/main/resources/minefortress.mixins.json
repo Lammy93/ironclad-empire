@@ -20,7 +20,6 @@
     "interaction.FortressGameModeMixin",
     "item.DisabledBlockItemMixin",
     "item.DisableItemMixin",
-    "network.FortressPacketByteBufMixin",
     "network.FortressServerPlayNetworkHandlerMixin",
     "renderer.gui.FortressScreenHandler",
     "renderer.gui.worldcreator.LevelPropertiesMixin",

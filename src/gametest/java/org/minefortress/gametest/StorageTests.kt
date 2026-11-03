@@ -11,7 +11,7 @@ import net.minecraft.test.TestContext
  */
 class StorageTests : FabricGameTest {
 
-    @GameTest(templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 200)
+    @GameTest(skyAccess = true, templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 200)
     fun itemsLiveInRealChests(ctx: TestContext) {
         val f = FortressTestKit.createFortress(ctx)
         f.give(Items.COBBLESTONE, 64)
@@ -20,7 +20,7 @@ class StorageTests : FabricGameTest {
         }
     }
 
-    @GameTest(templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 6000)
+    @GameTest(skyAccess = true, templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 6000)
     fun taskReservesAndConsumes(ctx: TestContext) {
         val f = FortressTestKit.createFortress(ctx)
         val origin = f.center.add(8, 0, 0)
@@ -35,7 +35,7 @@ class StorageTests : FabricGameTest {
         }
     }
 
-    @GameTest(templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 400)
+    @GameTest(skyAccess = true, templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 400)
     fun cancelReturnsResources(ctx: TestContext) {
         val f = FortressTestKit.createFortress(ctx)
         val origin = f.center.add(8, 0, 0)
@@ -50,7 +50,7 @@ class StorageTests : FabricGameTest {
         }
     }
 
-    @GameTest(templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 400)
+    @GameTest(skyAccess = true, templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 400)
     fun noLossOnSaveMidTask(ctx: TestContext) {
         val f = FortressTestKit.createFortress(ctx)
         val origin = f.center.add(8, 0, 0)

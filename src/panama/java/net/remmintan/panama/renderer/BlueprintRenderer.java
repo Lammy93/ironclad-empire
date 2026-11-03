@@ -130,7 +130,9 @@ public final class BlueprintRenderer extends AbstractCustomRenderer implements I
         // calculating matrix
         final var projectionMatrix = RenderSystem.getProjectionMatrix();
 
-        final var matrices = RenderSystem.getModelViewStack();
+        // 1.20.5+: the global model-view stack is a JOML Matrix4fStack; use a local MatrixStack seeded with it
+        final var matrices = new MatrixStack();
+        matrices.peek().getPositionMatrix().set(RenderSystem.getModelViewMatrix());
         final var cameraMove = new Vector3f(x, y, z);
         matrices.push();
         rotateScene(matrices, cameraMove);

@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos
 /** Two players with separate fortresses on one server never affect each other (plan Review Focus 2). */
 class TwoFortressesIsolationTest : FabricGameTest {
 
-    @GameTest(templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 400)
+    @GameTest(skyAccess = true, templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 400)
     fun storageIsPerFortress(ctx: TestContext) {
         val a = FortressTestKit.createFortress(ctx, BlockPos(12, 1, 12))
         val b = FortressTestKit.createFortress(ctx, BlockPos(52, 1, 52))
@@ -21,7 +21,7 @@ class TwoFortressesIsolationTest : FabricGameTest {
         }
     }
 
-    @GameTest(templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 400)
+    @GameTest(skyAccess = true, templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 400)
     fun taskOfOneFortressNeverTakesTheOthersPawns(ctx: TestContext) {
         val a = FortressTestKit.createFortress(ctx, BlockPos(12, 1, 12))
         val b = FortressTestKit.createFortress(ctx, BlockPos(52, 1, 52))

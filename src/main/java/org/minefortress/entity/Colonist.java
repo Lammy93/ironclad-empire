@@ -91,11 +91,11 @@ public class Colonist extends NamedPawnEntity implements IMinefortressEntity, IW
     }
 
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(CURRENT_TASK_DESCRIPTION, "");
-        this.dataTracker.startTracking(PROFESSION_ID, DEFAULT_PROFESSION_ID);
-        this.dataTracker.startTracking(HAS_TASK, false);
+    protected void initDataTracker(net.minecraft.entity.data.DataTracker.Builder builder) {
+        super.initDataTracker(builder);
+        builder.add(CURRENT_TASK_DESCRIPTION, "");
+        builder.add(PROFESSION_ID, DEFAULT_PROFESSION_ID);
+        builder.add(HAS_TASK, false);
     }
 
     public float getAdjustedMovementSpeed() {

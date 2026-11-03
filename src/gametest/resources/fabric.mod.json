@@ -2,14 +2,15 @@
   "schemaVersion": 1,
   "id": "minefortress-gametest",
   "version": "1.0.0",
-  "name": "MineFortress Continued game tests",
+  "name": "MineFortress Empires game tests",
   "environment": "*",
   "entrypoints": {
     "fabric-gametest": [
       "org.minefortress.gametest.SmokeTests",
       "org.minefortress.gametest.TwoFortressesIsolationTest",
       "org.minefortress.gametest.StorageTests",
-      "org.minefortress.gametest.GameModeTests"
+      "org.minefortress.gametest.GameModeTests",
+      "org.minefortress.gametest.NetworkRoundTripTests"
     ]
   },
   "depends": {

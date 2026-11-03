@@ -11,9 +11,7 @@ import net.remmintan.mods.minefortress.core.utils.ServerModUtils
 class C2SRequestItemsState(private val items: Set<ItemVariant>) : FortressC2SPacket {
 
     constructor(buf: PacketByteBuf) : this(buf.readCollection({ _ -> mutableSetOf<ItemVariant>() }) { b ->
-        ItemVariant.fromPacket(
-            b
-        )
+        net.remmintan.mods.minefortress.core.utils.PacketCompat.readItemVariant(b)
     })
 
     override fun handle(server: MinecraftServer, player: ServerPlayerEntity) {
@@ -21,7 +19,7 @@ class C2SRequestItemsState(private val items: Set<ItemVariant>) : FortressC2SPac
     }
 
     override fun write(buf: PacketByteBuf) {
-        buf.writeCollection(items) { b, i -> i.toPacket(b) }
+        buf.writeCollection(items) { b, i -> net.remmintan.mods.minefortress.core.utils.PacketCompat.writeItemVariant(b, i) }
     }
 
     companion object {

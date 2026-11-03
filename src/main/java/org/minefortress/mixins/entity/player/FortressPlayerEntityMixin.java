@@ -39,9 +39,9 @@ public abstract class FortressPlayerEntityMixin extends LivingEntity implements 
     }
 
     @Inject(method = "initDataTracker", at = @At("TAIL"))
-    protected void initDataTracker(CallbackInfo ci) {
-        this.dataTracker.startTracking(FORTRESS_POS, Optional.empty());
-        this.dataTracker.startTracking(SUPPORT_LEVEL_TRACKED_DATA, SupportLevel.NONE);
+    protected void initDataTracker(net.minecraft.entity.data.DataTracker.Builder builder, CallbackInfo ci) {
+        builder.add(FORTRESS_POS, Optional.empty());
+        builder.add(SUPPORT_LEVEL_TRACKED_DATA, SupportLevel.NONE);
     }
 
     @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))

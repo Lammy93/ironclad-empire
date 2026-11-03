@@ -27,7 +27,7 @@ class SmokeTests : FabricGameTest {
     @AfterBatch(batchId = CREATIVE)
     fun backToSurvival(world: ServerWorld) = FortressTestKit.setFortressMode(world.server, FortressGamemode.SURVIVAL)
 
-    @GameTest(templateName = ARENA, batchId = CREATIVE, tickLimit = 400)
+    @GameTest(skyAccess = true, templateName = ARENA, batchId = CREATIVE, tickLimit = 400)
     fun fortressSetupCreatesCampfire(ctx: TestContext) {
         val f = FortressTestKit.createFortress(ctx)
         ctx.addInstantFinalTask {
@@ -36,7 +36,7 @@ class SmokeTests : FabricGameTest {
         }
     }
 
-    @GameTest(templateName = ARENA, batchId = CREATIVE, tickLimit = 6000)
+    @GameTest(skyAccess = true, templateName = ARENA, batchId = CREATIVE, tickLimit = 6000)
     fun pawnBuildsSmallBlueprint(ctx: TestContext) {
         val f = FortressTestKit.createFortress(ctx)
         // accessory_1 is the smallest predefined blueprint (14 blocks, 3x2x5)
@@ -47,7 +47,7 @@ class SmokeTests : FabricGameTest {
         }
     }
 
-    @GameTest(templateName = ARENA, batchId = SURVIVAL, tickLimit = 6000)
+    @GameTest(skyAccess = true, templateName = ARENA, batchId = SURVIVAL, tickLimit = 6000)
     fun pawnsCutTree(ctx: TestContext) {
         val f = FortressTestKit.createFortress(ctx)
         // placed after setup (setup clears trees within radius 20), at a normal working distance
@@ -61,7 +61,7 @@ class SmokeTests : FabricGameTest {
         }
     }
 
-    @GameTest(templateName = ARENA, batchId = CREATIVE, tickLimit = 1200)
+    @GameTest(skyAccess = true, templateName = ARENA, batchId = CREATIVE, tickLimit = 1200)
     fun warriorKillsZombie(ctx: TestContext) {
         val f = FortressTestKit.createFortress(ctx)
         val warrior = f.spawnWarrior()
@@ -71,7 +71,7 @@ class SmokeTests : FabricGameTest {
         ctx.addInstantFinalTask { ctx.assertTrue(!husk.isAlive, "husk still alive (health ${husk.health})") }
     }
 
-    @GameTest(templateName = ARENA, batchId = SURVIVAL, tickLimit = 400)
+    @GameTest(skyAccess = true, templateName = ARENA, batchId = SURVIVAL, tickLimit = 400)
     fun stateSurvivesSaveReload(ctx: TestContext) {
         val f = FortressTestKit.createFortress(ctx)
         f.give(Items.COBBLESTONE, 10)

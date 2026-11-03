@@ -42,7 +42,9 @@ class ServerResourceManager(private val server: MinecraftServer) :
     private val foodItems: Set<Item> by lazy {
         Registries.ITEM
             .filter {
-                it.foodComponent?.statusEffects?.none { it.first.effectType.category == StatusEffectCategory.HARMFUL } == true
+                // 1.20.5+: food is a data component
+                it.components.get(net.minecraft.component.DataComponentTypes.FOOD)?.effects()
+                    ?.none { e -> e.effect().effectType.value().category == StatusEffectCategory.HARMFUL } == true
             }
             .toSet()
     }

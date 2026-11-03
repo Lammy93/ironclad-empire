@@ -33,13 +33,13 @@ class FortressScaffoldBlockEntity(pos: BlockPos?, state: BlockState?) :
         }
     }
 
-    override fun writeNbt(nbt: NbtCompound?) {
-        super.writeNbt(nbt)
+    override fun writeNbt(nbt: NbtCompound?, registryLookup: net.minecraft.registry.RegistryWrapper.WrapperLookup) {
+        super.writeNbt(nbt, registryLookup)
         nbt?.putLong("placedTimestamp", placedTimestamp)
     }
 
-    override fun readNbt(nbt: NbtCompound?) {
-        super.readNbt(nbt)
+    override fun readNbt(nbt: NbtCompound?, registryLookup: net.minecraft.registry.RegistryWrapper.WrapperLookup) {
+        super.readNbt(nbt, registryLookup)
         placedTimestamp = nbt?.getLong("placedTimestamp") ?: 0
     }
 

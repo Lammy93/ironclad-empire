@@ -282,7 +282,7 @@ class FortressBuildingBlockEntity(pos: BlockPos?, state: BlockState?) :
         return this.blueprintMetadata ?: error("Blueprint metadata is not set")
     }
 
-    override fun readNbt(nbt: NbtCompound) {
+    override fun readNbt(nbt: NbtCompound, registryLookup: net.minecraft.registry.RegistryWrapper.WrapperLookup) {
         fortressPos = BlockPos.fromLong(nbt.getLong("fortressCenter"))
         blueprintMetadata = BlueprintMetadata(nbt.getCompound("blueprintMetadata"))
         start = BlockPos.fromLong(nbt.getLong("start"))
@@ -291,7 +291,7 @@ class FortressBuildingBlockEntity(pos: BlockPos?, state: BlockState?) :
         hireHandler.updateFromNbt(nbt.getCompound("hireHandler"))
     }
 
-    override fun writeNbt(nbt: NbtCompound) {
+    override fun writeNbt(nbt: NbtCompound, registryLookup: net.minecraft.registry.RegistryWrapper.WrapperLookup) {
         fortressPos?.let { nbt.putLong("fortressCenter", it.asLong()) }
         blueprintMetadata?.toNbt()?.let { nbt.put("blueprintMetadata", it) }
         start?.let { nbt.putLong("start", it.asLong()) }
@@ -301,9 +301,7 @@ class FortressBuildingBlockEntity(pos: BlockPos?, state: BlockState?) :
     }
 
     override fun toUpdatePacket(): Packet<ClientPlayPacketListener> {
-        val nbt = NbtCompound()
-        writeNbt(nbt)
-        return BlockEntityUpdateS2CPacket.create(this) { nbt }
+        return BlockEntityUpdateS2CPacket.create(this) { _, lookup -> NbtCompound().also { writeNbt(it, lookup) } }
     }
 
     override fun getHealth(): Int = blockData?.health ?: 100

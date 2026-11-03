@@ -25,15 +25,15 @@ public class ServerboundCutTreesTaskPacket implements FortressC2SPacket {
 
     public ServerboundCutTreesTaskPacket(PacketByteBuf buf) {
         this.uuid = buf.readUuid();
-        this.treeRoots = buf.readCollection(ArrayList::new, PacketByteBuf::readBlockPos);
-        this.selectedPawns = buf.readCollection(ArrayList::new, PacketByteBuf::readInt);
+        this.treeRoots = buf.readCollection(ArrayList::new, b -> b.readBlockPos());
+        this.selectedPawns = buf.readCollection(ArrayList::new, b -> b.readInt());
     }
 
     @Override
     public void write(PacketByteBuf buf) {
         buf.writeUuid(uuid);
-        buf.writeCollection(treeRoots, PacketByteBuf::writeBlockPos);
-        buf.writeCollection(selectedPawns, PacketByteBuf::writeInt);
+        buf.writeCollection(treeRoots, (b, v) -> b.writeBlockPos(v));
+        buf.writeCollection(selectedPawns, (b, v) -> b.writeInt(v));
     }
 
     @Override

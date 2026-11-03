@@ -1,6 +1,5 @@
 package org.minefortress.registries;
 
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.SpawnEggItem;
@@ -40,7 +39,7 @@ public class FortressItems {
 
     public static final Item BUILDING_BLOCK = new BlockItem(
             FortressBlocks.FORTRESS_BUILDING_CONFIGURATION,
-            new FabricItemSettings().maxCount(1)
+            new net.minecraft.item.Item.Settings().maxCount(1)
     );
 
     public static void register() {

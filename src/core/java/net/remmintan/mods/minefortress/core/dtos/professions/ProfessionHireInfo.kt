@@ -12,7 +12,7 @@ data class ProfessionHireInfo(
     fun writeToPacketByteBuf(buf: PacketByteBuf) {
         buf.writeString(professionId)
         buf.writeString(professionName)
-        buf.writeItemStack(professionItem)
+        net.remmintan.mods.minefortress.core.utils.PacketCompat.writeItemStack(buf, professionItem)
         buf.writeCollection(professionCost) { b, it -> it.writeToPacketByteBuf(b) }
     }
 
@@ -20,7 +20,7 @@ data class ProfessionHireInfo(
         fun readFromPacketByteBuf(buf: PacketByteBuf): ProfessionHireInfo {
             val professionId = buf.readString()
             val professionName = buf.readString()
-            val professionItem = buf.readItemStack()
+            val professionItem = net.remmintan.mods.minefortress.core.utils.PacketCompat.readItemStack(buf)
             val professionCosts =
                 buf.readCollection({ mutableListOf<ProfessionCost>() }) { ProfessionCost.readFromPacketByteBuf(it) }
                     .toList()

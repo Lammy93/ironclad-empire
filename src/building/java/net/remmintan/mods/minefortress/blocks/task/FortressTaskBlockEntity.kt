@@ -23,15 +23,15 @@ class FortressTaskBlockEntity @JvmOverloads constructor(
         inv.markDirty()
     }
 
-    override fun writeNbt(nbt: NbtCompound) {
-        val invItems = inv.toNbtList()
+    override fun writeNbt(nbt: NbtCompound, registryLookup: net.minecraft.registry.RegistryWrapper.WrapperLookup) {
+        val invItems = inv.toNbtList(registryLookup)
         nbt.put(INVENTORY_ITEMS_NBT_KEY, invItems)
     }
 
-    override fun readNbt(nbt: NbtCompound) {
+    override fun readNbt(nbt: NbtCompound, registryLookup: net.minecraft.registry.RegistryWrapper.WrapperLookup) {
         if (nbt.contains(INVENTORY_ITEMS_NBT_KEY)) {
             val itemsNbtList = nbt.getList(INVENTORY_ITEMS_NBT_KEY, NbtElement.COMPOUND_TYPE.toInt())
-            inv.readNbtList(itemsNbtList)
+            inv.readNbtList(itemsNbtList, registryLookup)
         }
     }
 }

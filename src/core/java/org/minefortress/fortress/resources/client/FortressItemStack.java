@@ -21,9 +21,7 @@ public class FortressItemStack extends ItemStack {
         }
         ItemStack itemStack = new FortressItemStack(this.getItem(), this.getCount());
         itemStack.setBobbingAnimationTime(this.getBobbingAnimationTime());
-        if (this.getNbt() != null) {
-            itemStack.setNbt(this.getNbt().copy());
-        }
+        itemStack.applyChanges(this.getComponentChanges()); // 1.20.5+: components replace item NBT
         return itemStack;
     }
 }

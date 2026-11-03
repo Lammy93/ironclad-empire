@@ -53,3 +53,34 @@ Build/infra fixes found at this step:
 **Fabric-ASM check:** `GameModeTests` (fortress game mode round trip + saved id) pass on Loader 0.16.14 → Fabric-ASM still works; Task 3b (player-flag fallback) not needed.
 
 Result: build OK, `runServer` reaches `Done (17.8s)`, game tests 13/13.
+
+## Step 2: Minecraft 1.20.4 → 1.20.6 (Java 21)
+
+Pinned: Yarn `1.20.6+build.3`, Fabric API `0.100.8+1.20.6`, Loader `0.16.14`, Cardinal Components API **6.0.0** (official; moved here from Step 3 because the `5.2.9-minefortress` fork crashes on 1.20.6). The fork only carried build/publishing changes, no gameplay patches, so nothing had to be re-applied.
+
+**Networking (`FortressRawPayload`).** 1.20.5 requires typed `CustomPayload`s. Instead of rewriting 36 packet classes, every MineFortress channel is registered as its own payload type whose body is exactly the bytes the packet class writes (`write(buf)` / `(buf)` constructor unchanged, wire format unchanged). Buffers are `RegistryByteBuf`s. S2C payload types are listed in `FortressRawPayload.S2C_CHANNELS` (registered from common code); C2S types are registered by `ServerNetworkReceivers.registerReceiver`. Packets can later move to typed payloads one at a time.
+
+**Items in packets (`PacketCompat`).** `PacketByteBuf.writeItemStack/readItemStack` and `ItemVariant.toPacket/fromPacket` are gone. `PacketCompat` keeps the old `FortressPacketByteBufMixin` format (VarInt count, so totals above 64 survive; they come back as `FortressItemStack`), with data-component changes instead of NBT. The mixin was removed; `FortressItemStack` moved to `core` (same package).
+
+| Change | Before | After | Where |
+|---|---|---|---|
+| Entity data tracker | `initDataTracker()` + `dataTracker.startTracking` | `initDataTracker(DataTracker.Builder)` + `builder.add` | 7 entities + FortressPlayerEntityMixin |
+| Enum tracked data | `TrackedDataHandler.ofEnum` | `TrackedDataHandler.create(PacketCodecs.indexed(...))` | MineFortressMod |
+| Spawn NBT | `MobEntity.initialize(..., NbtCompound)` / `EntityType.spawn(world, nbt, ...)` | `BasePawnEntity.applySpawnData(nbt)` called from the spawn consumer (`applySpawnDataTo`) | BasePawnEntity, NamedPawnEntity, WarriorPawn, ServerFortressManager, test kit |
+| Block entity NBT | `writeNbt/readNbt(nbt)` | `(nbt, RegistryWrapper.WrapperLookup)` | 5 fortress block entities |
+| Block use | `onUse(state, world, pos, player, hand, hit)` | `onUse(state, world, pos, player, hit)` | 2 blocks + FortressAbstractBlockState mixin |
+| CCA components | `readFromNbt/writeToNbt(tag)`, sync on `PacketByteBuf`, `dev.onyxstudios.cca` | `(tag, lookup)`, `RegistryByteBuf`, `org.ladysnake.cca`; entrypoint key `cardinal-components` | MineFortress + Automatone |
+| Model-view stack | `MatrixStack` (`push/translate(double)/pop`) | JOML `Matrix4fStack` (`pushMatrix/translate(float)/popMatrix`), or a local `MatrixStack` seeded from it | InfoTab, EditUpgradesScreen, BlueprintsScreen, ProfessionsScreen, BlueprintRenderer |
+| Food | `item.foodComponent`, `Item.isFood()` | `DataComponentTypes.FOOD` component | ServerResourceManager, EatControl |
+| Item NBT | `getNbt/getSubNbt/setNbt` | `CUSTOM_DATA` / `ENTITY_DATA` components | survival inventory lock, spawn-egg mixin |
+| Loot | `getLootManager().getLootTable(Identifier)` | `getReloadableRegistries().getLootTable(RegistryKey)` | fishing bobber; Automatone |
+| Misc | `FabricItemSettings`, `ItemStack.canCombine`, `getScrollbarPositionX`, `BookScreen.Contents` interface, vertex `normal(Matrix3f,...)` | `Item.Settings`, `areItemsAndComponentsEqual`, `getScrollbarX`, `BookScreen.Contents` record, `normal(MatrixStack.Entry,...)` | various |
+| Entity reach check mixin | redirect `Box.squaredMagnitude` in `onPlayerInteractEntity` | redirect `ServerPlayerEntity.canInteractWithEntityIn` | FortressServerPlayNetworkHandlerMixin |
+| Backup prompt mixin | `start(..., canShowBackupPrompt)` arg | `@Inject` HEAD of `checkBackupAndStart` → `start(session, saveLoader, packs, onCancel)` | FortressIntegratedServerLoaderMixin (client-only: check in play-test) |
+| Automatone | `EntityDimensions.width/height` fields, `getEyeHeight` invoker, `NbtHelper.toBlockPos(compound)`, `canPathfindThrough(world,pos,type)`, fake-player raw packets | record accessors, `dimensions.eyeHeight()`, `toBlockPos(nbt, key)`, `canPathfindThrough(type)`, `AutomatonePayloads` typed payloads | Automatone `mfc` |
+
+Test harness: 1.20.6 game tests default to `skyAccess = false` (a barrier ceiling over each test); pawns spawn by world-surface height and landed on it. All tests now set `skyAccess = true`.
+
+Known follow-ups (not regressions of this port): spawn-egg pawns are not auto-registered with a fortress (upstream stored a UUID under the block-pos key; spawn NBT no longer reaches `initialize`).
+
+Result: build OK, no mixin-target warnings, `runServer` reaches `Done (8.8s)`, game tests 16/16 (incl. network round-trips).

@@ -25,9 +25,9 @@ public abstract class BaritonableEntity extends PathAwareEntity implements IMine
     }
 
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(SELECTED_SLOT, 0);
+    protected void initDataTracker(net.minecraft.entity.data.DataTracker.Builder builder) {
+        super.initDataTracker(builder);
+        builder.add(SELECTED_SLOT, 0);
     }
 
     @Override
