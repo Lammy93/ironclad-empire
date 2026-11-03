@@ -11,11 +11,14 @@ mkdir -p "$REPO/build"
 NAME="mfc-gametest-$$"
 # The test world lives in RAM (tmpfs): writing many fresh region files to /mnt/user (Unraid shfs) can stall the
 # final save for minutes, and long-running servers on /mnt/user can block an array stop.
-MFC_DOCKER_ARGS="--tmpfs $REPO/build/gametest:rw,size=2g" MFC_NAME="$NAME" timeout "${MFC_GAMETEST_TIMEOUT:-1500}" "$REPO/scripts/gradle.sh" runGametest > "$LOG" 2>&1
+MFC_DOCKER_ARGS="--tmpfs $REPO/build/gametest:rw,size=2g" MFC_NAME="$NAME" timeout "${MFC_GAMETEST_TIMEOUT:-1200}" "$REPO/scripts/gradle.sh" runGametest > "$LOG" 2>&1
 RC=$?
 if [ "$RC" = 124 ]; then
+  # keep evidence of the hang (issue #24) before stopping the container
+  P=$(docker exec "$NAME" bash -c "jps -l | grep devlaunchinjector | awk '{print \$1}'" 2>/dev/null)
+  [ -n "$P" ] && docker exec "$NAME" jstack "$P" > "$REPO/build/gametest-hang-jstack.txt" 2>&1 && echo "thread dump: build/gametest-hang-jstack.txt"
   docker stop "$NAME" >/dev/null 2>&1
-  echo "WARNING: game-test run hit the ${MFC_GAMETEST_TIMEOUT:-1500}s deadline (server did not shut down); container stopped"
+  echo "WARNING: game-test run hit the ${MFC_GAMETEST_TIMEOUT:-1200}s deadline (server did not shut down); container stopped"
 fi
 if [ ! -s "$REPORT" ]; then
   echo "NO REPORT: the game-test server did not run. Last lines of $LOG:"
