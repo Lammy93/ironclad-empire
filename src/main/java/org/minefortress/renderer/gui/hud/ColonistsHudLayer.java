@@ -54,7 +54,10 @@ public class ColonistsHudLayer extends AbstractHudLayer {
                         Items.CHEST,
                         btn -> {
                             ClientModUtils.playSound(SoundEvents.BLOCK_CHEST_OPEN);
-                            client.setScreen(new CreativeInventoryScreen(client.player, FeatureSet.empty(), false));
+                            if (net.remmintan.mods.minefortress.core.utils.ClientExtensionsKt.isSurvivalFortress(client))
+                                client.setScreen(new org.minefortress.renderer.gui.resources.FortressStorageScreen());
+                            else
+                                client.setScreen(new CreativeInventoryScreen(client.player, FeatureSet.empty(), false));
                         },
                         "Inventory"
                 )

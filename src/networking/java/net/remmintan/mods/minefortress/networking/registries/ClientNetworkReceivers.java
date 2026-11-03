@@ -31,6 +31,7 @@ public class ClientNetworkReceivers {
         registerReceiver(S2CStartFortressConfiguration.CHANNEL, S2CStartFortressConfiguration::new);
         registerReceiver(S2CSyncBuildingScreenInfo.CHANNEL, S2CSyncBuildingScreenInfo::new);
         registerReceiver(S2CSyncItemsState.CHANNEL, S2CSyncItemsState::new);
+        registerReceiver(S2CSyncStorageContents.CHANNEL, S2CSyncStorageContents::new);
     }
 
     private static void registerReceiver(String channelName, Function<PacketByteBuf, FortressS2CPacket> packetConstructor) {

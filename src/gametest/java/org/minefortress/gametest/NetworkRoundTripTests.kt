@@ -14,8 +14,10 @@ import net.remmintan.mods.minefortress.core.dtos.ItemInfo
 import net.remmintan.mods.minefortress.core.interfaces.networking.FortressPacket
 import net.remmintan.mods.minefortress.core.utils.PacketCompat
 import net.remmintan.mods.minefortress.networking.c2s.C2SRequestItemsState
+import net.remmintan.mods.minefortress.networking.c2s.C2SRequestStorageContents
 import net.remmintan.mods.minefortress.networking.helpers.FortressRawPayload
 import net.remmintan.mods.minefortress.networking.s2c.S2CSyncItemsState
+import net.remmintan.mods.minefortress.networking.s2c.S2CSyncStorageContents
 import org.minefortress.fortress.resources.client.FortressItemStack
 
 /**
@@ -44,6 +46,13 @@ class NetworkRoundTripTests : FabricGameTest {
     @GameTest(skyAccess = true, templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 20)
     fun itemsRequestRoundTrips(ctx: TestContext) {
         roundTrip(ctx, C2SRequestItemsState(setOf(ItemVariant.of(Items.OAK_LOG), ItemVariant.of(Items.DIAMOND)))) { C2SRequestItemsState(it) }
+        ctx.complete()
+    }
+
+    @GameTest(skyAccess = true, templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 20)
+    fun storageContentsRoundTrip(ctx: TestContext) {
+        roundTrip(ctx, S2CSyncStorageContents(listOf(ItemInfo(Items.COBBLESTONE, 5000L), ItemInfo(Items.BREAD, 12L)))) { S2CSyncStorageContents(it) }
+        roundTrip(ctx, C2SRequestStorageContents()) { C2SRequestStorageContents(it) }
         ctx.complete()
     }
 

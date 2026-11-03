@@ -66,6 +66,19 @@ public class FortressServerPlayNetworkHandlerMixin {
         }
     }
 
+    /**
+     * Fortress mode counts as creative, so vanilla accepted creative-menu item grabs from survival fortresses:
+     * free items. Refuse them (play-test bugfix-1) and resync the client's inventory so no phantom item stays.
+     */
+    @Inject(method = "onCreativeInventoryAction", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/NetworkThreadUtils;forceMainThread(Lnet/minecraft/network/packet/Packet;Lnet/minecraft/network/listener/PacketListener;Lnet/minecraft/server/world/ServerWorld;)V", shift = At.Shift.AFTER), cancellable = true)
+    public void noCreativeItemsInSurvivalFortress(net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket packet, CallbackInfo ci) {
+        if (FortressGamemodeUtilsKt.isFortressGamemode(this.player)
+                && net.remmintan.mods.minefortress.core.utils.ServerExtensionsKt.isSurvivalFortress(this.player.getServer())) {
+            this.player.playerScreenHandler.syncState();
+            ci.cancel();
+        }
+    }
+
     // 1.20.5+: the reach check is ServerPlayerEntity.canInteractWithEntityIn(box, extraRange).
     // In fortress mode the player picks entities from the RTS camera, so allow anything within PICK_DISTANCE.
     @Redirect(method = "onPlayerInteractEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;canInteractWithEntityIn(Lnet/minecraft/util/math/Box;D)Z"))

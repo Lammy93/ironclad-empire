@@ -5,6 +5,7 @@ import net.remmintan.mods.minefortress.core.dtos.EnoughResourceState
 import net.remmintan.mods.minefortress.core.dtos.ItemInfo
 import net.remmintan.mods.minefortress.core.interfaces.resources.IClientResourceManager
 import net.remmintan.mods.minefortress.networking.c2s.C2SRequestItemsState
+import net.remmintan.mods.minefortress.networking.c2s.C2SRequestStorageContents
 import net.remmintan.mods.minefortress.networking.helpers.FortressClientNetworkHelper
 import java.time.Duration
 import java.time.Instant
@@ -33,6 +34,18 @@ class ClientResourceManager : IClientResourceManager {
         stacks.forEach {
             items[it.item] = ItemStateInfo.FilledItemState(it.amount)
         }
+    }
+
+    override var storageContents: List<ItemInfo> = emptyList()
+        private set
+
+    override fun syncStorageContents(stacks: List<ItemInfo>) {
+        storageContents = stacks
+        stacks.forEach { items[it.item] = ItemStateInfo.FilledItemState(it.amount) }
+    }
+
+    override fun requestStorageContents() {
+        FortressClientNetworkHelper.send(C2SRequestStorageContents.CHANNEL, C2SRequestStorageContents())
     }
 
     private fun getStorageStack(requestedStack: ItemInfo): ItemStateInfo {

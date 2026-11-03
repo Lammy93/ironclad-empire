@@ -27,6 +27,7 @@
   ],
   "client": [
     "FortressMinecraftClientMixin",
+    "renderer.gui.FortressScreenBlurMixin",
     "entity.player.FortressClientPlayerEntityMixin",
     "entity.player.FortressPlayerEntityRendererMixin",
     "interaction.FortressClientInteractionManagerMixin",

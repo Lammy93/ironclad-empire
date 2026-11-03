@@ -14,7 +14,8 @@
       "org.minefortress.gametest.OwnerOfflineTest",
       "org.minefortress.gametest.ModeSwitchInventoryTest",
       "org.minefortress.gametest.BugRegressionTests",
-      "org.minefortress.gametest.OwnershipTests"
+      "org.minefortress.gametest.OwnershipTests",
+      "org.minefortress.gametest.CreativeMenuTests"
     ],
     "client": [
       "org.minefortress.gametest.MixinAudit"

@@ -234,6 +234,13 @@ public abstract class FortressMinecraftClientMixin extends ReentrantThreadExecut
         if (FortressGamemodeUtilsKt.isClientInFortressGamemode()) {
             if (screen instanceof InventoryScreen && (selectionManager.isSelecting() || clientBlueprintManager.isSelecting())) {
                 ci.cancel();
+                return;
+            }
+            // Survival fortress: the E key must not open the creative item menu (free items); show the fortress chests instead.
+            if ((screen instanceof InventoryScreen || screen instanceof net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen)
+                    && net.remmintan.mods.minefortress.core.utils.ClientExtensionsKt.isSurvivalFortress((MinecraftClient) (Object) this)) {
+                ci.cancel();
+                ((MinecraftClient) (Object) this).setScreen(new org.minefortress.renderer.gui.resources.FortressStorageScreen());
             }
         }
     }

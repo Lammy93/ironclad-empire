@@ -40,8 +40,7 @@ public class ProfessionsScreen extends Screen {
         matrices.translate((float) (0), (float) (0), 200.0f);
         final String availableColonistsText = String.format("Available colonists: %d/%d", professionManager.getFreeColonists(), fortressManager.getTotalColonistsCount());
         drawContext.drawTextWithShadow(textRenderer, availableColonistsText, screenX + 9, screenY + 18, 0xFFFFFF);
-        drawContext.drawTextWithShadow(textRenderer, "left click on profession - add pawn to profession", 2, this.height - (2*this.textRenderer.fontHeight) - 2, 0xffffff);
-        drawContext.drawTextWithShadow(textRenderer, "right click on profession - remove pawn from profession", 2, this.height -  this.textRenderer.fontHeight - 2, 0xffffff);
+        this.drawHelp(drawContext);
         matrices.popMatrix();
 
         this.drawWidgetTooltip(drawContext, mouseX, mouseY, screenX, screenY);
@@ -60,6 +59,26 @@ public class ProfessionsScreen extends Screen {
             this.professionsLayer.move(deltaX, deltaY);
         }
         return true;
+    }
+
+    // Play-test bugfix-1: the two old one-liners did not explain how professions work.
+    private static final String[] HELP = {
+            "How professions work",
+            "Free colonists have no job yet. Left-click a profession to train one of them in it.",
+            "Right-click a profession to take one pawn out of it again (they become free colonists).",
+            "Hover a profession to see what it needs. Dark ones are still locked: build what they ask for,",
+            "or unlock the profession they branch from first. Drag with the mouse to move the tree.",
+    };
+
+    private void drawHelp(DrawContext drawContext) {
+        final int lineHeight = this.textRenderer.fontHeight + 2;
+        int boxWidth = 0;
+        for (String line : HELP) boxWidth = Math.max(boxWidth, this.textRenderer.getWidth(line));
+        final int top = this.height - HELP.length * lineHeight - 6;
+        drawContext.fill(0, top - 3, boxWidth + 8, this.height, 0xB0000000);
+        for (int i = 0; i < HELP.length; i++) {
+            drawContext.drawTextWithShadow(textRenderer, HELP[i], 4, top + i * lineHeight, i == 0 ? 0xFFD27F : 0xFFFFFF);
+        }
     }
 
     private void drawProfessionsTree(DrawContext drawContext, int screenX, int screenY) {

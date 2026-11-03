@@ -26,4 +26,8 @@ interface IServerResourceHelper : IServerManager {
     fun getCountIncludingSimilar(item: Item): Long
     fun syncRequestedItems(items: Set<ItemVariant>, player: ServerPlayerEntity)
 
+    /** Everything in the fortress's loaded chests, one entry per item variant, largest amounts first. */
+    fun getStorageContents(): List<ItemInfo>
+    fun syncStorageContents(player: ServerPlayerEntity)
+
 }

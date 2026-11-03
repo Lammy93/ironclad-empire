@@ -41,7 +41,8 @@ public record FortressRawPayload(CustomPayload.Id<FortressRawPayload> id, byte[]
             S2CSyncGamemodePacket.CHANNEL,
             S2CStartFortressConfiguration.CHANNEL,
             S2CSyncBuildingScreenInfo.CHANNEL,
-            S2CSyncItemsState.CHANNEL
+            S2CSyncItemsState.CHANNEL,
+            S2CSyncStorageContents.CHANNEL
     );
 
     private static final Map<String, Id<FortressRawPayload>> IDS = new ConcurrentHashMap<>();

@@ -20,6 +20,19 @@ class StorageTests : FabricGameTest {
         }
     }
 
+    /** The Fortress storage screen (play-test bugfix-1) shows exactly what the fortress chests hold. */
+    @GameTest(skyAccess = true, templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 200)
+    fun storageContentsListEveryStoredItem(ctx: TestContext) {
+        val f = FortressTestKit.createFortress(ctx)
+        f.give(Items.COBBLESTONE, 100)
+        f.give(Items.OAK_LOG, 7)
+        ctx.addInstantFinalTask {
+            val contents = f.managers.resourceHelper.getStorageContents().associate { it.item.item to it.amount }
+            ctx.assertTrue(contents[Items.COBBLESTONE] == f.chestTotal(Items.COBBLESTONE).toLong() && contents[Items.COBBLESTONE] == 100L, "storage contents show ${contents[Items.COBBLESTONE]} cobblestone, chests hold ${f.chestTotal(Items.COBBLESTONE)}")
+            ctx.assertTrue(contents[Items.OAK_LOG] == 7L, "storage contents show ${contents[Items.OAK_LOG]} oak logs, expected 7")
+        }
+    }
+
     @GameTest(skyAccess = true, templateName = SmokeTests.ARENA, batchId = SmokeTests.SURVIVAL, tickLimit = 6000)
     fun taskReservesAndConsumes(ctx: TestContext) {
         val f = FortressTestKit.createFortress(ctx)

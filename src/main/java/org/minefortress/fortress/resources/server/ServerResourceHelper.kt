@@ -20,6 +20,7 @@ import net.remmintan.mods.minefortress.core.utils.extractItemsConsideringSimilar
 import net.remmintan.mods.minefortress.core.utils.getManagersProvider
 import net.remmintan.mods.minefortress.networking.helpers.FortressServerNetworkHelper
 import net.remmintan.mods.minefortress.networking.s2c.S2CSyncItemsState
+import net.remmintan.mods.minefortress.networking.s2c.S2CSyncStorageContents
 
 @Suppress("UnstableApiUsage")
 class ServerResourceHelper(server: MinecraftServer, fortressPos: BlockPos) : IServerResourceHelper {
@@ -136,6 +137,19 @@ class ServerResourceHelper(server: MinecraftServer, fortressPos: BlockPos) : ISe
         }
         val packet = S2CSyncItemsState(requestedStates)
         FortressServerNetworkHelper.send(player, S2CSyncItemsState.CHANNEL, packet)
+    }
+
+    override fun getStorageContents(): List<ItemInfo> {
+        val totals = linkedMapOf<ItemVariant, Long>()
+        for (view in resourceManager.getStorage()) {
+            if (view.isResourceBlank || view.amount <= 0) continue
+            totals.merge(view.resource, view.amount, Long::plus)
+        }
+        return totals.map { (variant, amount) -> ItemInfo(variant, amount) }.sortedByDescending { it.amount }
+    }
+
+    override fun syncStorageContents(player: ServerPlayerEntity) {
+        FortressServerNetworkHelper.send(player, S2CSyncStorageContents.CHANNEL, S2CSyncStorageContents(getStorageContents()))
     }
 
     private fun transferItems(

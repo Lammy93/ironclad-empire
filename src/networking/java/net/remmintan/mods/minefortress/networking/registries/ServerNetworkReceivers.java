@@ -48,6 +48,7 @@ public class ServerNetworkReceivers {
         registerReceiver(C2SSetPawnSkinPacket.CHANNEL, C2SSetPawnSkinPacket::new);
         registerReceiver(C2SRequestBuildingScreenInfo.CHANNEL, C2SRequestBuildingScreenInfo::new);
         registerReceiver(C2SRequestItemsState.CHANNEL, C2SRequestItemsState::new);
+        registerReceiver(C2SRequestStorageContents.CHANNEL, C2SRequestStorageContents::new);
     }
 
     private static void registerReceiver(String channelName, Function<PacketByteBuf, FortressC2SPacket> packetConstructor) {
