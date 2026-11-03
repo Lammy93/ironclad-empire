@@ -33,6 +33,10 @@ public interface IFortressBuilding {
     @Nullable
     BlockPos getRandomPosToComeToBuilding();
 
+    /** The fortress (campfire position) this building belongs to, or null if unknown. */
+    @org.jetbrains.annotations.Nullable
+    BlockPos getFortressPos();
+
     default List<String> getUpgrades() {
         return getMetadata().getRequirement().getUpgrades();
     }

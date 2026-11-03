@@ -21,6 +21,7 @@ class C2SHireProfessional(private val pos: BlockPos, private val professionId: S
     }
 
     override fun handle(server: MinecraftServer, player: ServerPlayerEntity) {
+        if (!net.remmintan.mods.minefortress.core.utils.FortressOwnership.ownsBuildingAt(player, pos, "hire")) return
         (player.world?.getBlockEntity(pos) as? IFortressBuilding)?.hireHandler?.hire(professionId)
     }
 }

@@ -22,7 +22,7 @@ class BugRegressionTests : FabricGameTest {
         ctx.addInstantFinalTask {
             ctx.assertTrue(ctx.world.getBlockState(f.center).isOf(FortressBlocks.FORTRESS_CAMPFIRE), "the fortress campfire was dug up")
             val others = BlockPos.iterate(from, to).count { it != f.center && !ctx.world.getBlockState(it).isAir }
-            ctx.assertTrue(others == 0, "dig task not finished yet ($others blocks left)")
+            ctx.assertTrue(others == 0, "dig task not finished yet ($others blocks left); ${f.diagnostics()}")
         }
     }
 

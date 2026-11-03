@@ -39,6 +39,11 @@ object PlayerBlockEvents {
             return@register if (!cell.contains(blockPos)) ActionResult.FAIL else ActionResult.PASS
         }
 
+        // The fortress campfire holds the whole fortress: only operators may break it (#23, #48).
+        // Breaking it used to delete the fortress and crash the server on the next building tick.
+        net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents.BEFORE.register { _, player, _, state, _ ->
+            !state.isOf(FortressBlocks.FORTRESS_CAMPFIRE) || player.hasPermissionLevel(2)
+        }
         // can't destroy building blocks
         AttackBlockCallback.EVENT.register { _, world, _, blockPos, _ ->
             return@register if (world.getBlockState(blockPos).isOf(FortressBlocks.FORTRESS_BUILDING))

@@ -34,6 +34,10 @@ fun MinecraftServer.getManagersProvider(fortressPos: BlockPos): IServerManagersP
     return this.getFortressHolder(fortressPos)?.getServerManagersProvider()!!
 }
 
+fun MinecraftServer.getManagersProviderOrNull(fortressPos: BlockPos): IServerManagersProvider? {
+    return this.getFortressHolder(fortressPos)?.getServerManagersProvider()
+}
+
 fun MinecraftServer.getFortressManager(fortressPos: BlockPos): IServerFortressManager? {
     return this.getFortressHolder(fortressPos)?.getServerFortressManager()
 }

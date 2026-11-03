@@ -13,7 +13,8 @@
       "org.minefortress.gametest.NetworkRoundTripTests",
       "org.minefortress.gametest.OwnerOfflineTest",
       "org.minefortress.gametest.ModeSwitchInventoryTest",
-      "org.minefortress.gametest.BugRegressionTests"
+      "org.minefortress.gametest.BugRegressionTests",
+      "org.minefortress.gametest.OwnershipTests"
     ],
     "client": [
       "org.minefortress.gametest.MixinAudit"

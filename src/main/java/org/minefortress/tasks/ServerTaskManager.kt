@@ -16,6 +16,7 @@ import net.remmintan.mods.minefortress.core.interfaces.server.IWritableManager
 import net.remmintan.mods.minefortress.core.interfaces.tasks.*
 import net.remmintan.mods.minefortress.core.utils.LogCompanion
 import net.remmintan.mods.minefortress.core.utils.ServerModUtils
+import net.remmintan.mods.minefortress.core.utils.getFortressManager
 import net.remmintan.mods.minefortress.core.utils.getManagersProvider
 import net.remmintan.mods.minefortress.core.utils.isSurvivalFortress
 import net.remmintan.mods.minefortress.networking.helpers.FortressChannelNames
@@ -26,7 +27,7 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 
-class ServerTaskManager(private val server: MinecraftServer, fortressPos: BlockPos) : IServerTaskManager,
+class ServerTaskManager(private val server: MinecraftServer, private val fortressPos: BlockPos) : IServerTaskManager,
     IWritableManager,
     ITickableManager {
     private val tasksInProgress: MutableMap<BlockPos, IBaseTask> = ConcurrentHashMap()
@@ -40,45 +41,37 @@ class ServerTaskManager(private val server: MinecraftServer, fortressPos: BlockP
 
         //TODO place the task in the world + reserve items
 
-        if (selectedPawnIds.isEmpty()) {
+        startTask(task, filterWorkers(selectedPawnIds))
+    }
+
+    /** Starts [task] with [workers], or queues it when nobody can take it yet. The task is already placed in the world. */
+    private fun startTask(task: IBaseTask, workers: List<IWorkerPawn>) {
+        if (workers.isEmpty()) {
             notStartedTasks.add(task)
             return
         }
-
-        val selectedWorkers = filterWorkers(selectedPawnIds, player)
-        if (selectedWorkers.isEmpty()) {
-            notStartedTasks.add(task)
-            return
-        }
-
         if (task is ITaskWithPreparation)
             task.prepareTask()
         tasksInProgress[task.pos] = task
-        setPawnsToTask(task, selectedWorkers)
+        setPawnsToTask(task, workers)
     }
 
     override fun tick(server: MinecraftServer, world: ServerWorld, player: ServerPlayerEntity?) {
         removeAllFinishedTasks()
-
-        //FIXME take planned tasks even when the player is offline
-        if (player == null) return
         if (notStartedTasks.isEmpty() && tasksInProgress.isEmpty()) return
-        val readyWorkers = ServerModUtils
-            .getFortressManager(player)
-            .map { it.readyWorkers }
-            .orElse(emptyList())
 
-        if (readyWorkers.isNotEmpty()) {
-            val inProgressTask = tasksInProgress.values
-                .firstOrNull { it.notCancelled() && it.canTakeMoreWorkers() }
-                ?.also { setPawnsToTask(it, readyWorkers) }
+        // Work continues while the owner is offline (upstream FIXME): ready workers come from the fortress itself.
+        // Before, leftover task parts and queued tasks were only handed out while the owner was online.
+        val readyWorkers = server.getFortressManager(fortressPos)?.readyWorkers ?: return
+        if (readyWorkers.isEmpty()) return
 
-            if (inProgressTask == null) {
-                notStartedTasks.poll()?.let {
-                    val selectedPawnIds = readyWorkers.map { w -> (w as Entity).id }
-                    this.addTask(it, selectedPawnIds, player)
-                }
-            }
+        val inProgressTask = tasksInProgress.values
+            .firstOrNull { it.notCancelled() && it.canTakeMoreWorkers() }
+            ?.also { setPawnsToTask(it, readyWorkers) }
+
+        if (inProgressTask == null) {
+            // a queued task was already placed in the world (and its items reserved) when it was added
+            notStartedTasks.poll()?.let { startTask(it, readyWorkers) }
         }
     }
 
@@ -202,17 +195,15 @@ class ServerTaskManager(private val server: MinecraftServer, fortressPos: BlockP
         return success
     }
 
-    companion object : LogCompanion(ServerTaskManager::class) {
-        private fun filterWorkers(selectedPawnIds: List<Int>, player: ServerPlayerEntity): List<IWorkerPawn> {
-            val serverWorld = player.world
-            return selectedPawnIds
-                .asSequence()
-                .map { serverWorld.getEntityById(it) }
-                .filterNotNull()
-                .filter { it is IWorkerPawn }
-                .map { it as IWorkerPawn }
-                .filter { !it.taskControl.isDoingEverydayTasks }
-                .toList()
-        }
-    }
+    private fun filterWorkers(selectedPawnIds: List<Int>): List<IWorkerPawn> =
+        selectedPawnIds
+            .asSequence()
+            .map { world.getEntityById(it) }
+            .filterNotNull()
+            .filter { it is IWorkerPawn }
+            .map { it as IWorkerPawn }
+            .filter { !it.taskControl.isDoingEverydayTasks }
+            .toList()
+
+    companion object : LogCompanion(ServerTaskManager::class)
 }

@@ -28,6 +28,7 @@ public class C2SFollowTargetPacket implements FortressC2SPacket {
     @Override
     public void handle(@NotNull MinecraftServer server, @NotNull ServerPlayerEntity player) {
         final var entity = player.getWorld().getEntityById(id);
+        if (!net.remmintan.mods.minefortress.core.utils.FortressOwnership.ownsEntity(player, entity, "order soldier to attack")) return;
         final var target = player.getWorld().getEntityById(targetId);
         if(entity instanceof ITargetedPawn pawn && target instanceof LivingEntity targetEntity) {
             pawn.setAttackTarget(targetEntity);

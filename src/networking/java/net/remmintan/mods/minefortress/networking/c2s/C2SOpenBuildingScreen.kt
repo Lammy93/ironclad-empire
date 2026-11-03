@@ -12,6 +12,7 @@ class C2SOpenBuildingScreen(private val pos: BlockPos) : FortressC2SPacket {
     constructor(buf: PacketByteBuf) : this(buf.readBlockPos())
 
     override fun handle(server: MinecraftServer, player: ServerPlayerEntity) {
+        if (!net.remmintan.mods.minefortress.core.utils.FortressOwnership.ownsBuildingAt(player, pos, "open building screen")) return
         player.world?.getBlockEntity(pos).let {
             if (it is NamedScreenHandlerFactory) {
                 player.openHandledScreen(it)

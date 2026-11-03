@@ -34,6 +34,7 @@ public class C2SRepairBuilding implements FortressC2SPacket {
 
     @Override
     public void handle(@NotNull MinecraftServer server, @NotNull ServerPlayerEntity player) {
+        if (!net.remmintan.mods.minefortress.core.utils.FortressOwnership.ownsBuildingAt(player, pos, "repair building")) return;
         final var serverManager = getFortressManager(player);
         serverManager.repairBuilding(player, pos, selectedPawns);
     }

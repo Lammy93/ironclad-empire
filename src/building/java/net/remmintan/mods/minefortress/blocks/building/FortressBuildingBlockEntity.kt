@@ -36,6 +36,7 @@ import net.remmintan.mods.minefortress.core.interfaces.buildings.IFortressBuildi
 import net.remmintan.mods.minefortress.core.utils.ClientModUtils
 import net.remmintan.mods.minefortress.core.utils.ServerModUtils
 import net.remmintan.mods.minefortress.core.utils.getManagersProvider
+import net.remmintan.mods.minefortress.core.utils.getManagersProviderOrNull
 import net.remmintan.mods.minefortress.gui.building.BuildingScreenHandler
 import net.remmintan.mods.minefortress.networking.helpers.FortressServerNetworkHelper
 import net.remmintan.mods.minefortress.networking.s2c.S2CSyncBuildingScreenInfo
@@ -110,7 +111,8 @@ class FortressBuildingBlockEntity(pos: BlockPos?, state: BlockState?) :
                 val professionType = metadata.requirement.type ?: return@let
 
                 if (world is ServerWorld) {
-                    val provider = world.server.getManagersProvider(fortressPos!!)
+                    // the campfire may be gone (operator /setblock); skip instead of crashing the server tick
+                    val provider = fortressPos?.let { world.server.getManagersProviderOrNull(it) } ?: return@let
 
                     it.init(
                         professionType,
@@ -303,6 +305,8 @@ class FortressBuildingBlockEntity(pos: BlockPos?, state: BlockState?) :
     override fun toUpdatePacket(): Packet<ClientPlayPacketListener> {
         return BlockEntityUpdateS2CPacket.create(this) { _, lookup -> NbtCompound().also { writeNbt(it, lookup) } }
     }
+
+    override fun getFortressPos(): BlockPos? = fortressPos
 
     override fun getHealth(): Int = blockData?.health ?: 100
 

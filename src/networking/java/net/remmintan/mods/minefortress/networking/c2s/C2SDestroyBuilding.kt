@@ -11,6 +11,7 @@ class C2SDestroyBuilding(private val pos: BlockPos) : FortressC2SPacket {
     constructor(buf: PacketByteBuf) : this(BlockPos.fromLong(buf.readLong()))
 
     override fun handle(server: MinecraftServer, player: ServerPlayerEntity) {
+        if (!net.remmintan.mods.minefortress.core.utils.FortressOwnership.ownsBuildingAt(player, pos, "destroy building")) return
         getManagersProvider(player).buildingsManager.destroyBuilding(pos)
     }
 
