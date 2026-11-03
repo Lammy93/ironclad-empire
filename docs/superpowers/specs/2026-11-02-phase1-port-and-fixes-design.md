@@ -113,8 +113,9 @@ Fix order: crash/data-loss first.
 | 33 | Pawns stuck inside fence + pressure-plate tables | After placing a block, a pawn standing inside a non-full block moves to the nearest free spot. Blueprint placement order puts such "furniture" blocks last. |
 | 29 | Army does not fight back when idle | Idle warriors, archers and knights retaliate against attackers and nearby threats. Full stances come in Phase 3. |
 | 45 | "This world is no longer supported" on very old worlds | Deliberate upstream block of pre-rework worlds: keep it, reword it to explain what to do. |
+| new (found 2026-11-03) | Server trusts the client about ownership: any player can destroy another fortress's building, hire in another fortress (paid from its storage), open its building screens, or command its soldiers; a survival player can mine a fortress campfire and delete the whole fortress | Server-side owner check on every fortress-changing packet (`C2SDestroyBuilding`, `C2SRepairBuilding`, `C2SHireProfessional`, `C2SOpenBuildingScreen`, `C2SMoveTargetPacket`, `C2SFollowTargetPacket`, task/selection packets): the target's `fortressPos` must equal the sender's. The fortress campfire can only be broken by its owner (or an operator). Added at Zac's request; PvP rules themselves are a later design round. |
 
-Not in Phase 1: #62 (Phase 2), #9 translation prep, #20/#31/#34/#47 (meta/roadmap;
+Not in Phase 1: player-vs-player rules (friend/foe, sieges, war rules: a separate design round after Phase 1), #62 (Phase 2), #9 translation prep, #20/#31/#34/#47 (meta/roadmap;
 #34/#47 are answered by this port).
 
 ## 6. Testing

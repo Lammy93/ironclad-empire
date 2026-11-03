@@ -185,7 +185,7 @@
 - [ ] **Step 3:** Run → fix any data-fixer gaps (old item NBT → components for mod-private data needs a `DataFixer`-style read fallback in the components' readers).
 - [ ] **Step 4: Commit + PR** `test: 1.17.5 world upgrade`.
 
-### Tasks 9–19: Bug fixes
+### Tasks 9–18b: Bug fixes
 
 Each bug task follows this pattern: write the test → run it on the 1.21.1 build → **if it already passes, record "fixed upstream / by the port" on the issue and close it with the test kept** → otherwise fix → test passes → commit + PR referencing `Fixes Lammy93/minefortress#<n> (upstream remmintan/minefortress#<m>)`.
 
@@ -286,6 +286,18 @@ Each bug task follows this pattern: write the test → run it on the 1.21.1 buil
 
 - [ ] **Step 1:** Replace the text with exactly: title `"This world was made with a very old MineFortress"`, body `"Worlds from MineFortress versions before the fortress rework can't be opened with this version. Your world has not been changed. To keep playing it, use the MineFortress version it was made with; to play MineFortress Continued, create a new world."`
 - [ ] **Step 2: Verify** build + a manual look at the screen via a play-test drop (or a dev client if available). Commit + PR.
+
+### Task 18b: Server-side ownership checks (added 2026-11-03, Zac's go)
+
+**Files:** Create `src/main/java/org/minefortress/fortress/FortressOwnership.kt`; test `OwnershipTests.kt`; modify the `handle` of `C2SDestroyBuilding`, `C2SRepairBuilding`, `C2SHireProfessional`, `C2SOpenBuildingScreen`, `C2SMoveTargetPacket`, `C2SFollowTargetPacket`, `ServerboundSimpleSelectionTaskPacket`, `ServerboundBlueprintTaskPacket`, `ServerboundCutTreesTaskPacket`, `ServerboundRoadsTaskPacket`; `FortressCampfireBlock` (break handling).
+
+**Interfaces:**
+- Produces: `object FortressOwnership { fun ownsPawn(player: ServerPlayerEntity, entity: Entity?): Boolean; fun ownsBuilding(player: ServerPlayerEntity, pos: BlockPos): Boolean; fun ownsCampfire(player: ServerPlayerEntity, pos: BlockPos): Boolean }`. Ownership = the target's `fortressPos` equals the sender's `(player as IFortressPlayerEntity).get_FortressPos()`; operators (permission level 2+) always pass. A rejected packet is dropped with a `LOGGER.warn` naming the player and packet.
+
+- [ ] **Step 1:** `OwnershipTests` (two fixtures A and B): `cannotDestroyOthersBuilding` (B sends the destroy packet for A's building → building intact); `cannotHireInOthersFortress` (B hires in A's building → A's storage and profession counts unchanged); `cannotCommandOthersSoldier` (B sends move/follow for A's warrior → its target unchanged); `cannotTaskOthersArea` (B digs inside A's fortress bounds → no blocks removed); `campfireOnlyBreakableByOwner` (a survival non-owner fails to break A's campfire; the owner can).
+- [ ] **Step 2:** Run → FAIL (every exploit currently succeeds).
+- [ ] **Step 3:** Implement `FortressOwnership` and call it at the top of each `handle`; stop non-owners breaking the campfire (`PlayerBlockBreakEvents.BEFORE` → false unless `ownsCampfire`).
+- [ ] **Step 4:** Run → PASS; whole suite green. Commit + PR referencing the issue.
 
 ### Task 19: Release 1.18.0
 
