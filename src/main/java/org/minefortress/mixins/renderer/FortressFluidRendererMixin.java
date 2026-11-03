@@ -36,7 +36,7 @@ public abstract class FortressFluidRendererMixin {
     }
 
     @Inject(method="vertex", at = @At(value = "HEAD"), cancellable = true)
-    void vertex(VertexConsumer vertexConsumer, double x, double y, double z, float red, float green, float blue, float u, float v, int light, CallbackInfo ci) {
+    void vertex(VertexConsumer vertexConsumer, float x, float y, float z, float red, float green, float blue, float u, float v, int light, CallbackInfo ci) { // 1.21+: float coords
         if(this.fortressFluid.get()) {
             final int x1 = fortressFluidPos.getX();
             final int y1 = fortressFluidPos.getY();

@@ -93,7 +93,8 @@ public abstract class FortressGameRendererMixin implements FortressGameRenderer 
         }
     }
 
-    @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getRotationVec(F)Lnet/minecraft/util/math/Vec3d;"))
+    // 1.21+: updateTargetedEntity(float) became updateCrosshairTarget(float) -> findCrosshairTarget(entity, blockRange, entityRange, tickDelta)
+    @Redirect(method = "findCrosshairTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;getRotationVec(F)Lnet/minecraft/util/math/Vec3d;"))
     public Vec3d updateTargetedEntityGetRotation(Entity instance, float tickDelta) {
         if (instance instanceof ClientPlayerEntity player && FortressGamemodeUtilsKt.isFortressGamemode(player)) {
             final var mouse = client.mouse;
@@ -103,7 +104,7 @@ public abstract class FortressGameRendererMixin implements FortressGameRenderer 
         }
     }
 
-    @Redirect(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/Vec3d;squaredDistanceTo(Lnet/minecraft/util/math/Vec3d;)D", ordinal = 1))
+    @Redirect(method = "findCrosshairTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/Vec3d;squaredDistanceTo(Lnet/minecraft/util/math/Vec3d;)D", ordinal = 1))
     public double updateTargetedEntityRedirectDistanceToEntity(Vec3d instance, Vec3d vec) {
         final double realDistance = instance.squaredDistanceTo(vec);
 
@@ -115,4 +116,16 @@ public abstract class FortressGameRendererMixin implements FortressGameRenderer 
         }
     }
 
+    // 1.21+: findCrosshairTarget drops targets beyond the vanilla interaction range; in fortress mode the
+    // player picks from the RTS camera, so keep whatever was hit.
+    @Redirect(method = "findCrosshairTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/GameRenderer;ensureTargetInRange(Lnet/minecraft/util/hit/HitResult;Lnet/minecraft/util/math/Vec3d;D)Lnet/minecraft/util/hit/HitResult;"))
+    private net.minecraft.util.hit.HitResult keepFortressTargetsInRange(net.minecraft.util.hit.HitResult hit, Vec3d cameraPos, double range) {
+        if (FortressGamemodeUtilsKt.isClientInFortressGamemode()) return hit;
+        return ensureTargetInRange(hit, cameraPos, range);
+    }
+
+    @org.spongepowered.asm.mixin.Shadow
+    private static net.minecraft.util.hit.HitResult ensureTargetInRange(net.minecraft.util.hit.HitResult hit, Vec3d cameraPos, double range) {
+        throw new AssertionError();
+    }
 }

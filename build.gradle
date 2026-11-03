@@ -137,6 +137,20 @@ loom {
     }
 
     runs {
+        // Client start-up checks (scripts/client-check.sh): mixin audit, then a real boot to the title screen
+        clientCheck {
+            client()
+            name "Client check"
+            source sourceSets.gametest
+            runDir "build/clientcheck"
+        }
+        clientAudit {
+            client()
+            name "Client mixin audit"
+            source sourceSets.gametest
+            runDir "build/clientcheck"
+            vmArg "-Dmfc.mixinAudit=true"
+        }
         // Headless Fabric game tests: scripts/gradle.sh runGametest
         gametest {
             server()

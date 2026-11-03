@@ -11,6 +11,9 @@
       "org.minefortress.gametest.StorageTests",
       "org.minefortress.gametest.GameModeTests",
       "org.minefortress.gametest.NetworkRoundTripTests"
+    ],
+    "client": [
+      "org.minefortress.gametest.MixinAudit"
     ]
   },
   "depends": {

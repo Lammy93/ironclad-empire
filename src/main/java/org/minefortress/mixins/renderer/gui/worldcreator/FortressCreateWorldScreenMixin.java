@@ -38,7 +38,8 @@ public abstract class FortressCreateWorldScreenMixin extends Screen {
         IntegratedServerLoader.tryLoad(client, parent, lifecycle, loader, true);
     }
 
-    @ModifyArg(method = "startServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/integrated/IntegratedServerLoader;start(Lnet/minecraft/world/level/storage/LevelStorage$Session;Lnet/minecraft/server/DataPackContents;Lnet/minecraft/registry/CombinedDynamicRegistries;Lnet/minecraft/world/SaveProperties;)V"))
+    // 1.21+: IntegratedServerLoader.start(...) for new worlds became startNewWorld(...)
+    @ModifyArg(method = "startServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/integrated/IntegratedServerLoader;startNewWorld(Lnet/minecraft/world/level/storage/LevelStorage$Session;Lnet/minecraft/server/DataPackContents;Lnet/minecraft/registry/CombinedDynamicRegistries;Lnet/minecraft/world/SaveProperties;)V"))
     public SaveProperties updateLevelPropsBeforeStartingAServer(SaveProperties props) {
         final var worldCreator = this.getWorldCreator();
         if (props instanceof IFortressGamemodeHolder wcProps && worldCreator instanceof IFortressGamemodeHolder creator) {

@@ -58,8 +58,9 @@ public abstract class FortressWorldRendererMixin  {
         fortressClient.get_TasksRenderer().prepareForRender();
     }
 
-    @Inject(method = "render", at = @At(value = "INVOKE", ordinal=2, target = "Lnet/minecraft/client/render/WorldRenderer;renderLayer(Lnet/minecraft/client/render/RenderLayer;Lnet/minecraft/client/util/math/MatrixStack;DDDLorg/joml/Matrix4f;)V", shift = At.Shift.AFTER))
-    public void renderObjectsOnTerrain(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f projectionMatrix, CallbackInfo ci) {
+    @Inject(method = "render", at = @At(value = "INVOKE", ordinal=2, target = "Lnet/minecraft/client/render/WorldRenderer;renderLayer(Lnet/minecraft/client/render/RenderLayer;DDDLorg/joml/Matrix4f;Lorg/joml/Matrix4f;)V", shift = At.Shift.AFTER))
+    public void renderObjectsOnTerrain(net.minecraft.client.render.RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, Matrix4f projectionMatrix, CallbackInfo ci) {
+        final MatrixStack matrices = minefortress$worldMatrices(positionMatrix); // 1.21+: render() takes matrices, not a MatrixStack
         final var cameraPos = camera.getPos();
 
         final var fortressClient = (IFortressMinecraftClient) this.client;
@@ -96,7 +97,8 @@ public abstract class FortressWorldRendererMixin  {
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", ordinal=11, target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", shift = At.Shift.AFTER))
-    public void renderSelectionLabels(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f projectionMatrix, CallbackInfo ci) {
+    public void renderSelectionLabels(net.minecraft.client.render.RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, Matrix4f projectionMatrix, CallbackInfo ci) {
+        final MatrixStack matrices = minefortress$worldMatrices(positionMatrix); // 1.21+: render() takes matrices, not a MatrixStack
         if(!client.options.hudHidden) {
             this.entityRenderer.prepare(camera);
             final var cameraPos = camera.getPos();
@@ -106,13 +108,15 @@ public abstract class FortressWorldRendererMixin  {
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", ordinal=14, target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", shift = At.Shift.AFTER))
-    public void renderTranslucent(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo ci) {
-        renderTranslucent(matrices, camera, matrix4f);
+    public void renderTranslucent(net.minecraft.client.render.RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, Matrix4f projectionMatrix, CallbackInfo ci) {
+        final MatrixStack matrices = minefortress$worldMatrices(positionMatrix); // 1.21+: render() takes matrices, not a MatrixStack
+        renderTranslucent(matrices, camera, projectionMatrix);
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", ordinal=18, target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", shift = At.Shift.BY, by = -3))
-    public void renderTranslucentBuffer(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo ci) {
-        renderTranslucent(matrices, camera, matrix4f);
+    public void renderTranslucentBuffer(net.minecraft.client.render.RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, Matrix4f projectionMatrix, CallbackInfo ci) {
+        final MatrixStack matrices = minefortress$worldMatrices(positionMatrix); // 1.21+: render() takes matrices, not a MatrixStack
+        renderTranslucent(matrices, camera, projectionMatrix);
     }
 
     @Unique
@@ -141,4 +145,10 @@ public abstract class FortressWorldRendererMixin  {
         );
     }
 
+    @Unique
+    private static MatrixStack minefortress$worldMatrices(Matrix4f positionMatrix) {
+        final MatrixStack matrices = new MatrixStack();
+        matrices.multiplyPositionMatrix(positionMatrix);
+        return matrices;
+    }
 }
