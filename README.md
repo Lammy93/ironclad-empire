@@ -1,75 +1,56 @@
 # Ironclad Empire
 
-A continued fork of [MineFortress](https://github.com/remmintan/minefortress) by **remmintan**, the mod that turns Minecraft into a real-time strategy game.
-The original mod has not been updated since August 2025. This fork ports it to newer Minecraft versions (Fabric 1.21.1 first) and fixes open bug reports.
-All credit for the original mod goes to remmintan. MIT licence, same as upstream.
+A real-time strategy mod for Minecraft. Lead a village from above: gather resources, build from blueprints, hire
+professions, raise an army and grow your settlement, all with the mouse, like a classic RTS.
 
-**Building:** `scripts/build-deps.sh` (once, builds our Automatone fork), then `scripts/gradle.sh build`. Both run in Docker (JDK 21).
+Ironclad Empire is a continued fork of **[MineFortress](https://github.com/remmintan/minefortress)** by remmintan,
+which has not been updated since August 2025. All credit for the original mod goes to its author.
+Licence: MIT, same as the original (see [LICENSE](LICENSE)).
 
----
+> **Status: alpha.** Runs on **Minecraft 1.21.1 (Fabric)**. Expect bugs; please report them in
+> [Issues](https://github.com/Lammy93/ironclad-empire/issues).
 
-![the mod that will turn your Minecraft into real-time strategy](docs/main-banner.png)
-# MineFortress
-[![Support the project](https://img.shields.io/badge/PATREON-SUPPORT_THE_PROJECT-f96854?style=for-the-badge&logo=patreon&logoColor=f96854&labelColor=052d49&color=f96854)](https://www.patreon.com/minefortress)
-[![Join Discord](https://img.shields.io/discord/906943962659561515?style=for-the-badge&logo=discord&label=discord&color=5865F2)](https://discord.gg/6rt7VJxPcq)
-[![Website](https://img.shields.io/badge/website-minefortress-CC9966?style=for-the-badge)](https://minefortress.net/)
+## Install
 
-The mod that turns your Minecraft into RTS. Take the role of a village leader, gather resources, build houses, hire professionals to grow and expand your village and even conquer your neighbors! Forget about the first-person view and control everything with your mouse pointer like in classic RTS games.
-## Links
-* **[Website](https://minecraftfortress.org/)**
-* **[Patreon](https://www.patreon.com/minefortress)**
-* **[Modrinth](https://modrinth.com/mod/minefortress)**
-* **[CurseForge](https://www.curseforge.com/minecraft/mc-mods/minefortress-rts)**
-## For Players
-This repo is intendent for developers. If you want to play the mod, please download it from [CurseForge](https://www.curseforge.com/minecraft/mc-mods/minefortress-rts) or [Modrinth](https://modrinth.com/mod/minefortress).
+1. Create a **Fabric** instance for **Minecraft 1.21.1** (Modrinth App, Prism Launcher, or the Fabric installer).
+2. Put these in its `mods` folder:
+   - Ironclad Empire (`ironclad-empire-*.jar`)
+   - [Fabric API](https://modrinth.com/mod/fabric-api) for 1.21.1
+   - [Fabric Language Kotlin](https://modrinth.com/mod/fabric-language-kotlin)
+3. Start the game and create a new world with the **Fortress** game mode.
 
-Mod requires Fabric Loader and Fabric API to work.
-Follow the detailed installation instructions in our [wiki](https://wiki.minecraftfortress.org/wiki/Installation:Curseforge_Launcher).
+Servers need the same mods. Players without Ironclad Empire are turned away with a message telling them to install it.
 
-## For Developers
-### Prerequisites
-I assume that everyone who wants to contribute to the project is familiar with Java/Kotlin development in general.
-I won't go in details of installing basic developer setup, but I will list all the tools that are required to work with the project:
-* Java 17 - I prefer using [Adoptium](https://adoptium.net/) builds 
-* IntelliJ IDEA - For the most convenient development experience and to get the results matching my results, I recommend using IntelliJ IDEA. You can download it [here](https://www.jetbrains.com/idea/download/).
-* Git - To clone the repository and to commit your changes. You can download it [here](https://git-scm.com/downloads).
+## What's different from MineFortress
 
-If you need some support in setting up your developer environment, please read articles located here: [Java development with IntelliJ IDEA](https://www.jetbrains.com/help/idea/getting-started.html)
+- Ported from Minecraft 1.20.2 to **1.21.1**.
+- Fixes: dedicated servers start again, storage no longer loads far-away chunks or forgets out-of-range chests, no
+  start-up crash without the "Keybind Fix" mod (shared keys are handled built in).
+- **No data sent anywhere:** the original sent each player's name to its website for a supporter check. That is
+  removed, and every pawn skin is available to everyone.
+- Planned: the original mod's open bug reports, protection between fortresses on shared servers, a versus mode,
+  and more (see Issues).
 
-Feel free to ask for help in our [Discord server](https://discord.gg/6rt7VJxPcq).
-### Getting started / Installation
-1. Clone the repository using Git.
-2. Make sure that the project is cloned in the directory named `minefortress`. This is required to make Gradle work properly with IDEA.
-3. Open the project in IntelliJ IDEA.
-4. Wait for Gradle to finish importing the project.
-5. We still need to make Run Configurations work. Fabric plugin will do it automatically, but we need to close the project.
-6. Close the project and open it again.
-7. New Run Configurations should appear. If they don't, try to restart IDEA.
-8. Run Configuration may have small cross near it. It means that Fabric plugin used wrong module when setting up the configuration.
-![](docs/run-configurations-1.png)
-9. To fix it, edit the configuration and select `minefortress.main` module classpath dropdown.
-![](docs/run-configurations-2.png)
-10. Now you can run the project using the `Minecraft Client` configuration.
-![](docs/run-configurations-3.png)
+## Building from source
 
-### Contributing
-Any help is highly appreciated! If you want to contribute to the project, please follow these steps:
-1. Fork the repository.
-2. Create a new branch from `master` branch.
-3. Make your changes.
-4. Commit your changes and push them to your fork.
-5. Create a pull request to `master` branch of this repository.
+Everything builds in Docker (JDK 21); nothing needs installing on the host.
 
-There is no contribution guide yet, but you can check out the [issues](https://github.com/remmintan/minefortress/issues) to find something to work on.
-I will try to collect bugs and feature requests in the issues, but if you have any questions, feel free to ask them in our [Discord server](https://discord.gg/6rt7VJxPcq).
+```bash
+git clone --recurse-submodules https://github.com/Lammy93/ironclad-empire.git
+cd ironclad-empire
+scripts/build-deps.sh          # once: builds our Automatone fork (pathfinding) into deps/m2
+scripts/gradle.sh build        # the mod jar ends up in build/libs/
+```
 
-Also feel free to create issues if you find any bugs or have any feature requests.
+Checks:
 
-Over time, I will try to create a contribution guide and a list of issues that are good for beginners.
+| Command | What it does |
+|---|---|
+| `scripts/gametest.sh` | Headless Fabric game tests on a dedicated server |
+| `scripts/client-check.sh audit` | Starts the client headless and applies every mixin up front |
+| `scripts/client-check.sh boot` | Boots the client headless to the title screen |
+| `scripts/prodcheck.sh` | Checks the shipped (remapped) jar for unimplemented methods |
+| `scripts/vanilla-join-check.sh` | Joins with a vanilla client and expects a clean "install the mod" message |
+| `scripts/predrop-check.sh` | All of the above that gate a test build |
 
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Donate
-Support the open-source development by donating to the project. You can donate using the following methods:
-* **[Patreon](https://www.patreon.com/minefortress)**
+Porting notes per Minecraft version: [docs/porting-notes.md](docs/porting-notes.md).
