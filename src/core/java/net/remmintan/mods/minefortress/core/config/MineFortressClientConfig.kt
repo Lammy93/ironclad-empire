@@ -29,18 +29,18 @@ object MineFortressClientConfig {
                     }
                 }
             } catch (e: Exception) {
-                System.err.println("[MineFortress] Failed to load client config: ${e.message}")
+                System.err.println("[Ironclad Empire] Failed to load client config: ${e.message}")
                 // Keep disclaimerAcknowledged as false if loading fails
             }
         }
-        println("[MineFortress] Loaded client config. Disclaimer acknowledged: $disclaimerAcknowledged")
+        println("[Ironclad Empire] Loaded client config. Disclaimer acknowledged: $disclaimerAcknowledged")
     }
 
     fun acknowledgeDisclaimer() {
         if (!disclaimerAcknowledged) {
             disclaimerAcknowledged = true
             save()
-            println("[MineFortress] Disclaimer acknowledged and saved.")
+            println("[Ironclad Empire] Disclaimer acknowledged and saved.")
         }
     }
 
@@ -52,7 +52,7 @@ object MineFortressClientConfig {
                 gson.toJson(json, writer)
             }
         } catch (e: Exception) {
-            System.err.println("[MineFortress] Failed to save client config: ${e.message}")
+            System.err.println("[Ironclad Empire] Failed to save client config: ${e.message}")
         }
     }
 }

@@ -229,13 +229,7 @@ public abstract class FortressMinecraftClientMixin extends ReentrantThreadExecut
 
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     public void setScreen(Screen screen, CallbackInfo ci) {
-        if (screen instanceof SelectWorldScreen) {
-            final var disclaimerAcknowledged = MineFortressClientConfig.INSTANCE.getDisclaimerAcknowledged();
-            if (!disclaimerAcknowledged) {
-                this.setScreen(new DisclaimerScreen(screen));
-                ci.cancel();
-            }
-        }
+        // Ironclad Empire: the upstream disclaimer only explained the supporter lookup, which this fork removed.
 
         if (FortressGamemodeUtilsKt.isClientInFortressGamemode()) {
             if (screen instanceof InventoryScreen && (selectionManager.isSelecting() || clientBlueprintManager.isSelecting())) {

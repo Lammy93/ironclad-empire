@@ -70,20 +70,7 @@ class FortressConfigurationScreen(private val fakePawnProvider: () -> LivingEnti
         }
 
         confirmButton = ButtonWidget.builder(Text.translatable("gui.done")) {
-            val currentSelectedSkin = this.selectedSkin
-            if (currentSelectedSkin != null && currentSelectedSkin.exclusive) {
-
-                val player = ClientModUtils.getClientPlayer()
-                val isSupporter = player is IFortressPlayerEntity && player.get_SupportLevel().patron
-
-                if (!isSupporter) {
-                    this.client?.setScreen(
-                        ExclusiveSkinScreen(this, currentSelectedSkin, this.fakePawnProvider)
-                    )
-                    return@builder
-                }
-            }
-
+            // Ironclad Empire: every skin is available to everyone (the upstream supporter gate is removed)
             selectedSkin?.let { skin ->
                 FortressClientNetworkHelper.send(C2SSetPawnSkinPacket.CHANNEL, C2SSetPawnSkinPacket(skin))
                 close()

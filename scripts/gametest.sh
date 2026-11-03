@@ -9,7 +9,9 @@ rm -f "$REPORT"
 mkdir -p "$REPO/build"
 # A server that hangs on shutdown must not stall the run: stop the container after the deadline.
 NAME="mfc-gametest-$$"
-MFC_NAME="$NAME" timeout "${MFC_GAMETEST_TIMEOUT:-1500}" "$REPO/scripts/gradle.sh" runGametest > "$LOG" 2>&1
+# The test world lives in RAM (tmpfs): writing many fresh region files to /mnt/user (Unraid shfs) can stall the
+# final save for minutes, and long-running servers on /mnt/user can block an array stop.
+MFC_DOCKER_ARGS="--tmpfs $REPO/build/gametest:rw,size=2g" MFC_NAME="$NAME" timeout "${MFC_GAMETEST_TIMEOUT:-1500}" "$REPO/scripts/gradle.sh" runGametest > "$LOG" 2>&1
 RC=$?
 if [ "$RC" = 124 ]; then
   docker stop "$NAME" >/dev/null 2>&1

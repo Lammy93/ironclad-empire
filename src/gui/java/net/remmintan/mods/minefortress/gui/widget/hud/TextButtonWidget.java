@@ -46,4 +46,14 @@ public class TextButtonWidget extends ButtonWidget implements IHudButton {
     public int getAnchorY() {
         return anchorY;
     }
+
+    @Override
+    public void renderHudElement(DrawContext drawContext, int mouseX, int mouseY, float delta) {
+        this.render(drawContext, mouseX, mouseY, delta);
+    }
+
+    @Override
+    public boolean isHudElementHovered() {
+        return this.isHovered();
+    }
 }

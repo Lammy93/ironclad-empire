@@ -55,4 +55,13 @@ public class DynamicTextButtonWidget extends ButtonWidget implements IHudButton 
         return anchorY;
     }
 
+    @Override
+    public void renderHudElement(DrawContext drawContext, int mouseX, int mouseY, float delta) {
+        this.render(drawContext, mouseX, mouseY, delta);
+    }
+
+    @Override
+    public boolean isHudElementHovered() {
+        return this.isHovered();
+    }
 }
